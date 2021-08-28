@@ -12,6 +12,8 @@ import SideBar from "components/App/SideBar";
 import styled from "styled-components" ;
 // import { useInputs } from "util/hooks";
 
+
+
 const AppContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -75,6 +77,7 @@ function App() {
           ref.current.scrollLeft = 90 ;
       }
   },[]);
+
 
   return (
     <AppContainer>

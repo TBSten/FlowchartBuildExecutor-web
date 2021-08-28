@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton" ;
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
 import {calcSymCreator} from "../../util/itemCreator" ;
-import { getEffectiveTypeParameterDeclarations } from "typescript";
+
 
 const ArrowContainer = styled.div`
     width: ${conf.width}px;
@@ -38,7 +38,7 @@ interface ArrowProps{
 }
 
 export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
-    const { mode,addItem,addSymToFlow,getItem,items } = useEditItems();
+    const { mode,addItem,addSymToFlow, } = useEditItems();
     const classes = useStyles();
 
     const canvasRef = useRef<HTMLCanvasElement>(null);

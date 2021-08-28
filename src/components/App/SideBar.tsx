@@ -1,3 +1,6 @@
+import {
+    Button,
+} from "@material-ui/core" ;
 
 import styled from "styled-components" ;
 import {sp} from "../../css/media" ;
@@ -15,12 +18,14 @@ const SideBarContainer = styled.div`
 `;
 
 export default function SideBar(){
-    const {selectItemId, getItem,setOption } = useEditItems();
-    let child :string | ReactNode = <tr><td>none selected</td></tr> ;
-    if(selectItemId >= 0){
-        const item = getItem(selectItemId);
+    const {selectItemId, getItem, setOption, removeItem, } = useEditItems();
+    let child :string | ReactNode = <div>none selected</div> ;
+    const handleRemove = ()=>{
+        removeItem(selectItemId);
+    };
+    const item = getItem(selectItemId);
+    if(selectItemId >= 0 && item){
         child = item.options.map((ele,idx)=>{
-            // console.log(ele);
             const Input = ele.type.input ? 
                 ele.type.input
                 :
@@ -44,14 +49,27 @@ export default function SideBar(){
                 </tr>
             ) ;
         }) ;
+        child = (
+            <>
+                <h6>オプション</h6>
+                <table><tbody>
+                    {child}
+                </tbody></table>
+                <h6>メニュー</h6>
+                <div>
+                    <Button onClick={handleRemove} color="primary" variant="contained">
+                        記号を削除
+                        </Button>
+                </div>
+            
+            </>
+        );
     }
     return (
         <SideBarContainer>
-            <table><tbody>
-                {
-                    child
-                }
-            </tbody></table>
+            {
+                child
+            }
         </SideBarContainer>
     ) ;
 }

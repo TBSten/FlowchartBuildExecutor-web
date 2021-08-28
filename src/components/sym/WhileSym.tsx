@@ -20,21 +20,26 @@ export default function WhileSym({id,item} :{id:number,item:Item}) {
     let ChildrenComp :ReactNode = ()=><># WhileSym doesn't have child !</> ;
     if(item?.syms && item.syms[0]){
         const flowItem = getItem(item.syms[0]) ;
-        const Work = flowItem.component ;
-        ChildrenComp = <Work id={item.syms[0]} item={flowItem}/> ;
-        return (
-            <Sym render={renderWhile} autoSize={false}id={id}>
-                <Sym render={renderWhileTop}id={id}>While TOP</Sym>
-                <Arrow addable={false}/>
-                {ChildrenComp}
-                {
-                    flowItem.syms && flowItem.syms.length <= 0?
-                    "":
-                    <Arrow addable={false}/>
-                }
-                <Sym id={id} render={renderWhileBottom}>While BOTTOM</Sym>
-            </Sym>
-        ) ;
+        if(flowItem){
+            const Work = flowItem.component ;
+            ChildrenComp = <Work id={item.syms[0]} item={flowItem}/> ;
+            return (
+                <Sym render={renderWhile} autoSize={false} id={id}>
+                    <Sym render={renderWhileTop} id={id}>While TOP</Sym>
+                    <Arrow addable={true} parentFlowId={item.syms[0]} idx={-1} />
+                    {ChildrenComp}
+                    {
+                        flowItem.syms && flowItem.syms.length <= 0?
+                        "":
+                        <Arrow addable={true} parentFlowId={item.syms[0]} idx={flowItem.syms && flowItem.syms.length ? flowItem.syms.length-1 : 1 }/>
+                    }
+                    <Sym id={id} render={renderWhileBottom}>While BOTTOM</Sym>
+                </Sym>
+            ) ;
+        }else{
+            console.log("flowItem :",flowItem,"is deleted !");
+            return null ;
+        }
     }else{
         return (
             <Sym id={id} render={renderWhile}>
@@ -43,3 +48,4 @@ export default function WhileSym({id,item} :{id:number,item:Item}) {
         ) ;
     }
 }
+

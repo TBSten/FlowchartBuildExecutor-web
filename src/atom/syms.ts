@@ -24,7 +24,7 @@ export const topFlowsState = atom({
 
 const itemListState = atom<number[]>({
     key: "itemList",
-    default: [0,1,2,3,4,5],
+    default: [0,1,2,3,4,5,6],
 });
 const itemDataState = atom<Item[]>({
     key: "itemData",
@@ -34,15 +34,15 @@ const itemDataState = atom<Item[]>({
         calcSymCreator(),
         flowCreator([0,1,2,4]),
         whileSymCreator([5]),
+        flowCreator([6]),
         calcSymCreator(),
-
     ],
 });
 const itemsState = selector<Item[]>({
     key: "item",
     get: ({get})=>{
-        console.log("itemListState", get(itemListState));
-        console.log("itemDataState", get(itemDataState));
+        // console.log("itemListState", get(itemListState));
+        // console.log("itemDataState", get(itemDataState));
         const ans :Item[] = get(itemListState).map(ele=>{
             return get(itemDataState)[ele] ;
         }) ;
@@ -60,10 +60,30 @@ export function useEditItems() {
     const items = useRecoilValue(itemsState);
     const topFlows = useRecoilValue(topFlowsState);
 
-    function getItem(itemId :number) :Item{
-        return itemData[itemId] ;
+    function getItem(itemId :number) :Item | null{
+        if(itemList.indexOf(itemId) >= 0){
+            return itemData[itemId] ;
+        }else{
+            return null ;
+        }
     }
     function addItem(item :Item){
+        // setItemData(prev => {
+        //     const newItemData = [
+        //         ...prev,
+        //         item
+        //     ] ;
+        //     const idx = newItemData.indexOf(item) ;
+        //     setItemList(prev => {
+        //         const newItemList = [
+        //             ...prev,
+        //             idx,
+        //         ] ;
+        //         return newItemList ;
+        //     });
+            
+        //     return newItemData ;
+        // });
         const newItemData = [
             ...itemData,
             item
@@ -75,24 +95,35 @@ export function useEditItems() {
             idx,
         ] ;
         setItemList(newItemList);
-        console.log("addItem item:",
-            item,
-            newItemData,newItemList,
-            itemData,itemList,);
         return idx ;
+
     }
     function setItem(itemId :number, newItem :Item){
-        const newItemData = itemData.map((ele,idx)=>{
-            if(idx === itemId){
-                return newItem ;
-            }
-            return ele ;
+        // const newItemData = itemData.map((ele,idx)=>{
+        //     if(idx === itemId){
+        //         return newItem ;
+        //     }
+        //     return ele ;
+        // });
+        // setItemData(newItemData);
+        setItemData(prev => {
+            const newItemData = prev.map((ele,idx)=>{
+                if(idx === itemId){
+                    return newItem ;
+                }
+                return ele ;
+            });
+            return newItemData ;
         });
-        setItemData(newItemData);
     }
     function removeItem(itemId :number){
-        const newItemList = itemList.filter((ele,idx)=>(idx!==itemId));
-        setItemList(newItemList);
+        // const newItemList = itemList.filter((ele,idx)=>(idx!==itemId));
+        // setItemList(newItemList);
+        console.log("remove",itemId);
+        setItemList(()=>{
+            const newItemList = itemList.filter((ele,idx)=>(idx!==itemId));
+            return newItemList ;
+        });
     }
     function setOption(itemId :number, name :string, value :string|number){
         const newItemData = itemData.map((ele :Item,idx)=>{
@@ -123,16 +154,22 @@ export function useEditItems() {
     }
     function addSymToFlow(flowId :number,idx :number, symId :number){
         const oldFlow = getItem(flowId);
-        const newSyms :number[] | undefined = oldFlow.syms?.reduce((p,v,i) :number[]=>{
-            if(idx === i){
-                p.push(symId);
+        if(oldFlow){
+            const newSyms :number[] | undefined = oldFlow.syms?.reduce((p,v,i) :number[]=>{
+                if(idx === i){
+                    p.push(symId);
+                }
+                p.push(v);
+                return p ;
+            },[] as number[]);
+            if(oldFlow.syms && idx >= oldFlow.syms.length){
+                newSyms?.push(symId);
             }
-            p.push(v);
-            return p ;
-        },[] as number[]);
-        const newFlow = {...oldFlow, syms:newSyms} ;
-        setItem(flowId,newFlow);
-        console.log(newFlow);
+            const newFlow = {...oldFlow, syms:newSyms} ;
+            setItem(flowId,newFlow);
+            // console.log(newFlow);
+
+        }
     }
 
 

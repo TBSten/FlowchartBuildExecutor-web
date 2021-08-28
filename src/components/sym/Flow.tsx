@@ -30,11 +30,12 @@ export default function Flow(props :{id:number, item :Item }){
                 p.push(<ChildComp key={idx*2} id={v} item={childItem}/>);
                 p.push(<Arrow key={idx*2+1} parentFlowId={props.id} idx={idx} />);
             }else{
-                console.log("not valid child :",childItem," id :",v);
+                console.log("unvalid child :",childItem," id :",v);
             }
             return p ;
         },[] as ReactNode[]);
         childrenComp.length --;
+        console.log("Flow childrenComp",childrenComp);
         return (
             <FlowContainer>
                 {

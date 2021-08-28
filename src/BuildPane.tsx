@@ -38,8 +38,12 @@ export default function BuildPane(){
             {
                 topFlows.map((ele,idx)=>{
                     const item = getItem(ele) ;
-                    const Ele = item.component ;
-                    return <Ele id={ele} item={item} key={idx}/>
+                    if(item){
+                        const Ele = item.component ;
+                        return <Ele id={ele} item={item} key={idx}/>
+                    }else{
+                        return null ;
+                    }
                 })
             }
         </FlowContainer>
