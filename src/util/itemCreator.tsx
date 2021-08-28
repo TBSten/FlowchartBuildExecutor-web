@@ -45,9 +45,9 @@ export function calcSymCreator() :Item{
     return ans ;
 }
 
-interface flowComponentProps extends baseItemComponentProps{
-    isRound? :boolean,
-}
+// interface flowComponentProps extends baseItemComponentProps{
+//     isRound? :boolean,
+// }
 
 export function flowCreator(syms? :string[]) :Item{
     if(!syms){ syms = []; }

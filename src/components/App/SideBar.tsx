@@ -4,7 +4,7 @@ import {
 
 import styled from "styled-components" ;
 import {sp} from "../../css/media" ;
-import {useEditItems} from "atom/syms" ;
+import { useSelectItemId, useGetItem,useSetOption,useRemoveItem} from "atom/syms" ;
 import { ReactNode, } from "react";
 
 
@@ -18,7 +18,17 @@ const SideBarContainer = styled.div`
 `;
 
 export default function SideBar(){
-    const {selectItemId, getItem, setOption, removeItem, } = useEditItems();
+    // const {
+    //     selectItemId, 
+    //     getItem, 
+    //     setOption, 
+    //     removeItem, 
+    // } = useEditItems();
+    const selectItemId = useSelectItemId();
+    const getItem = useGetItem();
+    const setOption = useSetOption();
+    const removeItem = useRemoveItem();
+    
     // const {selectItemId, getItem, setOption, } = useEditItems();
 
     let child :string | ReactNode = <div>none selected</div> ;

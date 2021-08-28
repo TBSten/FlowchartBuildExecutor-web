@@ -1,6 +1,6 @@
 import styled from "styled-components" ;
 import { useRef } from "react";
-import { useEditItems } from "atom/syms";
+import { useAddItem, useMode, useAddSymToFlow } from "atom/syms";
 import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
 
@@ -38,7 +38,14 @@ interface ArrowProps{
 }
 
 export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
-    const { mode,addItem,addSymToFlow, } = useEditItems();
+    // const { 
+    //     mode,
+    //     addItem,
+    //     addSymToFlow, 
+    // } = useEditItems();
+    const mode = useMode();
+    const addItem = useAddItem();
+    const addSymToFlow = useAddSymToFlow();
     const classes = useStyles();
 
     const canvasRef = useRef<HTMLCanvasElement>(null);

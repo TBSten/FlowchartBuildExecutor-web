@@ -1,5 +1,5 @@
 
-import { useEditItems } from "atom/syms";
+import { useGetItem, useTopFlows } from "atom/syms";
 import styled from "styled-components" ;
 
 const FlowContainer = styled.div`
@@ -20,10 +20,12 @@ const FlowContainer = styled.div`
 
 
 export default function BuildPane(){
-    const {
-        topFlows,
-        getItem,
-    } = useEditItems() ;
+    // const {
+    //     topFlows,
+    //     getItem,
+    // } = useEditItems() ;
+    const topFlows = useTopFlows();
+    const getItem = useGetItem();
 
     const memodChild = (
         <FlowContainer>

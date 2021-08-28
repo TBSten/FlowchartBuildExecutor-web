@@ -1,4 +1,4 @@
-import { Item, useEditItems } from "atom/syms";
+import { Item, useGetItem } from "atom/syms";
 import { ReactNode } from "react";
 import styled from "styled-components" ;
 import Arrow from "./Arrow";
@@ -25,7 +25,8 @@ interface FlowProps{
 
 export default function Flow(props :FlowProps){
     // console.log(props);
-    const {getItem} = useEditItems();
+    // const {getItem} = useEditItems();
+    const getItem = useGetItem();
     const isRound = props.isRound?props.isRound:false ;
     let symIds = props.item.syms?props.item.syms:[] ;
     symIds = symIds.filter(ele=>(getItem(ele) !== null));

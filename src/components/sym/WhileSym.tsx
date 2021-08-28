@@ -1,9 +1,6 @@
-import { Item, useEditItems } from "atom/syms";
-import Arrow from "components/sym/Arrow";
+import { Item, useGetItem } from "atom/syms";
 import { ReactNode } from "react";
 import Sym, { SymRender } from "./Sym" ;
-
-
 
 export default function WhileSym({id,item} :{id:string,item:Item}) {
     const renderWhile :SymRender = (ctx,w,h,lw)=>{
@@ -16,7 +13,8 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
         ctx.fillRect(0,0,w,h);
         ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
     };
-    const {getItem} = useEditItems();
+    // const {getItem} = useEditItems();
+    const getItem = useGetItem();
     let ChildrenComp :ReactNode = ()=><># WhileSym doesn't have child !</> ;
     if(item?.syms && item.syms[0]){
         const flowItem = getItem(item.syms[0]) ;

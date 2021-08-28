@@ -1,4 +1,4 @@
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import { atom, selector, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectItemState, modeState } from "./edit";
 import { calcSymCreator, flowCreator, whileSymCreator } from "util/itemCreator";
 import { OptionType } from "../util/syms";
@@ -33,18 +33,6 @@ const itemListState = atom<string[]>({
         "Item-6",
     ],
 });
-// const itemDataState = atom<Item[]>({
-//     key: "itemData",
-//     default: [
-//         calcSymCreator(),
-//         calcSymCreator(),
-//         calcSymCreator(),
-//         flowCreator([0,1,2,4]),
-//         whileSymCreator([5]),
-//         flowCreator([6]),
-//         calcSymCreator(),
-//     ],
-// });
 const itemDataState = atom<{[key: string]: Item}>({
     key: "itemData",
     default: {
@@ -67,9 +55,12 @@ const itemsState = selector<Item[]>({
     },
 });
 
+
+
+
 export function useGetItem() {
-    const [itemList,setItemList] = useRecoilState(itemListState);
-    const [itemData,setItemData] = useRecoilState(itemDataState);
+    const itemList = useRecoilValue(itemListState);
+    const itemData = useRecoilValue(itemDataState);
     function getItem(itemId :string):Item | null{
         if(itemList.indexOf(itemId) >= 0){
             return itemData[itemId] ;
@@ -104,7 +95,7 @@ export function useItems(){
     return items ;
 }
 export function useSetItem(){
-    const [itemData,setItemData] = useRecoilState(itemDataState);
+    const setItemData = useSetRecoilState(itemDataState);
     function setItem(itemId :string, newItem :Item){
         setItemData(prev => {
             const newItemData = {...prev} ;
@@ -114,31 +105,11 @@ export function useSetItem(){
     }
     return setItem ;
 }
-/*
-return {
--    items,
--    getItem,
--    addItem,
--    setItem,
--    removeItem,
-    setOption,
-    topFlows,
-    selectItem,
-    selectItemId,
-    mode,
-    addSymToFlow,
-};
-*/
 export function useRemoveItem(){
     const [itemList,setItemList] = useRecoilState(itemListState);
     function removeItem(itemId :string){
-        // const newItemList = itemList.filter((ele,idx)=>(idx!==itemId));
-        // setItemList(newItemList);
-        // console.log("remove",itemId);
         setItemList(()=>{
-            // const newItemList = itemList.filter((ele,idx)=>(idx!==itemId));
             const newItemList = itemList.filter((ele)=>{
-                // console.log("remove each :",ele,ele!==itemId);
                 return ele!==itemId
             }) ;
             return newItemList ;
@@ -149,28 +120,6 @@ export function useRemoveItem(){
 export function useSetOption(){
     const [itemData,setItemData] = useRecoilState(itemDataState);
     function setOption(itemId :string, name :string, value :string|number){
-        // const newItemData = itemData.map((ele :Item,idx)=>{
-        //     //変更対象のItem
-        //     if(idx === itemId){
-        //         //eleのoptionを書き換え
-        //         const newOptions = ele.options.map((op)=>{
-        //             //変更対象のOption
-        //             if(op.name === name){
-        //                 return {
-        //                     ...op,
-        //                     value,} ;
-        //             }
-        //             return op ;
-        //         }) ;
-        //         const newItem :Item = {
-        //             ...ele,
-        //             options:newOptions,
-        //         } ;
-        //         return newItem ;
-        //     }
-        //     return ele ;
-        // });
-        // setItemData(newItemData);
         const newItemData = {...itemData} ;
         const newItem = {...itemData[itemId]} ;
         newItem.options = newItem.options.map(ele=>{
@@ -191,7 +140,7 @@ export function useTopFlows(){
     return topFlows ;
 }
 export function useSelectItem(){
-    const [selectItemId,setSelectItemId] = useRecoilState(selectItemState);
+    const setSelectItemId = useSetRecoilState(selectItemState);
     function selectItem(itemId :string){
         setSelectItemId(itemId);
     }
@@ -229,128 +178,95 @@ export function useAddSymToFlow(){
 }
 
 export function useEditItems() {
-    const [itemList,setItemList] = useRecoilState(itemListState);
-    const [itemData,setItemData] = useRecoilState(itemDataState);
-    const [selectItemId,setSelectItemId] = useRecoilState(selectItemState);
-    const mode = useRecoilValue(modeState);
-    const items = useRecoilValue(itemsState);
-    const topFlows = useRecoilValue(topFlowsState);
+    // const [itemList,setItemList] = useRecoilState(itemListState);
+    // const [itemData,setItemData] = useRecoilState(itemDataState);
+    // const [selectItemId,setSelectItemId] = useRecoilState(selectItemState);
+    // const mode = useRecoilValue(modeState);
+    // const items = useRecoilValue(itemsState);
+    // const topFlows = useRecoilValue(topFlowsState);
 
-    function getItem(itemId :string) :Item | null{
-        if(itemList.indexOf(itemId) >= 0){
-            return itemData[itemId] ;
-        }else{
-            return null ;
-        }
-    }
-    function addItem(item :Item){
-        const idx :string = "Item-"+Object.keys(itemData).length ;
-        const newItemData = {
-            ...itemData,
-            [idx]:item,
-        }
-        setItemData(newItemData);
-        const newItemList = [
-            ...itemList,
-            idx,
-        ] ;
-        setItemList(newItemList);
-        return idx ;
+    // function getItem(itemId :string) :Item | null{
+    //     if(itemList.indexOf(itemId) >= 0){
+    //         return itemData[itemId] ;
+    //     }else{
+    //         return null ;
+    //     }
+    // }
+    // function addItem(item :Item){
+    //     const idx :string = "Item-"+Object.keys(itemData).length ;
+    //     const newItemData = {
+    //         ...itemData,
+    //         [idx]:item,
+    //     }
+    //     setItemData(newItemData);
+    //     const newItemList = [
+    //         ...itemList,
+    //         idx,
+    //     ] ;
+    //     setItemList(newItemList);
+    //     return idx ;
 
-    }
-    function setItem(itemId :string, newItem :Item){
-        // const newItemData = itemData.map((ele,idx)=>{
-        //     if(idx === itemId){
-        //         return newItem ;
-        //     }
-        //     return ele ;
-        // });
-        // setItemData(newItemData);
-        setItemData(prev => {
-            // const newItemData = prev.map((ele,idx)=>{
-            //     if(idx === itemId){
-            //         return newItem ;
-            //     }
-            //     return ele ;
-            // });
-            const newItemData = {...prev} ;
-            newItemData[itemId] = newItem ;
-            return newItemData ;
-        });
-    }
-    function removeItem(itemId :string){
-        // const newItemList = itemList.filter((ele,idx)=>(idx!==itemId));
-        // setItemList(newItemList);
-        // console.log("remove",itemId);
-        setItemList(()=>{
-            // const newItemList = itemList.filter((ele,idx)=>(idx!==itemId));
-            const newItemList = itemList.filter((ele)=>{
-                // console.log("remove each :",ele,ele!==itemId);
-                return ele!==itemId
-            }) ;
-            return newItemList ;
-        });
-    }
-    function setOption(itemId :string, name :string, value :string|number){
-        // const newItemData = itemData.map((ele :Item,idx)=>{
-        //     //変更対象のItem
-        //     if(idx === itemId){
-        //         //eleのoptionを書き換え
-        //         const newOptions = ele.options.map((op)=>{
-        //             //変更対象のOption
-        //             if(op.name === name){
-        //                 return {
-        //                     ...op,
-        //                     value,} ;
-        //             }
-        //             return op ;
-        //         }) ;
-        //         const newItem :Item = {
-        //             ...ele,
-        //             options:newOptions,
-        //         } ;
-        //         return newItem ;
-        //     }
-        //     return ele ;
-        // });
-        // setItemData(newItemData);
-        const newItemData = {...itemData} ;
-        const newItem = {...itemData[itemId]} ;
-        newItem.options = newItem.options.map(ele=>{
-            if(ele.name!==name){
-                return ele ;
-            }else{
-                return {...ele, value:value} ;
-            }
-        });
-        newItemData[itemId] = newItem;
-        setItemData(newItemData);
-        // console.log(itemId, name,value,"==>>",newItemData);
-    }
-    function selectItem(itemId :string){
-        setSelectItemId(itemId);
-    }
-    function addSymToFlow(flowId :string,idx :number, symId :string){
-        const oldFlow = getItem(flowId);
-        if(oldFlow){
-            const newSyms :string[] | undefined = oldFlow.syms?.reduce((p,v,i) :string[]=>{
-                if(idx === i){
-                    p.push(symId);
-                }
-                p.push(v);
-                return p ;
-            },[] as string[]);
-            if(oldFlow.syms && idx >= oldFlow.syms.length){
-                newSyms?.push(symId);
-            }
-            const newFlow = {...oldFlow, syms:newSyms} ;
-            setItem(flowId,newFlow);
-            // console.log(newFlow);
+    // }
+    // function setItem(itemId :string, newItem :Item){
+    //     setItemData(prev => {
+    //         const newItemData = {...prev} ;
+    //         newItemData[itemId] = newItem ;
+    //         return newItemData ;
+    //     });
+    // }
+    // function removeItem(itemId :string){
+    //     setItemList(()=>{
+    //         const newItemList = itemList.filter((ele)=>{
+    //             return ele!==itemId
+    //         }) ;
+    //         return newItemList ;
+    //     });
+    // }
+    // function setOption(itemId :string, name :string, value :string|number){
+    //     const newItemData = {...itemData} ;
+    //     const newItem = {...itemData[itemId]} ;
+    //     newItem.options = newItem.options.map(ele=>{
+    //         if(ele.name!==name){
+    //             return ele ;
+    //         }else{
+    //             return {...ele, value:value} ;
+    //         }
+    //     });
+    //     newItemData[itemId] = newItem;
+    //     setItemData(newItemData);
+    // }
+    // function selectItem(itemId :string){
+    //     setSelectItemId(itemId);
+    // }
+    // function addSymToFlow(flowId :string,idx :number, symId :string){
+    //     const oldFlow = getItem(flowId);
+    //     if(oldFlow){
+    //         const newSyms :string[] | undefined = oldFlow.syms?.reduce((p,v,i) :string[]=>{
+    //             if(idx === i){
+    //                 p.push(symId);
+    //             }
+    //             p.push(v);
+    //             return p ;
+    //         },[] as string[]);
+    //         if(oldFlow.syms && idx >= oldFlow.syms.length){
+    //             newSyms?.push(symId);
+    //         }
+    //         const newFlow = {...oldFlow, syms:newSyms} ;
+    //         setItem(flowId,newFlow);
+    //     }
+    // }
 
-        }
-    }
-
-
+    const items = useItems();
+    const getItem = useGetItem();
+    const addItem = useAddItem();
+    const setItem = useSetItem();
+    const removeItem = useRemoveItem();
+    const setOption = useSetOption();
+    const topFlows = useTopFlows();
+    const selectItem = useSelectItem();
+    const selectItemId = useSelectItemId();
+    const mode = useMode();
+    const addSymToFlow = useAddSymToFlow();
 
     return {
         items,

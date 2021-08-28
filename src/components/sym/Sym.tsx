@@ -1,5 +1,5 @@
 
-import { useEditItems } from "atom/syms";
+import { useGetItem, useSelectItem, useSelectItemId } from "atom/syms";
 import React from "react";
 import { useRef,  ReactNode, useEffect, useCallback,   } from "react";
 import styled, { css } from "styled-components" ;
@@ -103,8 +103,10 @@ export interface SymProps{
 }
 export default function Sym({children, render, autoSize=true, id }: SymProps){
     console.log("Sym");
-    const {selectItem, selectItemId, getItem} = useEditItems();
-    // console.log("Sym ", id, selectItemId);
+    const selectItem = useSelectItem();
+    const selectItemId = useSelectItemId();
+    const getItem = useGetItem();
+
     //canvas render
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -129,28 +131,27 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
         canvasRender();
     }, [canvasRender, ]);
 
-    const handleClick = (e :React.MouseEvent<HTMLDivElement>)=>{
+    const handleClick = useCallback((e :React.MouseEvent<HTMLDivElement>)=>{
         selectItem(id);
         e.preventDefault();
         e.stopPropagation();
-        // console.log("handleClick:"+id,e);
-    };
+    },[selectItem,id]);
 
     return (
-        // <SymContainer autoSize={autoSize}>
-        //     <Canvas width={conf.width} height={conf.height} ref={canvasRef}/>
-        //     <Child autoSize={autoSize}>{children}</Child>
-        //     <Glass onClick={()=>{console.log("click")}}/>
-        // </SymContainer>
         React.useMemo(()=>
             <SymContainer autoSize={autoSize}>
                 <Canvas width={conf.width} height={conf.height} ref={canvasRef}/>
                 <Child onClick={handleClick} autoSize={autoSize}>{children}</Child>
             </SymContainer>
             ,
-            [id,
-                getItem(id)?getItem(id)?.options:[],
-                getItem(id)?getItem(id)?.syms:[],
+            [
+                id,
+                getItem(id)?getItem(id)?.options:"",
+                getItem(id)?getItem(id)?.syms:"",
+                //handleClick, autoSize, 
+                handleClick,
+                autoSize,
+                children,
             ]
 
         )
