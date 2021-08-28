@@ -17,11 +17,18 @@ const FlowContainer = styled.div`
 
 `;
 
+interface FlowProps{
+    id:string, 
+    item :Item, 
+    isRound? :boolean , 
+}
 
-export default function Flow(props :{id:number, item :Item }){
-    // console.log("Flow render by ",props.item);
-    const symIds = props.item.syms?props.item.syms:[] ;
+export default function Flow(props :FlowProps){
+    // console.log(props);
     const {getItem} = useEditItems();
+    const isRound = props.isRound?props.isRound:false ;
+    let symIds = props.item.syms?props.item.syms:[] ;
+    symIds = symIds.filter(ele=>(getItem(ele) !== null));
     if(symIds && symIds.length > 0){
         const childrenComp :ReactNode[] = symIds.reduce((p,v,idx)=>{
             const childItem = getItem(v) ;
@@ -30,22 +37,35 @@ export default function Flow(props :{id:number, item :Item }){
                 p.push(<ChildComp key={idx*2} id={v} item={childItem}/>);
                 p.push(<Arrow key={idx*2+1} parentFlowId={props.id} idx={idx} />);
             }else{
-                console.log("unvalid child :",childItem," id :",v);
+                // console.log("unvalid child :",childItem," id :",v);
             }
             return p ;
         },[] as ReactNode[]);
         childrenComp.length --;
-        console.log("Flow childrenComp",childrenComp);
+        // console.log("Flow childrenComp",childrenComp,"isRound",isRound,"props",props);
         return (
             <FlowContainer>
                 {
+                    isRound?
+                    <Arrow idx={-1} parentFlowId={props.id} addable={true}/>
+                    :
+                    ""
+                }
+                {
                     childrenComp
+                }
+                {
+                    isRound && childrenComp.length > 0?
+                    <Arrow idx={childrenComp.length} parentFlowId={props.id} addable={true}/>
+                    :
+                    ""
                 }
             </FlowContainer>
         ) ;
     }else {
         return (
             <FlowContainer>
+                <Arrow idx={-1} parentFlowId={props.id} addable={true}/>
             </FlowContainer>
         ) ;
     }

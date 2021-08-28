@@ -8,11 +8,9 @@ import {
 import {
     Menu as MenuIcon,
 } from "@material-ui/icons";
-import { useEditItems } from "atom/syms";
 
 
 export default function Head(props :object){
-    const { addItem,addSymToFlow } = useEditItems();
     return (
         <AppBar position="static" {...props}>
             <Toolbar>

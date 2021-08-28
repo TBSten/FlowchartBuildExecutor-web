@@ -2,9 +2,6 @@
 import "./css/global.min.css" ;
 import MuiPaper from "@material-ui/core/Paper" ;
 import {sp, } from "./css/media" ;
-// import Sym,{SymRender} from "./components/sym/Sym" ;
-// import {useEditItems} from "./atom/syms" ;
-// import { calcSymCreator, flowCreator, whileSymCreator,  } from "util/itemCreator";
 import { useEffect, useRef,  } from "react";
 import BuildPane from "./BuildPane";
 import Head from "components/App/Head";
@@ -68,7 +65,7 @@ const SideContainer = styled(MuiPaper)`
 
 function App() {
 
-  console.log("########## App render ##########");
+  // console.log("########## App render ##########");
   const ref = useRef<HTMLDivElement>(null!);
   useEffect(()=>{
       console.log(ref);

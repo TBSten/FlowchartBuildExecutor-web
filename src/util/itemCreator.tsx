@@ -5,9 +5,10 @@ import React from "react";
 import {Option, Item, } from "../atom/syms" ;
 import { optionTypes } from "./syms";
 
+
 interface baseItemComponentProps {
     item :Item;
-    id :number;
+    id :string;
 }
 
 /* usage
@@ -28,7 +29,7 @@ export function calcSymCreator() :Item{
         ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
     };
     const ans = baseItemCreator(
-        ({id, item}: {id:number, item:Item})=>{
+        ({id, item}: {id:string, item:Item})=>{
             // console.log(item.options);
             return(
                 <Sym id={id} render={render}>
@@ -44,18 +45,20 @@ export function calcSymCreator() :Item{
     return ans ;
 }
 
-export function flowCreator(syms? :number[]) :Item{
+interface flowComponentProps extends baseItemComponentProps{
+    isRound? :boolean,
+}
+
+export function flowCreator(syms? :string[]) :Item{
     if(!syms){ syms = []; }
     const ans = baseItemCreator(
-        ({item, id} :baseItemComponentProps)=>{
-            // const {items} = useEditItems();
-            // console.log("items ::",items,item);
-            // const syms = item.syms? item.syms:[] ;
-
-            return (
-                <Flow id={id} item={item}/>
-            ) ;
-        },
+        // ({item, id, isRound} :flowComponentProps)=>{
+        //     return (
+        //         <Flow id={id} item={item} isRound={isRound}/>
+        //     ) ;
+        // },
+        Flow
+        ,
         [
             {name:"タグ", value:"", type:optionTypes["text"]},
         ]
@@ -64,15 +67,16 @@ export function flowCreator(syms? :number[]) :Item{
     return ans ;
 }
 
-export function whileSymCreator(syms ?:number[]) :Item{
+export function whileSymCreator(syms ?:string[]) :Item{
     if(! syms) { syms = [] ; }
     const ans = baseItemCreator(
-        ({item, id} :baseItemComponentProps)=>{
-            // console.log("WhileSym render !!!",item);
-            return (
-                <WhileSym id={id} item={item}/>
-            );
-        },
+        // ({item, id} :baseItemComponentProps)=>{
+        //     // console.log("WhileSym render !!!",item);
+        //     return (
+        //         <WhileSym id={id} item={item}/>
+        //     );
+        // },
+        WhileSym,
         [
             {name:"条件", value:"変数 < 10", type:optionTypes["text"]},
             {name:"タイプ", value:"前判定", type:optionTypes["select"], args:["前判定","後判定","データがある間"]},

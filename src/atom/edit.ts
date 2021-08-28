@@ -1,8 +1,8 @@
 import { atom, } from 'recoil';
 
-export const selectItemState = atom<number>({
+export const selectItemState = atom<string>({
     key:"selectItem",
-    default:-1
+    default:"none"
 });
 export const modesState = atom<{name:string, }[]>({
     key:"modes",

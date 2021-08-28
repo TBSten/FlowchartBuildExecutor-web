@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 interface ArrowProps{
-    parentFlowId? :number,
+    parentFlowId? :string,
     idx? :number,
     addable? :boolean,
 }
@@ -46,7 +46,7 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
         const canvas = canvasRef.current ;
         const ctx = canvas.getContext("2d") ;
         if(ctx){
-            console.log("arrow draw");
+            // console.log("arrow draw");
             ctx.fillStyle = conf.baseBackC ;
             ctx.strokeStyle = conf.baseForeC ;
             ctx.lineWidth = conf.lineWidth ;
@@ -61,8 +61,9 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
         }
     }
     const handleClick = ()=>{
-        console.log("Arrow Clicked :",parentFlowId,idx,addable);
-        if(addable && (parentFlowId || parentFlowId === 0)){
+        // console.log("Arrow Clicked :",parentFlowId,idx,addable);
+        // if(addable && (parentFlowId || parentFlowId === 0)){
+        if(addable && (parentFlowId )){
             //getItem(parentFlowId).syms に idx をもとに追加
             if(idx || idx === 0){
                 const newItem = calcSymCreator() ;

@@ -1,5 +1,6 @@
 
 import { useEditItems } from "atom/syms";
+import React from "react";
 import { useRef,  ReactNode, useEffect, useCallback,   } from "react";
 import styled, { css } from "styled-components" ;
 
@@ -98,11 +99,12 @@ export interface SymProps{
     children?: ReactNode;
     render: SymRender;
     autoSize? :boolean;
-    id :number;
+    id :string;
 }
 export default function Sym({children, render, autoSize=true, id }: SymProps){
-
-    const {selectItem, selectItemId, } = useEditItems();
+    console.log("Sym");
+    const {selectItem, selectItemId, getItem} = useEditItems();
+    // console.log("Sym ", id, selectItemId);
     //canvas render
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -140,10 +142,18 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
         //     <Child autoSize={autoSize}>{children}</Child>
         //     <Glass onClick={()=>{console.log("click")}}/>
         // </SymContainer>
-        <SymContainer autoSize={autoSize}>
-            <Canvas width={conf.width} height={conf.height} ref={canvasRef}/>
-            <Child onClick={handleClick} autoSize={autoSize}>{children}</Child>
-        </SymContainer>
+        React.useMemo(()=>
+            <SymContainer autoSize={autoSize}>
+                <Canvas width={conf.width} height={conf.height} ref={canvasRef}/>
+                <Child onClick={handleClick} autoSize={autoSize}>{children}</Child>
+            </SymContainer>
+            ,
+            [id,
+                getItem(id)?getItem(id)?.options:[],
+                getItem(id)?getItem(id)?.syms:[],
+            ]
+
+        )
 
     ) ;
 }

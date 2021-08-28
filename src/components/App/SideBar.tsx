@@ -19,12 +19,15 @@ const SideBarContainer = styled.div`
 
 export default function SideBar(){
     const {selectItemId, getItem, setOption, removeItem, } = useEditItems();
+    // const {selectItemId, getItem, setOption, } = useEditItems();
+
     let child :string | ReactNode = <div>none selected</div> ;
     const handleRemove = ()=>{
+        // console.log(selectItemId);
         removeItem(selectItemId);
     };
     const item = getItem(selectItemId);
-    if(selectItemId >= 0 && item){
+    if(selectItemId !== "none" && item){
         child = item.options.map((ele,idx)=>{
             const Input = ele.type.input ? 
                 ele.type.input

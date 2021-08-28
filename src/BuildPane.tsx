@@ -1,7 +1,5 @@
 
 import { useEditItems } from "atom/syms";
-import { useMemo } from "react";
-// import { useEffect, useRef } from "react";
 import styled from "styled-components" ;
 
 const FlowContainer = styled.div`
@@ -23,15 +21,9 @@ const FlowContainer = styled.div`
 
 export default function BuildPane(){
     const {
-        items,
         topFlows,
         getItem,
     } = useEditItems() ;
-    console.log(getItem(topFlows[0]));
-    topFlows.forEach(ele=>{
-        console.log( "BuildPane flows :" , getItem(ele) );
-    });
-    console.log("items :",items);
 
     const memodChild = (
         <FlowContainer>

@@ -5,7 +5,7 @@ import Sym, { SymRender } from "./Sym" ;
 
 
 
-export default function WhileSym({id,item} :{id:number,item:Item}) {
+export default function WhileSym({id,item} :{id:string,item:Item}) {
     const renderWhile :SymRender = (ctx,w,h,lw)=>{
     };
     const renderWhileTop :SymRender = (ctx,w,h,lw)=>{
@@ -22,17 +22,11 @@ export default function WhileSym({id,item} :{id:number,item:Item}) {
         const flowItem = getItem(item.syms[0]) ;
         if(flowItem){
             const Work = flowItem.component ;
-            ChildrenComp = <Work id={item.syms[0]} item={flowItem}/> ;
+            ChildrenComp = <Work id={item.syms[0]} item={flowItem} isRound={true}/> ;
             return (
                 <Sym render={renderWhile} autoSize={false} id={id}>
                     <Sym render={renderWhileTop} id={id}>While TOP</Sym>
-                    <Arrow addable={true} parentFlowId={item.syms[0]} idx={-1} />
                     {ChildrenComp}
-                    {
-                        flowItem.syms && flowItem.syms.length <= 0?
-                        "":
-                        <Arrow addable={true} parentFlowId={item.syms[0]} idx={flowItem.syms && flowItem.syms.length ? flowItem.syms.length-1 : 1 }/>
-                    }
                     <Sym id={id} render={renderWhileBottom}>While BOTTOM</Sym>
                 </Sym>
             ) ;
