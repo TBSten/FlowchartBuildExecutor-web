@@ -1,17 +1,39 @@
 import { Item, useGetItem } from "atom/syms";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Sym, { SymRender } from "./Sym" ;
 
 export default function WhileSym({id,item} :{id:string,item:Item}) {
     const renderWhile :SymRender = (ctx,w,h,lw)=>{
     };
     const renderWhileTop :SymRender = (ctx,w,h,lw)=>{
-        ctx.fillRect(0,0,w,h);
-        ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
+        // ctx.fillRect(0,0,w,h);
+        // ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
+        const base = 10 ;
+        ctx.beginPath();
+        ctx.moveTo(base,0+lw/2);
+        ctx.lineTo(w-base,0+lw/2);
+        ctx.lineTo(w-lw/2,base);
+        ctx.lineTo(w-lw/2,h-lw/2);
+        ctx.lineTo(0+lw/2,h-lw/2);
+        ctx.lineTo(0+lw/2,base);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
     };
     const renderWhileBottom :SymRender = (ctx,w,h,lw)=>{
-        ctx.fillRect(0,0,w,h);
-        ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
+        // ctx.fillRect(0,0,w,h);
+        // ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
+        const base = 10 ;
+        ctx.beginPath();
+        ctx.moveTo(lw/2,lw/2);
+        ctx.lineTo(w-lw/2,lw/2);
+        ctx.lineTo(w-lw/2,h-base);
+        ctx.lineTo(w-base,h-lw/2);
+        ctx.lineTo(base,h-lw/2);
+        ctx.lineTo(lw/2,h-base);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
     };
     // const {getItem} = useEditItems();
     const getItem = useGetItem();
@@ -23,9 +45,13 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
             ChildrenComp = <Work id={item.syms[0]} item={flowItem} isRound={true}/> ;
             return (
                 <Sym render={renderWhile} autoSize={false} id={id}>
-                    <Sym render={renderWhileTop} id={id}>While TOP</Sym>
+                    <Sym render={renderWhileTop} id={id}>
+                        {getItem(id)?.options[0].value}/{getItem(id)?.options[1].value}
+                    </Sym>
                     {ChildrenComp}
-                    <Sym id={id} render={renderWhileBottom}>While BOTTOM</Sym>
+                    <Sym id={id} render={renderWhileBottom}>
+                        While BOTTOM
+                    </Sym>
                 </Sym>
             ) ;
         }else{
@@ -33,9 +59,11 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
             return null ;
         }
     }else{
+        console.log(item,item?.syms);
         return (
             <Sym id={id} render={renderWhile}>
                 # ERROR :While Child Sym must be Flow !
+                item.syms:{ item?.syms }
             </Sym>
         ) ;
     }

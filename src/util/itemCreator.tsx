@@ -2,7 +2,7 @@ import Flow from "components/sym/Flow";
 import Sym, { SymRender } from "components/sym/Sym";
 import WhileSym from "components/sym/WhileSym";
 import React from "react";
-import {Option, Item, } from "../atom/syms" ;
+import {Option, Item, useAddItem, useEditItems } from "../atom/syms" ;
 import { optionTypes } from "./syms";
 
 
@@ -67,15 +67,16 @@ export function flowCreator(syms? :string[]) :Item{
     return ans ;
 }
 
-export function whileSymCreator(syms ?:string[]) :Item{
-    if(! syms) { syms = [] ; }
+export function whileSymCreator(syms ?:string[] ) :Item{
+    if(! syms) { 
+        console.error("WhileSym can't create without syms !",syms);
+        // const addItem = useAddItem();
+        // const flow = flowCreator();
+        // const flowId = addItem(flow);
+        // syms = [flowId] ;
+        syms = [] ;
+    }
     const ans = baseItemCreator(
-        // ({item, id} :baseItemComponentProps)=>{
-        //     // console.log("WhileSym render !!!",item);
-        //     return (
-        //         <WhileSym id={id} item={item}/>
-        //     );
-        // },
         WhileSym,
         [
             {name:"条件", value:"変数 < 10", type:optionTypes["text"]},
@@ -86,5 +87,31 @@ export function whileSymCreator(syms ?:string[]) :Item{
     return ans ;
 }
 
+
+
+export type ItemCreator = {
+    name :string,
+    description :string,
+    useCreator:()=>void,
+    creator: ()=>Item,
+} ;
+
+
+const itemCreators :ItemCreator[] = [
+    {
+        name:"計算",
+        description:"変数に値を代入します",
+        creator:calcSymCreator,
+        useCreator:()=>{},
+    },
+    {
+        name:"繰り返し1",
+        description:"条件が成立する間繰り返します",
+        creator:whileSymCreator,
+        useCreator:()=>{},
+    },
+] ;
+
+export default itemCreators ;
 
 

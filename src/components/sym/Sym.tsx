@@ -132,10 +132,14 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
     }, [canvasRender, ]);
 
     const handleClick = useCallback((e :React.MouseEvent<HTMLDivElement>)=>{
-        selectItem(id);
+        if(selectItemId !== id){
+            selectItem(id);
+        }else{
+            selectItem("none");
+        }
         e.preventDefault();
         e.stopPropagation();
-    },[selectItem,id]);
+},[selectItem,selectItemId,id]);
 
     return (
         React.useMemo(()=>

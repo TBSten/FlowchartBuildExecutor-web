@@ -1,12 +1,13 @@
 import styled from "styled-components" ;
-import { useRef } from "react";
-import { useAddItem, useMode, useAddSymToFlow } from "atom/syms";
+import { useRef, useState,  } from "react";
+import { useAddItem, useMode, useAddSymToFlow,useEditItems } from "atom/syms";
 import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
+import Drawer from "@material-ui/core/Drawer" ;
 
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
-import {calcSymCreator} from "../../util/itemCreator" ;
+import itemCreators,{ItemCreator} from "../../util/itemCreator" ;
 
 
 const ArrowContainer = styled.div`
@@ -38,22 +39,17 @@ interface ArrowProps{
 }
 
 export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
-    // const { 
-    //     mode,
-    //     addItem,
-    //     addSymToFlow, 
-    // } = useEditItems();
     const mode = useMode();
     const addItem = useAddItem();
     const addSymToFlow = useAddSymToFlow();
     const classes = useStyles();
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     if(canvasRef?.current){
         const canvas = canvasRef.current ;
         const ctx = canvas.getContext("2d") ;
         if(ctx){
-            // console.log("arrow draw");
             ctx.fillStyle = conf.baseBackC ;
             ctx.strokeStyle = conf.baseForeC ;
             ctx.lineWidth = conf.lineWidth ;
@@ -68,17 +64,26 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
         }
     }
     const handleClick = ()=>{
-        // console.log("Arrow Clicked :",parentFlowId,idx,addable);
-        // if(addable && (parentFlowId || parentFlowId === 0)){
+        console.log(itemCreators);
         if(addable && (parentFlowId )){
-            //getItem(parentFlowId).syms に idx をもとに追加
-            if(idx || idx === 0){
-                const newItem = calcSymCreator() ;
-                const newSymId = addItem(newItem) ;
-                addSymToFlow(parentFlowId, idx+1, newSymId);
-            }
+            // if(idx || idx === 0){
+            //     const newItem = calcSymCreator() ;
+            //     const newSymId = addItem(newItem) ;
+            //     addSymToFlow(parentFlowId, idx+1, newSymId);
+            // }
+            setIsDrawerOpen(true);
         }
     }
+    const handleAddItem = (itemCreator:ItemCreator)=>()=>{
+        console.log("add", itemCreator, idx, parentFlowId);
+        if((idx || idx === 0) && parentFlowId){
+            console.log("add !!!");
+            const newItem = itemCreator.creator() ;
+            const newSymId = addItem(newItem) ;
+            addSymToFlow(parentFlowId, idx+1, newSymId);
+            setIsDrawerOpen(false);
+        }
+    } ;
     return (
         <ArrowContainer>
             {
@@ -94,6 +99,16 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
                 :
                     "# Error: unvalid mode :"+mode                
             }
+            <Drawer anchor="left" open={isDrawerOpen} style={{zIndex:10001}}>
+                {
+                    itemCreators.map(ele=>(
+                        <div onClick={handleAddItem(ele)} key={ele.name}>
+                            {ele.name}/
+                            {ele.description}
+                        </div>
+                    ))
+                }
+            </Drawer>
         </ArrowContainer>
     ) ;
 }

@@ -10,10 +10,13 @@ import { ReactNode, } from "react";
 
 const SideBarContainer = styled.div`
     overflow: auto;
-    padding:1.5rem;
-    max-height: 40vh;
+    padding: 1.5rem;
+    padding-bottom: 60px;
     ${sp`
         padding:0.3rem;
+        padding-bottom: 60px;
+        max-height: 35vh;
+        box-sizing: border-box;
     `}
 `;
 
