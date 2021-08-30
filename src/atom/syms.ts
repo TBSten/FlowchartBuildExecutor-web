@@ -74,7 +74,7 @@ export function useAddItem(){
     const [itemList,setItemList] = useRecoilState(itemListState);
     const [itemData,setItemData] = useRecoilState(itemDataState);
     function addItem(item :Item){
-        const idx :string = "Item-"+Object.keys(itemData).length ;
+        const idx :string = "Item-"+Object.keys(itemData).length+"-"+Math.floor(Math.random()*10000) ;
         const newItemData = {
             ...itemData,
             [idx]:item,
@@ -85,8 +85,25 @@ export function useAddItem(){
             idx,
         ] ;
         setItemList(newItemList);
-        return idx ;
 
+        console.log("addItem :", idx, item);
+        return idx ;
+        // setItemList(itemList=>{
+        //     const idx :string = "Item-"+Object.keys(itemData).length ;
+        //     const newItemData = {
+        //         ...itemData,
+        //         [idx]:item,
+        //     }
+        //     setItemData(newItemData);
+        //     const newItemList = [
+        //         ...itemList,
+        //         idx,
+        //     ] ;
+        //     // setItemList(newItemList);
+
+        //     console.log("addItem :", idx, item);
+        //     return newItemList ;
+        // });
     }
     return addItem ;
 }
@@ -300,4 +317,34 @@ itemData :[
 削除(id :number)
     itemList.remove(id);
 
- */
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

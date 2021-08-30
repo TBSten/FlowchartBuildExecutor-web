@@ -7,7 +7,7 @@ import Drawer from "@material-ui/core/Drawer" ;
 
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
-import itemCreators,{ItemCreator} from "../../util/itemCreator" ;
+import itemCreators,{AddItemFunction, ItemCreator} from "../../util/itemCreator" ;
 
 
 const ArrowContainer = styled.div`
@@ -74,16 +74,29 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
             setIsDrawerOpen(true);
         }
     }
-    const handleAddItem = (itemCreator:ItemCreator)=>()=>{
-        console.log("add", itemCreator, idx, parentFlowId);
+    const addItemFunctions :AddItemFunction[] = itemCreators.reduce((p,n)=>{
+        p.push(n.creator());
+        return p ;
+    },[] as AddItemFunction[]);
+    const handleAddItem = (i :number)=> (()=>{
+        // console.log("add", itemCreator, idx, parentFlowId);
+        // if((idx || idx === 0) && parentFlowId){
+        //     console.log("add !!!");
+        //     const newItem = itemCreator.creator() ;
+        //     const newSymId = addItem(newItem) ;
+        //     addSymToFlow(parentFlowId, idx+1, newSymId);
+        //     setIsDrawerOpen(false);
+        // }
         if((idx || idx === 0) && parentFlowId){
-            console.log("add !!!");
-            const newItem = itemCreator.creator() ;
-            const newSymId = addItem(newItem) ;
+            const addItemFunction = addItemFunctions[i] ;
+            const newSymId = addItemFunction()[0];
             addSymToFlow(parentFlowId, idx+1, newSymId);
             setIsDrawerOpen(false);
         }
-    } ;
+    }) ;
+    const handleCloseDrawer = ()=>{
+        setIsDrawerOpen(false);
+    } ;   
     return (
         <ArrowContainer>
             {
@@ -99,10 +112,10 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
                 :
                     "# Error: unvalid mode :"+mode                
             }
-            <Drawer anchor="left" open={isDrawerOpen} style={{zIndex:10001}}>
+            <Drawer anchor="left" open={isDrawerOpen} style={{zIndex:10001}} onClose={handleCloseDrawer}>
                 {
-                    itemCreators.map(ele=>(
-                        <div onClick={handleAddItem(ele)} key={ele.name}>
+                    itemCreators.map((ele,idx)=>(
+                        <div onClick={handleAddItem(idx)} key={ele.name}>
                             {ele.name}/
                             {ele.description}
                         </div>

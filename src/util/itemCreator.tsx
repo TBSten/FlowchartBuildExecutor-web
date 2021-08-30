@@ -87,31 +87,78 @@ export function whileSymCreator(syms ?:string[] ) :Item{
     return ans ;
 }
 
+//addItem hooks 
+
+export type AddItemFunction = (...options :any[])=> [string,Item] ;
+
+export function useAddCalcSym() :AddItemFunction{
+    const addItem = useAddItem();
+    function addCalcSym() :[string,Item]{
+        const sym = calcSymCreator();
+        const ans = addItem(sym );
+        return [ans,sym] ;
+    }
+    return addCalcSym ;
+}
+
+export function useAddFlow() :AddItemFunction{
+    const addItem = useAddItem();
+    function addFlow(syms? :string[]) :[string,Item]{
+        const flow = flowCreator(syms);
+        const ans = addItem(flow );
+        return [ans,flow] ;
+    }
+    return addFlow ;
+}
+
+export function useAddWhileSym() :AddItemFunction{
+    const addItem = useAddItem();
+    function addWhileSym(syms ?:string[]) :[string,Item]{
+        let flow :Item|null = null ;
+        if(!syms ) {
+            flow = flowCreator();
+            const flowId = addItem(flow);
+            syms = [flowId] ;
+        }
+        const sym = whileSymCreator(syms);
+        const ans = addItem(sym);
+        console.log("whileSymCreator: syms",ans,syms);
+        return [ans,sym] ;
+    }
+    return addWhileSym ;
+}
+
+// export interface ItemCreator{
+//     name :string,
+//     description :string,
+//     creator :()=>AddItemFunction,
+// }
+export class ItemCreator{
+    name :string;
+    description :string;
+    creator :()=>AddItemFunction;
+    constructor(
+        name :string, 
+        description :string, 
+        creator :()=>AddItemFunction){
+            this.name = name ;
+            this.description = description ;
+            this.creator = creator ;
+    }
+}
+
+export default [
+    new ItemCreator("計算","数字や文字を変数に代入します",useAddCalcSym),
+    new ItemCreator("繰り返し1","条件が成り立つ間繰り返します",useAddWhileSym),
+] as ItemCreator[];
 
 
-export type ItemCreator = {
-    name :string,
-    description :string,
-    useCreator:()=>void,
-    creator: ()=>Item,
-} ;
 
 
-const itemCreators :ItemCreator[] = [
-    {
-        name:"計算",
-        description:"変数に値を代入します",
-        creator:calcSymCreator,
-        useCreator:()=>{},
-    },
-    {
-        name:"繰り返し1",
-        description:"条件が成立する間繰り返します",
-        creator:whileSymCreator,
-        useCreator:()=>{},
-    },
-] ;
 
-export default itemCreators ;
+
+
+
+
 
 

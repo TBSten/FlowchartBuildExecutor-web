@@ -3,6 +3,7 @@ import { ReactNode, useEffect } from "react";
 import Sym, { SymRender } from "./Sym" ;
 
 export default function WhileSym({id,item} :{id:string,item:Item}) {
+    console.log("WhileSym", item);
     const renderWhile :SymRender = (ctx,w,h,lw)=>{
     };
     const renderWhileTop :SymRender = (ctx,w,h,lw)=>{
@@ -55,8 +56,12 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
                 </Sym>
             ) ;
         }else{
-            console.log("flowItem :",flowItem,"is deleted !");
-            return null ;
+            console.log("flowItem :",flowItem,"is deleted !",item);
+            return (
+                <Sym id={id} render={renderWhile}>
+                    flowItem unvalid
+                    flowItem:{ flowItem }
+                </Sym>) ;
         }
     }else{
         console.log(item,item?.syms);

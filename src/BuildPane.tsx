@@ -20,6 +20,7 @@ const FlowContainer = styled.div`
 
 
 export default function BuildPane(){
+    console.log("BuildPane");
     // const {
     //     topFlows,
     //     getItem,
