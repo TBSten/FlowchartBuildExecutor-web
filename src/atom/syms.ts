@@ -1,6 +1,6 @@
 import { atom, selector, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectItemState, modeState } from "./edit";
-import { calcSymCreator, flowCreator, whileSymCreator } from "util/itemCreator";
+// import { calcSymCreator, flowCreator, whileSymCreator } from "util/itemCreator";
 import { OptionType } from "../util/syms";
 
 
@@ -36,13 +36,13 @@ const itemListState = atom<string[]>({
 const itemDataState = atom<{[key: string]: Item}>({
     key: "itemData",
     default: {
-        "Item-0": calcSymCreator(),
-        "Item-1": calcSymCreator(),
-        "Item-2": calcSymCreator(),
-        "Item-3": flowCreator(["Item-0","Item-1","Item-2","Item-4"]),
-        "Item-4": whileSymCreator(["Item-5"]),
-        "Item-5": flowCreator(["Item-6"]),
-        "Item-6": calcSymCreator(),
+        // "Item-0": calcSymCreator(),
+        // "Item-1": calcSymCreator(),
+        // "Item-2": calcSymCreator(),
+        // "Item-3": flowCreator(["Item-0","Item-1","Item-2","Item-4"]),
+        // "Item-4": whileSymCreator(["Item-5"]),
+        // "Item-5": flowCreator(["Item-6"]),
+        // "Item-6": calcSymCreator(),
     }
 });
 const itemsState = selector<Item[]>({

@@ -68,7 +68,13 @@ export function useInputs(initValues: {[key :string]:any}) :[object,ReactNode,<V
     ] ;
 }
 
-
+export function useInput(init :any){
+  const [value, setValue] = useState(init);
+  function handleChange(e :React.ChangeEvent<HTMLInputElement>){
+    setValue(e.target.value);
+  }
+  return [value, setValue, handleChange] ;
+}
 
 
 

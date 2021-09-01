@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import {actionTypes} from "../actions" ;
 
 const init = {
@@ -12,5 +13,10 @@ export default function topReducer(state=init, action:{type :string, payload:any
             break;
     }
     return newState ;
+}
+
+export function useTopFlows(){
+    const topFlows = useSelector((state:{top:{flows:string[]}}) => state.top.flows);
+    return topFlows ;
 }
 

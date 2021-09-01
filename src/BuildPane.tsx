@@ -1,5 +1,6 @@
-
-import { useGetItem, useTopFlows } from "atom/syms";
+import {useTopFlows} from "redux/reducers/top" ; 
+import {useGetItem} from "redux/reducers/items" ; 
+// import { useGetItem, useTopFlows } from "atom/syms";
 import styled from "styled-components" ;
 
 const FlowContainer = styled.div`

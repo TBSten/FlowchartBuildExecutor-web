@@ -1,9 +1,11 @@
-import { Item, useGetItem } from "atom/syms";
-import { ReactNode, useEffect } from "react";
+// import { Item, useGetItem } from "atom/syms";
+import {Item} from "redux/types/item" ;
+import {useGetItem} from "redux/reducers/items" ;
+import { ReactNode, } from "react";
 import Sym, { SymRender } from "./Sym" ;
 
 export default function WhileSym({id,item} :{id:string,item:Item}) {
-    console.log("WhileSym", item);
+    // console.log("WhileSym", item);
     const renderWhile :SymRender = (ctx,w,h,lw)=>{
     };
     const renderWhileTop :SymRender = (ctx,w,h,lw)=>{
@@ -41,6 +43,7 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
     let ChildrenComp :ReactNode = ()=><># WhileSym doesn't have child !</> ;
     if(item?.syms && item.syms[0]){
         const flowItem = getItem(item.syms[0]) ;
+        // console.log("WhileSym flowItem:", flowItem, item.syms[0]);
         if(flowItem){
             const Work = flowItem.component ;
             ChildrenComp = <Work id={item.syms[0]} item={flowItem} isRound={true}/> ;
@@ -56,7 +59,7 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
                 </Sym>
             ) ;
         }else{
-            console.log("flowItem :",flowItem,"is deleted !",item);
+            // console.log("flowItem :",flowItem,"is deleted !",item);
             return (
                 <Sym id={id} render={renderWhile}>
                     flowItem unvalid
@@ -64,7 +67,7 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
                 </Sym>) ;
         }
     }else{
-        console.log(item,item?.syms);
+        // console.log(item,item?.syms);
         return (
             <Sym id={id} render={renderWhile}>
                 # ERROR :While Child Sym must be Flow !

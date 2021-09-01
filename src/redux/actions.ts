@@ -9,6 +9,10 @@ const items = {
     option:{
         set:"items/option/set",
     },
+    sym:{
+        add:"items/sym/add",
+        remove:"items/sym/remove",
+    }
 } ;
 const top = {
     flow:{
@@ -28,18 +32,6 @@ export const actionTypes = {
     top,
     selectItem,
     mode,
-} ;
-
-//actionCreator
-function addItem(item :Item):Action{
-    return {
-        type:items.add,
-        payload:item,
-    } ;
-}
-
-export const actionCreators = {
-    addItem,
 } ;
 
 

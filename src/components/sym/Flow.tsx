@@ -1,4 +1,6 @@
-import { Item, useGetItem } from "atom/syms";
+import {useGetItem} from "redux/reducers/items" ;
+import {Item} from "redux/types/item" ;
+// import { Item, useGetItem } from "atom/syms";
 import { ReactNode } from "react";
 import styled from "styled-components" ;
 import Arrow from "./Arrow";
@@ -16,6 +18,7 @@ const FlowContainer = styled.div`
     width: auto;
 
 `;
+
 
 interface FlowProps{
     id:string, 

@@ -1,13 +1,23 @@
 import styled from "styled-components" ;
 import { useRef, useState,  } from "react";
-import { useAddItem, useMode, useAddSymToFlow,useEditItems } from "atom/syms";
+// import { useAddItem, useMode, useAddSymToFlow,useEditItems } from "atom/syms";
 import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
 import Drawer from "@material-ui/core/Drawer" ;
+import List from "@material-ui/core/List" ;
+import ListItem from "@material-ui/core/ListItem" ;
+import ListItemText from "@material-ui/core/ListItemText" ;
+import Tooltip from '@material-ui/core/Tooltip';
 
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
-import itemCreators,{AddItemFunction, ItemCreator} from "../../util/itemCreator" ;
+import itemCreator, { calcSymCreator } from "util/itemCreator";
+import { useDispatch } from "react-redux";
+import { addItem,setItem,removeItem } from "redux/reducers/items";
+import { useGetItem } from "redux/reducers/items";
+import { Item } from "redux/types/item";
+import { randomStr } from "util/functions";
+// import itemCreators,{AddItemFunction, ItemCreator} from "../../util/itemCreator" ;
 
 
 const ArrowContainer = styled.div`
@@ -39,9 +49,9 @@ interface ArrowProps{
 }
 
 export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
-    const mode = useMode();
-    const addItem = useAddItem();
-    const addSymToFlow = useAddSymToFlow();
+    // const mode = useMode();
+    // const addItem = useAddItem();
+    // const addSymToFlow = useAddSymToFlow();
     const classes = useStyles();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
@@ -63,40 +73,53 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
             ctx.closePath();
         }
     }
+    const dispatch = useDispatch();
+    const getItem = useGetItem();
     const handleClick = ()=>{
-        console.log(itemCreators);
-        if(addable && (parentFlowId )){
-            // if(idx || idx === 0){
-            //     const newItem = calcSymCreator() ;
-            //     const newSymId = addItem(newItem) ;
-            //     addSymToFlow(parentFlowId, idx+1, newSymId);
-            // }
+        // console.log(itemCreators);
+        // if(addable && (parentFlowId )){
+        //     // if(idx || idx === 0){
+        //     //     const newItem = calcSymCreator() ;
+        //     //     const newSymId = addItem(newItem) ;
+        //     //     addSymToFlow(parentFlowId, idx+1, newSymId);
+        //     // }
+        //     setIsDrawerOpen(true);
+        // }
+        if(addable && parentFlowId){
             setIsDrawerOpen(true);
         }
     }
-    const addItemFunctions :AddItemFunction[] = itemCreators.reduce((p,n)=>{
-        p.push(n.creator());
-        return p ;
-    },[] as AddItemFunction[]);
+    const creators = itemCreator.map(ele=>(
+        ele.creator()
+    ));
     const handleAddItem = (i :number)=> (()=>{
-        // console.log("add", itemCreator, idx, parentFlowId);
-        // if((idx || idx === 0) && parentFlowId){
-        //     console.log("add !!!");
-        //     const newItem = itemCreator.creator() ;
-        //     const newSymId = addItem(newItem) ;
-        //     addSymToFlow(parentFlowId, idx+1, newSymId);
-        //     setIsDrawerOpen(false);
-        // }
-        if((idx || idx === 0) && parentFlowId){
-            const addItemFunction = addItemFunctions[i] ;
-            const newSymId = addItemFunction()[0];
-            addSymToFlow(parentFlowId, idx+1, newSymId);
+        if(addable && parentFlowId && (idx||idx===0)){
+            // const sym = creators[i]() ;
+            // const id = "Flow-"+randomStr(32) ;  //親flowの
+            // dispatch(setItem(id,sym));
+            // const flow = getItem(parentFlowId);
+            // const newFlow = Object.assign({},flow);
+            // //----------newFlow.syms に idxの位置で idを追加
+            // let newSyms = newFlow.syms?.splice(idx+1, 0, id);
+            // newFlow.syms = newSyms ;
+            // console.log("newFlow ",flow,newFlow);
+            // dispatch(setItem(parentFlowId,newFlow));
+            // setIsDrawerOpen(false);
+            // console.log("add by Arrow ||||| ",parentFlowId,newFlow,idx);
+            const sym :Item = creators[i]();
+            const symId = "Item-"+randomStr(32) ;
+            dispatch(setItem(symId,sym));
+            const parentFlow = getItem(parentFlowId);
+            const newParentFlow :Item = Object.assign({},parentFlow);
+            newParentFlow.syms?.splice(idx+1,0,symId);
+            dispatch(setItem(parentFlowId, newParentFlow));
             setIsDrawerOpen(false);
         }
     }) ;
     const handleCloseDrawer = ()=>{
         setIsDrawerOpen(false);
     } ;   
+    const mode = "edit" ;
     return (
         <ArrowContainer>
             {
@@ -112,15 +135,18 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
                 :
                     "# Error: unvalid mode :"+mode                
             }
-            <Drawer anchor="left" open={isDrawerOpen} style={{zIndex:10001}} onClose={handleCloseDrawer}>
-                {
-                    itemCreators.map((ele,idx)=>(
-                        <div onClick={handleAddItem(idx)} key={ele.name}>
-                            {ele.name}/
-                            {ele.description}
-                        </div>
+            <Drawer anchor="bottom" open={isDrawerOpen} style={{zIndex:10001}} onClose={handleCloseDrawer}>
+                <List>{
+                    itemCreator.map((ele,idx)=>(
+                        <Tooltip title={ele.description} key={ele.name}>
+                            <ListItem button onClick={handleAddItem(idx)}>
+                                {/* <h6>{ele.name}</h6>
+                                {ele.description} */}
+                                <ListItemText primary={ele.name} />
+                            </ListItem>
+                        </Tooltip>
                     ))
-                }
+                }</List>
             </Drawer>
         </ArrowContainer>
     ) ;

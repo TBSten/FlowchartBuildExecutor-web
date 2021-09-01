@@ -9,10 +9,8 @@ import SideBar from "components/App/SideBar";
 import styled from "styled-components" ;
 // import { useInputs } from "util/hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { store } from "redux/store";
-import {Items} from "redux/types/item" ;
-import {actionCreators} from "redux/actions" ;
-import { calcSymCreator } from "util/itemCreator";
+import {useItems} from "redux/reducers/items" ;
+import {useTopFlows} from "redux/reducers/top" ;
 
 const AppContainer = styled.div`
   width: 100%;
@@ -78,13 +76,14 @@ function App() {
       }
   },[]);
 
-  const state = useSelector((state:{items:Items}) => state.items);
-  console.log(state);
+  const items = useItems() ;
+  const topFlows = useTopFlows() ;
+  console.log(items, topFlows);
   const dispatch = useDispatch();
   return (
     <AppContainer>
       <TopContainer>
-        {/* <button onClick={()=>{dispatch(actionCreators.addItem(calcSymCreator()))}}>BUTTON/{JSON.stringify(state)}</button> */}
+        {/* <button onClick={()=>{dispatch(actionCreators.addItem(calcSymCreator()))}}>BUTTON</button> */}
         <Head />
       </TopContainer>
       <MainContainer ref={ref}>

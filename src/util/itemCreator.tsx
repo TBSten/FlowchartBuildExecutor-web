@@ -1,9 +1,13 @@
+import { setItem } from "redux/reducers/items";
 import Flow from "components/sym/Flow";
 import Sym, { SymRender } from "components/sym/Sym";
 import WhileSym from "components/sym/WhileSym";
 import React from "react";
-import {Option, Item, useAddItem, useEditItems } from "../atom/syms" ;
+// import {Option, Item, useAddItem, useEditItems } from "../atom/syms" ;
+import {Item, Items, Option } from "redux/types/item" ;
 import { optionTypes } from "./syms";
+import { useDispatch } from "react-redux";
+import { randomStr } from "./functions";
 
 
 interface baseItemComponentProps {
@@ -70,10 +74,6 @@ export function flowCreator(syms? :string[]) :Item{
 export function whileSymCreator(syms ?:string[] ) :Item{
     if(! syms) { 
         console.error("WhileSym can't create without syms !",syms);
-        // const addItem = useAddItem();
-        // const flow = flowCreator();
-        // const flowId = addItem(flow);
-        // syms = [flowId] ;
         syms = [] ;
     }
     const ans = baseItemCreator(
@@ -87,69 +87,38 @@ export function whileSymCreator(syms ?:string[] ) :Item{
     return ans ;
 }
 
-//addItem hooks 
-
-export type AddItemFunction = (...options :any[])=> [string,Item] ;
-
-export function useAddCalcSym() :AddItemFunction{
-    const addItem = useAddItem();
-    function addCalcSym() :[string,Item]{
-        const sym = calcSymCreator();
-        const ans = addItem(sym );
-        return [ans,sym] ;
-    }
-    return addCalcSym ;
+// //addItem hooks 
+function useCalcSymCreator() :()=>Item{
+    return calcSymCreator;
+}
+function useWhileSymCreator() :()=>Item{
+    const dispatch = useDispatch() ;
+    return ()=>{
+        const id = randomStr(30) ;
+        const flow = flowCreator([]);
+        dispatch(setItem(id,flow));
+        return whileSymCreator([id]);
+    } ;
 }
 
-export function useAddFlow() :AddItemFunction{
-    const addItem = useAddItem();
-    function addFlow(syms? :string[]) :[string,Item]{
-        const flow = flowCreator(syms);
-        const ans = addItem(flow );
-        return [ans,flow] ;
-    }
-    return addFlow ;
-}
-
-export function useAddWhileSym() :AddItemFunction{
-    const addItem = useAddItem();
-    function addWhileSym(syms ?:string[]) :[string,Item]{
-        let flow :Item|null = null ;
-        if(!syms ) {
-            flow = flowCreator();
-            const flowId = addItem(flow);
-            syms = [flowId] ;
-        }
-        const sym = whileSymCreator(syms);
-        const ans = addItem(sym);
-        console.log("whileSymCreator: syms",ans,syms);
-        return [ans,sym] ;
-    }
-    return addWhileSym ;
-}
-
-// export interface ItemCreator{
-//     name :string,
-//     description :string,
-//     creator :()=>AddItemFunction,
-// }
 export class ItemCreator{
     name :string;
     description :string;
-    creator :()=>AddItemFunction;
+    creator :()=> ()=>Item;
     constructor(
         name :string, 
         description :string, 
-        creator :()=>AddItemFunction){
+        creator :()=> ()=>Item){
             this.name = name ;
             this.description = description ;
             this.creator = creator ;
     }
 }
 
+
 export default [
-    new ItemCreator("計算","数字や文字を変数に代入します",useAddCalcSym),
-    new ItemCreator("繰り返し1","条件が成り立つ間繰り返します",useAddWhileSym),
+    new ItemCreator("計算","数字や文字を変数に代入します",useCalcSymCreator),
+    new ItemCreator("繰り返し1","条件が成り立つ間繰り返します",useWhileSymCreator),
 ] as ItemCreator[];
 
 
