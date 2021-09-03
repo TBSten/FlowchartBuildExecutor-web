@@ -1,6 +1,5 @@
 import styled from "styled-components" ;
 import { useRef, useState,  } from "react";
-// import { useAddItem, useMode, useAddSymToFlow,useEditItems } from "atom/syms";
 import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
 import Drawer from "@material-ui/core/Drawer" ;
@@ -11,13 +10,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
-import itemCreator, { calcSymCreator } from "util/itemCreator";
+import itemCreator from "util/itemCreator";
 import { useDispatch } from "react-redux";
-import { addItem,setItem,removeItem } from "redux/reducers/items";
+import { setItem, } from "redux/reducers/items";
 import { useGetItem } from "redux/reducers/items";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
-// import itemCreators,{AddItemFunction, ItemCreator} from "../../util/itemCreator" ;
+
 
 
 const ArrowContainer = styled.div`

@@ -1,5 +1,5 @@
-import { Action } from "./types/action";
-import { Item } from "redux/types/item";
+
+
 
 //actionTypes
 const items = {
@@ -22,6 +22,8 @@ const top = {
 } ;
 const selectItem = {
     select:"selectItem/select",
+    unselect:"selectItem/unselect",
+    toggleMulti:"selectItem/toggleMulti",
 } ;
 const mode={
     set:"mode/set",

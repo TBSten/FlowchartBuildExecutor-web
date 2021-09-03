@@ -4,6 +4,7 @@ import {useGetItem} from "redux/reducers/items" ;
 import { ReactNode, } from "react";
 import Sym, { SymRender } from "./Sym" ;
 
+
 export default function WhileSym({id,item} :{id:string,item:Item}) {
     // console.log("WhileSym", item);
     const renderWhile :SymRender = (ctx,w,h,lw)=>{

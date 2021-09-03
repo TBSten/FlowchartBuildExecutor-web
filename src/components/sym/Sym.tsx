@@ -3,8 +3,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useGetItem } from "redux/reducers/items";
-import { useSelectItemId } from "redux/reducers/selectItem";
-import {selectItemById} from "redux/reducers/selectItem" ;
+import { unselectItemById, useSelectItemId } from "redux/reducers/selectItem";
+import {selectItemById, useSelectItemIds, } from "redux/reducers/selectItem" ;
 import { useRef,  ReactNode, useEffect, useCallback,   } from "react";
 import styled, { css } from "styled-components" ;
 
@@ -107,9 +107,9 @@ export interface SymProps{
     id :string;
 }
 export default function Sym({children, render, autoSize=true, id }: SymProps){
-    // console.log("Sym");
-    // const selectItem = useSelectItem();
     const selectItemId = useSelectItemId();
+    const selectItemIds = useSelectItemIds();
+
     const getItem = useGetItem();
     const dispatch = useDispatch();
 
@@ -126,8 +126,11 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
                 const lw = conf.lineWidth ;
                 //init
                 ctx.clearRect(0,0,w,h);
-                ctx.fillStyle = selectItemId === id ? conf.selectBackC : conf.baseBackC ;
-                ctx.strokeStyle = selectItemId === id ? conf.selectForeC : conf.baseForeC ;
+                const isSelect = selectItemIds.includes(id) ;
+                ctx.fillStyle = isSelect ? 
+                    conf.selectBackC : conf.baseBackC ;
+                ctx.strokeStyle = isSelect ? 
+                    conf.selectForeC : conf.baseForeC ;
                 ctx.lineWidth = lw ;
                 render(ctx, w, h , lw);
             }
@@ -137,17 +140,17 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
         canvasRender();
     }, [canvasRender, ]);
 
-    const handleClick = ((e :React.MouseEvent<HTMLDivElement>)=>{
+    const handleClick = useCallback((e :React.MouseEvent<HTMLDivElement>)=>{
         if(selectItemId !== id){
             // selectItem(id);
             dispatch(selectItemById(id));
         }else{
             // selectItem("none");
-            dispatch(selectItemById("none"));
+            dispatch(unselectItemById(id));
         }
         e.preventDefault();
         e.stopPropagation();
-    });
+    },[selectItemId,id,dispatch,selectItemById,]);
 
     return (
         React.useMemo(()=>
@@ -157,7 +160,7 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
             </SymContainer>
             ,
             [
-                id,
+                // id,
                 getItem(id)?getItem(id)?.options:"",
                 getItem(id)?getItem(id)?.syms:"",
                 //handleClick, autoSize, 

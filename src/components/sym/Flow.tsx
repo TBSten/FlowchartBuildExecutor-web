@@ -45,7 +45,9 @@ export default function Flow(props :FlowProps){
             }
             return p ;
         },[] as ReactNode[]);
-        childrenComp.length --;
+        if(childrenComp.length > 0){
+            childrenComp.length --;
+        }
         // console.log("Flow childrenComp",childrenComp,"isRound",isRound,"props",props);
         return (
             <FlowContainer>

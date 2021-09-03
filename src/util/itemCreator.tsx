@@ -4,7 +4,7 @@ import Sym, { SymRender } from "components/sym/Sym";
 import WhileSym from "components/sym/WhileSym";
 import React from "react";
 // import {Option, Item, useAddItem, useEditItems } from "../atom/syms" ;
-import {Item, Items, Option } from "redux/types/item" ;
+import {Item, Option } from "redux/types/item" ;
 import { optionTypes } from "./syms";
 import { useDispatch } from "react-redux";
 import { randomStr } from "./functions";

@@ -8,7 +8,6 @@ import Head from "components/App/Head";
 import SideBar from "components/App/SideBar";
 import styled from "styled-components" ;
 // import { useInputs } from "util/hooks";
-import { useDispatch, useSelector } from "react-redux";
 import {useItems} from "redux/reducers/items" ;
 import {useTopFlows} from "redux/reducers/top" ;
 
@@ -79,7 +78,6 @@ function App() {
   const items = useItems() ;
   const topFlows = useTopFlows() ;
   console.log(items, topFlows);
-  const dispatch = useDispatch();
   return (
     <AppContainer>
       <TopContainer>

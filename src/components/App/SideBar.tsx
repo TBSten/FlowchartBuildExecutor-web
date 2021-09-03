@@ -5,9 +5,8 @@ import {
 
 import styled from "styled-components" ;
 import {sp} from "../../css/media" ;
-// import { useSelectItemId, useGetItem,useSetOption,useRemoveItem} from "atom/syms" ;
 import { useGetItem, setOption, removeItem,  } from "redux/reducers/items" ;
-import {useSelectItemId} from "redux/reducers/selectItem" ;
+import {useSelectItemId, useSelectItemIds} from "redux/reducers/selectItem" ;
 import { ReactNode, } from "react";
 import { useDispatch } from "react-redux";
 
@@ -26,27 +25,19 @@ const SideBarContainer = styled.div`
 `;
 
 export default function SideBar(){
-    // const {
-    //     selectItemId, 
-    //     getItem, 
-    //     setOption, 
-    //     removeItem, 
-    // } = useEditItems();
+    const selectItemIds = useSelectItemIds();
     const selectItemId = useSelectItemId();
     const getItem = useGetItem();
-    // const setOption = useSetOption();
-    // const removeItem = useRemoveItem();
-    
-    // const {selectItemId, getItem, setOption, } = useEditItems();
 
     let child :string | ReactNode = <div>none selected</div> ;
     const handleRemove = ()=>{
-        // removeItem(selectItemId);
-        dispatch(removeItem(selectItemId));
+        console.log(selectItemIds);
+        selectItemIds.forEach(id=>{
+            dispatch(removeItem(id));
+        });
     };
     const item = getItem(selectItemId);
     const dispatch = useDispatch();
-    console.log("SideBar ",item);
     if(selectItemId !== "none" && item){
         child = item.options.map((ele,idx)=>{
             const Input = ele.type.input ? 

@@ -19,3 +19,10 @@ export function randomStr(len=1 ) :string{
     return Array.from(Array(N)).map(()=>S[Math.floor(Math.random()*S.length)]).join('');
 }
 
+export function randomItemId() :string{
+    let ans = "Item-"+randomStr(16)+"-"+Date.now().toString().slice(0,10) ;
+    return ans ;
+}
+
+randomItemId();
+
