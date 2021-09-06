@@ -2,12 +2,15 @@ import { setItem } from "redux/reducers/items";
 import Flow from "components/sym/Flow";
 import Sym, { SymRender } from "components/sym/Sym";
 import WhileSym from "components/sym/WhileSym";
+import TerminalSym from "components/sym/TerminalSym";
 import React from "react";
 // import {Option, Item, useAddItem, useEditItems } from "../atom/syms" ;
 import {Item, Option } from "redux/types/item" ;
 import { optionTypes } from "./syms";
 import { useDispatch } from "react-redux";
 import { randomStr } from "./functions";
+import CalcSym from "components/sym/CalcSym";
+import BranchSym from "components/sym/BranchSym";
 
 
 interface baseItemComponentProps {
@@ -28,19 +31,8 @@ function baseItemCreator(
 }
 
 export function calcSymCreator() :Item{
-    const render :SymRender = (ctx,w,h,lw)=>{
-        ctx.fillRect(0,0, w,h);
-        ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
-    };
     const ans = baseItemCreator(
-        ({id, item}: {id:string, item:Item})=>{
-            // console.log(item.options);
-            return(
-                <Sym id={id} render={render}>
-                    {item.options[0].value} → {item.options[1].value}
-                </Sym>
-            )
-        },
+        CalcSym,
         [
             {name:"式", value:"0", type:optionTypes["text"] } , 
             {name:"代入先変数", value:"変数", type:optionTypes["text"] } , 
@@ -87,6 +79,36 @@ export function whileSymCreator(syms ?:string[] ) :Item{
     return ans ;
 }
 
+export function terminalSymCreator(type :"はじめ"|"おわり" ="はじめ") :Item{
+    const ans = baseItemCreator(
+        TerminalSym,
+        [
+            {name:"タイプ", value:type, type:optionTypes["select"], args:["はじめ","おわり"] } , 
+            {name:"はじめのテキスト", value:"", type:optionTypes["text"] } , 
+            {name:"おわりの返り値", value:"", type:optionTypes["text"] } , 
+        ]
+    );
+    return ans ;
+}
+
+export function doubleBranchSymCreator(syms? :string[]) :Item{
+    if(!syms || syms.length !== 2){
+        console.error("ERROR BranchSym.syms is invalid :",syms);
+        syms = [] ;
+    }
+    const ans = baseItemCreator(
+        BranchSym,
+        [
+            {name:"条件", value:"変数 = 0", type:optionTypes["text"] } , 
+            {name:"記号外に表示する", value:false, type:optionTypes["check"] } , 
+        ]
+    );
+    ans.syms = syms ;
+    return ans ;
+}
+
+
+
 // //addItem hooks 
 function useCalcSymCreator() :()=>Item{
     return calcSymCreator;
@@ -98,6 +120,19 @@ function useWhileSymCreator() :()=>Item{
         const flow = flowCreator([]);
         dispatch(setItem(id,flow));
         return whileSymCreator([id]);
+    } ;
+}
+function useDoubleSymCreator() :()=>Item{
+    //doubleBranchSymCreator
+    const dispatch = useDispatch();
+    return ()=>{
+        const f1Id = randomStr(30) ;
+        const f2Id = randomStr(30) ;
+        const f1 = flowCreator([]);
+        const f2 = flowCreator([]);
+        dispatch(setItem(f1Id,f1));
+        dispatch(setItem(f2Id,f2));
+        return doubleBranchSymCreator([f1Id,f2Id]) ;
     } ;
 }
 
@@ -119,6 +154,7 @@ export class ItemCreator{
 export default [
     new ItemCreator("計算","数字や文字を変数に代入します",useCalcSymCreator),
     new ItemCreator("繰り返し1","条件が成り立つ間繰り返します",useWhileSymCreator),
+    new ItemCreator("分岐1","条件のYesとNoで処理を分岐します",useDoubleSymCreator),
 ] as ItemCreator[];
 
 

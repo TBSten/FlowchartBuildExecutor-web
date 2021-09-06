@@ -75,15 +75,6 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
     const dispatch = useDispatch();
     const getItem = useGetItem();
     const handleClick = ()=>{
-        // console.log(itemCreators);
-        // if(addable && (parentFlowId )){
-        //     // if(idx || idx === 0){
-        //     //     const newItem = calcSymCreator() ;
-        //     //     const newSymId = addItem(newItem) ;
-        //     //     addSymToFlow(parentFlowId, idx+1, newSymId);
-        //     // }
-        //     setIsDrawerOpen(true);
-        // }
         if(addable && parentFlowId){
             setIsDrawerOpen(true);
         }
@@ -93,18 +84,6 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
     ));
     const handleAddItem = (i :number)=> (()=>{
         if(addable && parentFlowId && (idx||idx===0)){
-            // const sym = creators[i]() ;
-            // const id = "Flow-"+randomStr(32) ;  //親flowの
-            // dispatch(setItem(id,sym));
-            // const flow = getItem(parentFlowId);
-            // const newFlow = Object.assign({},flow);
-            // //----------newFlow.syms に idxの位置で idを追加
-            // let newSyms = newFlow.syms?.splice(idx+1, 0, id);
-            // newFlow.syms = newSyms ;
-            // console.log("newFlow ",flow,newFlow);
-            // dispatch(setItem(parentFlowId,newFlow));
-            // setIsDrawerOpen(false);
-            // console.log("add by Arrow ||||| ",parentFlowId,newFlow,idx);
             const sym :Item = creators[i]();
             const symId = "Item-"+randomStr(32) ;
             dispatch(setItem(symId,sym));

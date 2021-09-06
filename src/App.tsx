@@ -2,7 +2,7 @@
 import "./css/global.min.css" ;
 import MuiPaper from "@material-ui/core/Paper" ;
 import {sp, } from "./css/media" ;
-import { useEffect, useRef,  } from "react";
+import { useEffect, useRef,   } from "react";
 import BuildPane from "./BuildPane";
 import Head from "components/App/Head";
 import SideBar from "components/App/SideBar";
@@ -10,6 +10,8 @@ import styled from "styled-components" ;
 // import { useInputs } from "util/hooks";
 import {useItems} from "redux/reducers/items" ;
 import {useTopFlows} from "redux/reducers/top" ;
+import { useMultiSelect } from "redux/reducers/selectItem";
+import { useDispatch } from "react-redux";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -64,8 +66,8 @@ const SideContainer = styled(MuiPaper)`
 
 
 function App() {
-
   // console.log("########## App render ##########");
+
   const ref = useRef<HTMLDivElement>(null!);
   useEffect(()=>{
       console.log(ref);
@@ -78,6 +80,7 @@ function App() {
   const items = useItems() ;
   const topFlows = useTopFlows() ;
   console.log(items, topFlows);
+
   return (
     <AppContainer>
       <TopContainer>

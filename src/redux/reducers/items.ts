@@ -1,6 +1,6 @@
-import {calcSymCreator, flowCreator, whileSymCreator} from "../../util/itemCreator" ; 
+import {calcSymCreator, doubleBranchSymCreator, flowCreator, terminalSymCreator, whileSymCreator} from "../../util/itemCreator" ; 
 
-import { Item, Items } from "redux/types/item";
+import { Item, Items, Option } from "redux/types/item";
 import { useSelector } from "react-redux";
 import { Action } from "redux/types/action";
 import { actionTypes } from "redux/actions" ; 
@@ -8,14 +8,15 @@ import { actionTypes } from "redux/actions" ;
 
 
 const init = {
-    "Item-0":flowCreator(["Item-1","Item-2","Item-3","Item-4"]),
-    "Item-1":calcSymCreator(),
-    "Item-2":calcSymCreator(),
-    "Item-3":calcSymCreator(),
-    "Item-4":whileSymCreator(["Item-5"]),
-    "Item-5":flowCreator(["Item-6","Item-7"]),
-    "Item-6":calcSymCreator(),
-    "Item-7":calcSymCreator(),
+    "Item-0":flowCreator(["Item-t-st","Item-db-1","Item-t-en"]),
+    "Item-t-st":terminalSymCreator("はじめ"),
+    "Item-db-1":doubleBranchSymCreator(["Item-f-1","Item-f-2"]),
+    "Item-f-1":flowCreator(["Item-c-1","Item-c-2"]),
+    "Item-f-2":flowCreator(["Item-c-3"]),
+    "Item-c-1":calcSymCreator(),
+    "Item-c-2":calcSymCreator(),
+    "Item-c-3":calcSymCreator(),
+    "Item-t-en":terminalSymCreator("おわり"),
 } ;
 export default function itemsReducer(
     state :Items =init, 
@@ -47,6 +48,7 @@ export default function itemsReducer(
             newItem.options = newItem.options.map(ele=>{
                 const ans = Object.assign({},ele) ;
                 if(ele.name === name){
+                    console.log(`${ele.name}: ${ele.value} => ${value}`);
                     ans.value = value ;
                 }
                 return ans ;
@@ -87,6 +89,19 @@ export function useGetItem(){
         return items[id] ;
     };
 }
+export function useGetItemOption() :(id :string, name :string)=>Option<string>|null{
+    const getItem = useGetItem() ;
+    return function getItemOption(id :string, name :string) :Option<string>|null{
+        const item = getItem(id) ;
+        let ans = null ;
+        item.options.forEach(ele=>{
+            if(ele.name === name){
+                ans = ele ;
+            }
+        });
+        return ans ;
+    }
+}
 
 //actionCreators
 export function addItem(item :Item) :Action{
@@ -110,7 +125,7 @@ export function removeItem(id :string) :Action{
         payload:id ,
     } ;
 }
-export function setOption(id :string, name :string, value: string|number){
+export function setOption(id :string, name :string, value: string|number|boolean){
     return {
         type:actionTypes.items.option.set ,
         payload:{

@@ -2,6 +2,7 @@ import {useTopFlows} from "redux/reducers/top" ;
 import {useGetItem} from "redux/reducers/items" ; 
 // import { useGetItem, useTopFlows } from "atom/syms";
 import styled from "styled-components" ;
+import {sp} from "./css/media" ;
 
 const FlowContainer = styled.div`
     /* overflow:auto; */
@@ -17,6 +18,11 @@ const FlowContainer = styled.div`
     
     padding: 180px;
     width:auto;
+
+    ${sp`
+        transform: scale(0.7);
+        transform-origin: left top ;
+    `}
 `;
 
 

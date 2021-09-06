@@ -1,7 +1,7 @@
 import {useGetItem} from "redux/reducers/items" ;
 import {Item} from "redux/types/item" ;
 // import { Item, useGetItem } from "atom/syms";
-import { ReactNode } from "react";
+import { ReactNode, RefObject, useRef } from "react";
 import styled from "styled-components" ;
 import Arrow from "./Arrow";
 
@@ -38,8 +38,8 @@ export default function Flow(props :FlowProps){
             const childItem = getItem(v) ;
             if(childItem){
                 const ChildComp = childItem.component ;
-                p.push(<ChildComp key={idx*2} id={v} item={childItem}/>);
-                p.push(<Arrow key={idx*2+1} parentFlowId={props.id} idx={idx} />);
+                p.push(<ChildComp key={v} id={v} item={childItem}/>);
+                p.push(<Arrow key={v+"-arrow"} parentFlowId={props.id} idx={idx} />);
             }else{
                 // console.log("unvalid child :",childItem," id :",v);
             }
@@ -50,7 +50,7 @@ export default function Flow(props :FlowProps){
         }
         // console.log("Flow childrenComp",childrenComp,"isRound",isRound,"props",props);
         return (
-            <FlowContainer>
+            <FlowContainer >
                 {
                     isRound?
                     <Arrow idx={-1} parentFlowId={props.id} addable={true}/>

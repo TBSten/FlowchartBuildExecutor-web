@@ -8,7 +8,7 @@ export type OptionType = {
         name :string, 
         value :string | number | boolean, 
         args :string | number | boolean | string[] | number[] | object,
-        updateOption :(name :string,value :string | number)=>void,
+        updateOption :(name :string,value :string | number | boolean)=>void,
     }>,
 
 } ;
@@ -16,12 +16,12 @@ export type OptionType = {
 export const optionTypes :{ [key :string]:OptionType } = {
     "text":{
         input:({name,value,updateOption})=>(
-            <TextField variant="outlined" value={value} onChange={(e)=>{updateOption(name,e.target.value);}}/>
+            <TextField size="small" variant="outlined" value={value} onChange={(e)=>{updateOption(name,e.target.value);}}/>
         ),
     },
     "check":{
         input:({name,value,updateOption})=>(
-            <Checkbox value={value} onChange={(e)=>{updateOption(name,e.target.value);}}/>
+            <Checkbox value={value} onChange={(e)=>{updateOption(name,e.target.checked);console.log("onChange",e.target.checked)}}/>
         ),
     },
     "select":{
@@ -36,3 +36,21 @@ export const optionTypes :{ [key :string]:OptionType } = {
         ),
     },
 } as const;
+
+export function corners(w :number,h :number,lw :number) 
+    :{[key :string]:[number,number]} {
+        return {
+            "leftTop":[lw/2,lw/2],
+            "leftCenter":[lw/2,h/2],
+            "leftBottom":[lw/2,h-lw/2],
+            "centerTop":[w/2,lw/2],
+            "centerBottom":[w/2,h-lw/2],
+            "rightTop":[w-lw/2,lw/2],
+            "rightCenter":[w-lw/2,h/2],
+            "rightBottom":[w-lw/2,h-lw/2],
+        } ;
+}
+
+
+
+

@@ -3,7 +3,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useGetItem } from "redux/reducers/items";
-import { unselectItemById, useSelectItemId } from "redux/reducers/selectItem";
+import { useSelectItemId } from "redux/reducers/selectItem";
 import {selectItemById, useSelectItemIds, } from "redux/reducers/selectItem" ;
 import { useRef,  ReactNode, useEffect, useCallback,   } from "react";
 import styled, { css } from "styled-components" ;
@@ -116,7 +116,7 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
     //canvas render
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const canvasRender = useCallback(function (){
+    const canvasRender = (function (){
         if(canvasRef?.current){
             const canvas = canvasRef.current ;
             const ctx = canvas.getContext("2d");
@@ -135,19 +135,13 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
                 render(ctx, w, h , lw);
             }
         }
-    },[canvasRef,render,selectItemId,id]);
+    });
     useEffect(() => {
         canvasRender();
     }, [canvasRender, ]);
 
     const handleClick = useCallback((e :React.MouseEvent<HTMLDivElement>)=>{
-        if(selectItemId !== id){
-            // selectItem(id);
-            dispatch(selectItemById(id));
-        }else{
-            // selectItem("none");
-            dispatch(unselectItemById(id));
-        }
+        dispatch(selectItemById(id));
         e.preventDefault();
         e.stopPropagation();
     },[selectItemId,id,dispatch,selectItemById,]);
