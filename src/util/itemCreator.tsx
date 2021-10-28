@@ -4,7 +4,7 @@ import WhileSym from "components/sym/WhileSym";
 import TerminalSym from "components/sym/TerminalSym";
 import React from "react";
 import {Item, Option, } from "redux/types/item" ;
-import { optionTypes } from "./syms";
+import { OptionType, optionTypes } from "./syms";
 import { useDispatch } from "react-redux";
 import { randomStr } from "./functions";
 import CalcSym from "components/sym/CalcSym";
@@ -24,7 +24,7 @@ import { useTopFlows, removeTopFlow,  } from "redux/reducers/top";
 import ForSym from "components/sym/ForSym";
 
 
-interface baseItemComponentProps {
+export interface baseItemComponentProps {
     item :Item;
     id :string;
 }
@@ -99,6 +99,20 @@ const AddFlowSymMenu = ()=>{
 
 
 
+
+function optionCreator<V>(name :string, value:V, type :OptionType, args?:any) :Option<V>{
+    const ans :Option<V> = {
+        name,
+        value,
+        type,
+        visible:true,
+    } ;
+    if(args){
+        ans.args = args ;
+    }
+    return ans ;
+}
+
 function baseItemCreator(
     itemType:string,
     component :(props :baseItemComponentProps)=>(React.ReactNode) , 
@@ -138,8 +152,10 @@ export function calcSymCreator() :Item{
         "Calc",
         CalcSym,
         [
-            {name:"式", value:"0", type:optionTypes["text"] } , 
-            {name:"代入先変数", value:"変数", type:optionTypes["text"] } , 
+            // {name:"式", value:"0", type:optionTypes["text"] } , 
+            // {name:"代入先変数", value:"変数", type:optionTypes["text"] } , 
+            optionCreator("式",　"0",　optionTypes["text"]),
+            optionCreator("代入先変数",　"変数",　optionTypes["text"]),
         ]
     );
     ans.execute = async (e,item)=>{
@@ -162,7 +178,8 @@ export function flowCreator(syms? :string[]) :Item{
         Flow
         ,
         [
-            {name:"タグ", value:"", type:optionTypes["text"]},
+            // {name:"タグ", value:"", type:optionTypes["text"]},
+            optionCreator("タグ",　"",　optionTypes["text"]),
         ]
     );
     ans.syms = syms ;
@@ -191,8 +208,11 @@ export function whileSymCreator(syms:string[]=[] ) :Item{
         "While",
         WhileSym,
         [
-            {name:"条件", value:"変数 < 10", type:optionTypes["text"]},
-            {name:"タイプ", value:"前判定", type:optionTypes["select"], args:["前判定","後判定","データがある間"]},
+            // {name:"条件", value:"変数 < 5", type:optionTypes["text"]},
+            // {name:"タイプ", value:"前判定", type:optionTypes["select"], args:["前判定","後判定","データがある間"]},
+            optionCreator("条件",　"変数 < 5",　optionTypes["text"]),
+            optionCreator("タイプ",　"前判定",　optionTypes["select"], ["前判定","後判定","データがある間"]),
+
         ],
     );
     ans.syms = syms ;
@@ -249,9 +269,12 @@ export function terminalSymCreator(type :"はじめ"|"おわり" ="はじめ") :
         "Terminal",
         TerminalSym,
         [
-            {name:"タイプ", value:type, type:optionTypes["select"], args:["はじめ","おわり"] } , 
-            {name:"はじめのテキスト", value:"", type:optionTypes["text"] } , 
-            {name:"おわりの返り値", value:"", type:optionTypes["text"] } , 
+            // {name:"タイプ", value:type, type:optionTypes["select"], args:["はじめ","おわり"] } , 
+            // {name:"はじめのテキスト", value:"", type:optionTypes["text"] } , 
+            // {name:"おわりの返り値", value:"", type:optionTypes["text"] } , 
+            optionCreator("タイプ",type , optionTypes["select"],["はじめ","おわり"] ),
+            optionCreator("はじめのテキスト",　"",　optionTypes["text"]),
+            optionCreator("おわりの返り値",　"",　optionTypes["text"]),
         ]
     );
     return ans ;
@@ -266,8 +289,10 @@ export function doubleBranchSymCreator(syms? :string[]) :Item{
         "DoubleBranch",
         DoubleBranchSym,
         [
-            {name:"条件", value:"変数 = 0", type:optionTypes["text"] } , 
-            {name:"記号外に表示する", value:false, type:optionTypes["check"] } , 
+            // {name:"条件", value:"変数 = 0", type:optionTypes["text"] } , 
+            // {name:"記号外に表示する", value:false, type:optionTypes["check"] } , 
+            optionCreator("条件",　"変数 = 0",　optionTypes["text"]),
+            optionCreator("記号外に表示する",　false,　optionTypes["check"]),
         ]
     );
     ans.syms = syms ;
@@ -296,8 +321,11 @@ export function switchBranchSymCreator(syms? :string[]) :Item{
         "SwitchBranch",
         SwitchBranchSym,
         [
-            {name:"条件", value:"変数", type:optionTypes["text"] } , 
-            {name:"記号外に表示する", value:false, type:optionTypes["check"] } , 
+            // {name:"条件", value:"変数", type:optionTypes["text"] } , 
+            // {name:"記号外に表示する", value:false, type:optionTypes["check"] } , 
+            optionCreator("条件",　"変数",　optionTypes["text"]),
+            optionCreator("記号外に表示する", false ,　optionTypes["check"]),
+
         ]
     );
     ans.syms = syms ;
@@ -338,8 +366,10 @@ export function dataSymCreator() :Item{
         "Data",
         DataSym,
         [
-            {name:"タイプ", value:"出力", type:optionTypes["select"],args:["キーボード入力","ファイルから入力","出力"] } , 
-            {name:"対象", value:"変数", type:optionTypes["text"] } , 
+            // {name:"タイプ", value:"出力", type:optionTypes["select"],args:["キーボード入力","ファイルから入力","出力"] } , 
+            // {name:"対象", value:"変数", type:optionTypes["text"] } , 
+            optionCreator("タイプ",　"出力",　optionTypes["select"], ["キーボード入力","ファイルから入力","出力"]),
+            optionCreator("対象",　"変数",　optionTypes["text"]),
         ]
     );
     ans.execute = async (e,item)=>{
@@ -375,10 +405,15 @@ export function prepareSymCreator() :Item{
         "Prepare",
         PrepareSym,
         [
-            {name:"タイプ", value:"1次元配列", type:optionTypes["select"],args:["1次元配列","2次元配列","3次元配列"] } , 
-            {name:"対象", value:"ARR", type:optionTypes["text"] } , 
-            {name:"初期値", value:"0", type:optionTypes["text"] } , 
-            {name:"要素数", value:"5", type:optionTypes["text"] } , 
+            // {name:"タイプ", value:"1次元配列", type:optionTypes["select"],args:["1次元配列","2次元配列","3次元配列"] } , 
+            // {name:"対象", value:"ARR", type:optionTypes["text"] } , 
+            // {name:"初期値", value:"0", type:optionTypes["text"] } , 
+            // {name:"要素数", value:"5", type:optionTypes["text"] } , 
+            optionCreator("タイプ",　"1次元配列",　optionTypes["select"], ["1次元配列","2次元配列","3次元配列"]),
+            optionCreator("対象",　"ARR",　optionTypes["text"]),
+            optionCreator("初期値",　"0",　optionTypes["text"]),
+            optionCreator("要素数",　"5",　optionTypes["text"]),
+
         ]
     );
     ans.execute = async (runtime,item)=>{
@@ -416,7 +451,9 @@ export function processSymCreator() :Item{
         "Process",
         ProcessSym,
         [
-            {name:"処理名", value:"処理", type:optionTypes["text"] } , 
+            // {name:"処理名", value:"処理", type:optionTypes["text"] } , 
+            optionCreator("処理名",　"処理",　optionTypes["text"]),
+            
         ],
     );
     ans.execute = async (runtime,item)=>{
@@ -436,10 +473,15 @@ export function forSymCreator(syms?:string[]) :Item{
     ans.itemType = "For" ;
     ans.component = ForSym ;
     ans.options = [
-        {name:"ループ変数", value:"i", type:optionTypes["text"] } , 
-        {name:"初期値", value:"0", type:optionTypes["text"]},
-        {name:"条件", value:"i < 10", type:optionTypes["text"]},
-        {name:"増分値", value:"1", type:optionTypes["text"] } , 
+        // {name:"ループ変数", value:"i", type:optionTypes["text"] } , 
+        // {name:"初期値", value:"0", type:optionTypes["text"]},
+        // {name:"条件", value:"i < 10", type:optionTypes["text"]},
+        // {name:"増分値", value:"1", type:optionTypes["text"] } , 
+        optionCreator("ループ変数",　"i",　optionTypes["text"]),
+        optionCreator("初期値",　"0",　optionTypes["text"]),
+        optionCreator("条件",　"i < 10",　optionTypes["text"]),
+        optionCreator("増分値",　"1",　optionTypes["text"]),
+
     ] ;
     ans.execute = async (runtime,item,id)=>{
         if(!id){

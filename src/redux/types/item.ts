@@ -7,6 +7,7 @@ export interface Option<V> {
     value: V;
     type: OptionType; //optionType のキーのみ
     args?: any;
+    visible: boolean;
 }
 export interface Item {
     itemType :string;

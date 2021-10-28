@@ -29,12 +29,15 @@ export default function ExeButton(){
     const mode = useMode();
     const runtime = useRuntime();
     const topFlows = useTopFlows();
+
     function handleExeMode(){
         // console.log("exe mode");
         if(mode === "edit"){
             dispatch(setMode("exe"));
-
         }else if(mode === "exe"){
+            if(runtime){
+                runtime.status = "done" ;
+            }
             dispatch(setRuntime(null));
             dispatch(setMode("edit"));
         }else{
@@ -42,7 +45,6 @@ export default function ExeButton(){
         }
     }
     function selectRuntime(runtime :Runtime,e :React.MouseEvent){
-        // console.log("set runtime :",runtime);
         e.preventDefault();
         e.stopPropagation();
         dispatch(setRuntime(runtime));

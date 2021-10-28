@@ -23,6 +23,7 @@ export type OutputOption = {
   value: any;
   type: string;
   args: any;
+  visible: boolean;
 };
 export type OutputItem = {
   itemType: string;
@@ -51,6 +52,7 @@ export function getSaveState(): SaveState {
         value: op.value,
         type: op.type.name,
         args: op.args,
+        visible: op.visible,
       };
     });
     items[el] = {

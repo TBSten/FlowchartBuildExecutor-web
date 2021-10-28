@@ -39,6 +39,10 @@ const SideContainer = styled(MuiPaper)`
   ${sp`
     grid-column: 1 / 3;
     grid-row: 3 / 4;
+
+    height: 50vh;
+    font-size: 1rem;
+    overflow: auto;
   `}
 `;
 const SideBarContainer = styled.div`
@@ -88,6 +92,15 @@ const ToggleSideShow = styled.div`
 const RightAlign = styled.div`
     text-align: right;
     width: 100%;
+
+    ${sp`
+        display:none;
+    `}
+`;
+const SliderCon = styled.div`
+    display :flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 function OptionLine(
@@ -197,13 +210,15 @@ function ControllPane({runtime} :ControllPaneProps){
                 </Button>
             </ButtonGroup>
             <h6>スピード</h6>
-            <Slider 
-                marks={marks} valueLabelDisplay="on"
-                step={1} min={1} max={10}
-                value={speed}
-                onChange={handleChangeSpeed} 
-                onChangeCommitted={handleChangeCommitted}
-                />
+            <SliderCon>
+                <Slider 
+                    marks={marks} valueLabelDisplay="on"
+                    step={1} min={1} max={10}
+                    value={speed}
+                    onChange={handleChangeSpeed} 
+                    onChangeCommitted={handleChangeCommitted}
+                    />
+            </SliderCon>
         </>
     ) ;
 }
@@ -256,7 +271,11 @@ export default function SideBar(props:SideBarProps){
                 };
                 
                 return (
-                    <OptionLine key={idx} ele={ele} updateOption={updateOption} Input={Input}/>
+                    <OptionLine 
+                        key={idx} 
+                        ele={ele} 
+                        updateOption={updateOption} 
+                        Input={Input} />
                 ) ;
             }) ;
             child = (
