@@ -1,4 +1,4 @@
-import {calcSymCreator, doubleBranchSymCreator, flowCreator, terminalSymCreator, whileSymCreator} from "../../util/itemCreator" ; 
+// import {calcSymCreator, doubleBranchSymCreator, flowCreator, terminalSymCreator, whileSymCreator} from "../../util/itemCreator" ; 
 
 import { Item, Items, Option } from "redux/types/item";
 import { useSelector } from "react-redux";
@@ -8,15 +8,6 @@ import { actionTypes } from "redux/actions" ;
 
 
 const init = {
-    "Item-0":flowCreator(["Item-t-st","Item-db-1","Item-t-en"]),
-    "Item-t-st":terminalSymCreator("はじめ"),
-    "Item-db-1":doubleBranchSymCreator(["Item-f-1","Item-f-2"]),
-    "Item-f-1":flowCreator(["Item-c-1","Item-c-2"]),
-    "Item-f-2":flowCreator(["Item-c-3"]),
-    "Item-c-1":calcSymCreator(),
-    "Item-c-2":calcSymCreator(),
-    "Item-c-3":calcSymCreator(),
-    "Item-t-en":terminalSymCreator("おわり"),
 } ;
 export default function itemsReducer(
     state :Items =init, 
@@ -24,13 +15,12 @@ export default function itemsReducer(
         let newState :Items = Object.assign({},state);
         if(action.type === actionTypes.items.add){
             const newItem = action.payload ;
-            console.log("add !",action.payload);
+            // console.log("add !",action.payload);
             const idx = "Item-"+Object.keys(newState).length+"-"+Math.floor(Math.random()*1000) ;
             newState[idx] = newItem ;
         }else if(action.type === actionTypes.items.set){
             const id = action.payload.id ;
             const item = action.payload.item ;
-            console.log("set item",id,item);
             newState[id] = item ;
         }else if(action.type === actionTypes.items.remove){
             const id = action.payload ;
@@ -48,7 +38,7 @@ export default function itemsReducer(
             newItem.options = newItem.options.map(ele=>{
                 const ans = Object.assign({},ele) ;
                 if(ele.name === name){
-                    console.log(`${ele.name}: ${ele.value} => ${value}`);
+                    // console.log(`${ele.name}: ${ele.value} => ${value}`);
                     ans.value = value ;
                 }
                 return ans ;
@@ -75,6 +65,9 @@ export default function itemsReducer(
                 ele !== childId 
             ));
             newState[parentId] = newParentItem ;
+        }else if(action.type === actionTypes.items.load){
+            const items = action.payload ;
+            newState = items ;
         }
         return newState ;
 }
@@ -135,7 +128,12 @@ export function setOption(id :string, name :string, value: string|number|boolean
         },
     } ;
 }
-
+export function loadItems(items :Items){
+    return {
+        type:actionTypes.items.load,
+        payload:items,
+    } ;
+}
 
 
 

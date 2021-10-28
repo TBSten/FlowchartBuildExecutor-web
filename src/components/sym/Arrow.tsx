@@ -1,21 +1,23 @@
 import styled from "styled-components" ;
-import { useRef, useState,  } from "react";
+import { useRef, useState, useEffect, } from "react";
 import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
 import Drawer from "@material-ui/core/Drawer" ;
-import List from "@material-ui/core/List" ;
-import ListItem from "@material-ui/core/ListItem" ;
-import ListItemText from "@material-ui/core/ListItemText" ;
-import Tooltip from '@material-ui/core/Tooltip';
+
 
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import itemCreator from "util/itemCreator";
 import { useDispatch } from "react-redux";
 import { setItem, } from "redux/reducers/items";
 import { useGetItem } from "redux/reducers/items";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
+import { Card, CardContent, CardActionArea, Typography, Grid, Button } from "@material-ui/core";
+import { breakpoint } from "css/media";
+import { useMode } from "redux/reducers/mode";
+import { selectItemById } from "redux/reducers/selectItem";
 
 
 
@@ -39,6 +41,9 @@ const useStyles = makeStyles({
         alignItems:"center",
         zIndex: 10000,
     },
+    dMenu: {
+        width:"100%",
+    } ,
 });
 
 interface ArrowProps{
@@ -52,26 +57,30 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
     // const addItem = useAddItem();
     // const addSymToFlow = useAddSymToFlow();
     const classes = useStyles();
+    const matches = useMediaQuery(`(max-width:${breakpoint})`);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    if(canvasRef?.current){
-        const canvas = canvasRef.current ;
-        const ctx = canvas.getContext("2d") ;
-        if(ctx){
-            ctx.fillStyle = conf.baseBackC ;
-            ctx.strokeStyle = conf.baseForeC ;
-            ctx.lineWidth = conf.lineWidth ;
-            const w = canvas.width ;
-            const h = canvas.height ;
-            ctx.clearRect(0,0,w,h);
-            ctx.beginPath();
-            ctx.moveTo(w/2,0);
-            ctx.lineTo(w/2,h);
-            ctx.stroke();
-            ctx.closePath();
+    const render = ()=>{
+        if(canvasRef?.current){
+            const canvas = canvasRef.current ;
+            const ctx = canvas.getContext("2d") ;
+            if(ctx){
+                ctx.fillStyle = conf.baseBackC ;
+                ctx.strokeStyle = conf.baseForeC ;
+                ctx.lineWidth = conf.lineWidth ;
+                const w = canvas.width ;
+                const h = canvas.height ;
+                ctx.clearRect(0,0,w,h);
+                ctx.beginPath();
+                ctx.moveTo(w/2,0);
+                ctx.lineTo(w/2,h);
+                ctx.stroke();
+                ctx.closePath();
+            }
         }
     }
+    useEffect(render,);
     const dispatch = useDispatch();
     const getItem = useGetItem();
     const handleClick = ()=>{
@@ -92,12 +101,14 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
             newParentFlow.syms?.splice(idx+1,0,symId);
             dispatch(setItem(parentFlowId, newParentFlow));
             setIsDrawerOpen(false);
+            dispatch(selectItemById(symId));
         }
     }) ;
     const handleCloseDrawer = ()=>{
         setIsDrawerOpen(false);
-    } ;   
-    const mode = "edit" ;
+    } ;
+    const mode = useMode() ;
+
     return (
         <ArrowContainer>
             {
@@ -113,21 +124,34 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
                 :
                     "# Error: unvalid mode :"+mode                
             }
-            <Drawer anchor="bottom" open={isDrawerOpen} style={{zIndex:10001}} onClose={handleCloseDrawer}>
-                <List>{
-                    itemCreator.map((ele,idx)=>(
-                        <Tooltip title={ele.description} key={ele.name}>
-                            <ListItem button onClick={handleAddItem(idx)}>
-                                {/* <h6>{ele.name}</h6>
-                                {ele.description} */}
-                                <ListItemText primary={ele.name} />
-                            </ListItem>
-                        </Tooltip>
-                    ))
-                }</List>
+            <Drawer anchor="bottom" open={isDrawerOpen} style={{zIndex:10001,}} onClose={handleCloseDrawer} >
+                <Grid container spacing={2}>
+                    {
+                        itemCreator.map((ele,idx)=>(
+                            <Grid item xs={matches?12:6} key={idx}>
+                                <Card className={classes.dMenu}>
+                                    <CardActionArea onClick={handleAddItem(idx)}>
+                                        <CardContent key={idx}>
+                                            <Typography variant="h5">{ele.name}</Typography>
+                                            <Typography>
+                                                {ele.description}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
+                        ))
+                    }
+                    <Grid item xs={12}>
+                        <Button　color="primary" variant="outlined" onClick={handleCloseDrawer}>
+                            キャンセル
+                        </Button>
+                    </Grid>
+                </Grid>
             </Drawer>
         </ArrowContainer>
     ) ;
 }
+
 
 

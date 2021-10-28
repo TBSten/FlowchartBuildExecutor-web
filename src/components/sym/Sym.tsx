@@ -1,12 +1,9 @@
 
-// import { useGetItem, useSelectItem, useSelectItemId } from "atom/syms";
-import React from "react";
 import { useDispatch } from "react-redux";
-import { useGetItem } from "redux/reducers/items";
-import { useSelectItemId } from "redux/reducers/selectItem";
 import {selectItemById, useSelectItemIds, } from "redux/reducers/selectItem" ;
-import { useRef,  ReactNode, useEffect, useCallback,   } from "react";
+import { useRef,  ReactNode, useEffect, useCallback, useMemo, useState,  } from "react";
 import styled, { css } from "styled-components" ;
+import { useExecutingId, useRuntime } from "redux/reducers/exes";
 
 
 export const conf = {
@@ -17,7 +14,7 @@ export const conf = {
     selectBackC: "white",
     selectForeC: "blue",
     exeBackC: "white",
-    exeBaForeC: "green",
+    exeForeC: "green",
     lineWidth: 2,
 };
 
@@ -29,6 +26,7 @@ const SymContainer = styled.div<{autoSize :boolean}>`
     justify-content: center;
     align-items: center;
     position: relative;
+    user-select: none;
     ${
         (props)=> props.autoSize?
             css`
@@ -43,18 +41,7 @@ const SymContainer = styled.div<{autoSize :boolean}>`
     }
     
 `;
-// const Glass = styled.div`
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     position: relative;
-//     position: absolute;
-//     top: 0;
-//     left: 0;
-//     width: 100%;
-//     height: 100%;
-//     z-index: 2;
-// `;
+
 const Child = styled.div<{autoSize :boolean}>`
     display: flex;
     flex-direction: column;
@@ -70,6 +57,7 @@ const Child = styled.div<{autoSize :boolean}>`
     word-break: break-all;
     text-align: center;
     box-sizing: border-box;
+    font-size: 12px;
     /* padding: ${conf.lineWidth}px; */
     ${
         (props)=>!props.autoSize?
@@ -106,17 +94,20 @@ export interface SymProps{
     autoSize? :boolean;
     id :string;
 }
-export default function Sym({children, render, autoSize=true, id }: SymProps){
-    const selectItemId = useSelectItemId();
-    const selectItemIds = useSelectItemIds();
 
-    const getItem = useGetItem();
+
+//高階コンポーネントにしとけばよかった（後悔）
+export default function Sym({children, render, autoSize=true, id }: SymProps){
+    const selectItemIds = useSelectItemIds();
+    const executingId = useExecutingId();
+    const runtime = useRuntime();
+
     const dispatch = useDispatch();
 
     //canvas render
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const canvasRender = (function (){
+    const canvasRender = useCallback(function (){
         if(canvasRef?.current){
             const canvas = canvasRef.current ;
             const ctx = canvas.getContext("2d");
@@ -127,44 +118,52 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
                 //init
                 ctx.clearRect(0,0,w,h);
                 const isSelect = selectItemIds.includes(id) ;
-                ctx.fillStyle = isSelect ? 
-                    conf.selectBackC : conf.baseBackC ;
-                ctx.strokeStyle = isSelect ? 
-                    conf.selectForeC : conf.baseForeC ;
+                const isExe = runtime !== null&& executingId === id ;
+                if(isExe){
+                    ctx.fillStyle = conf.exeBackC ;
+                    ctx.strokeStyle = conf.exeForeC ;
+                }else if(isSelect){
+                    ctx.fillStyle = conf.selectBackC ;
+                    ctx.strokeStyle = conf.selectForeC ;
+                }else{
+                    ctx.fillStyle = conf.baseBackC ;
+                    ctx.strokeStyle = conf.baseForeC ;
+                }
                 ctx.lineWidth = lw ;
+
                 render(ctx, w, h , lw);
             }
         }
-    });
+    },[executingId,id,render,runtime,selectItemIds.includes(id),]);
     useEffect(() => {
+        // console.log("canvas render");
         canvasRender();
     }, [canvasRender, ]);
+    // useEffect(() => {
+    //     console.log("canvasRender");
+    //     canvasRender();
+    // }, []);
 
     const handleClick = useCallback((e :React.MouseEvent<HTMLDivElement>)=>{
         dispatch(selectItemById(id));
         e.preventDefault();
         e.stopPropagation();
-    },[selectItemId,id,dispatch,selectItemById,]);
+    },[id,dispatch,]);
 
     return (
-        React.useMemo(()=>
+        useMemo(()=>
             <SymContainer autoSize={autoSize}>
                 <Canvas width={conf.width} height={conf.height} ref={canvasRef}/>
                 <Child onClick={handleClick} autoSize={autoSize}>{children}</Child>
             </SymContainer>
             ,
             [
-                // id,
-                getItem(id)?getItem(id)?.options:"",
-                getItem(id)?getItem(id)?.syms:"",
-                //handleClick, autoSize, 
                 handleClick,
                 autoSize,
                 children,
+                canvasRef,
             ]
-
         )
-
     ) ;
 }
 

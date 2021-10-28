@@ -2,16 +2,20 @@
 import "./css/global.min.css" ;
 import MuiPaper from "@material-ui/core/Paper" ;
 import {sp, } from "./css/media" ;
-import { useEffect, useRef,   } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
+import {useDispatch} from "react-redux";
 import BuildPane from "./BuildPane";
+
 import Head from "components/App/Head";
 import SideBar from "components/App/SideBar";
 import styled from "styled-components" ;
-// import { useInputs } from "util/hooks";
-import {useItems} from "redux/reducers/items" ;
-import {useTopFlows} from "redux/reducers/top" ;
-import { useMultiSelect } from "redux/reducers/selectItem";
-import { useDispatch } from "react-redux";
+import FabBar from "components/App/FabBar" ;
+import AppDialog from "components/App/AppDialog" ;
+import TestZone from "components/App/TestZone";
+
+import {test} from "util/formulaEval" ;
+import { loadBrowserSaveData, saveBrowserSaveData } from "util/io";
+
 
 const AppContainer = styled.div`
   width: 100%;
@@ -41,33 +45,13 @@ const MainContainer = styled(MuiPaper)`
     grid-column: 1 / 3;
   `}
 `;
-const SideContainer = styled(MuiPaper)`
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-  width: 100%;
-  height: 100%;
-  overflow:auto;
-  /* border: solid 1px gray;
-  border-radius: 10px ; */
-  box-sizing:border-box;
-  z-index: 1;
-
-  ${sp`
-    grid-column: 1 / 3;
-    grid-row: 3 / 4;
-  `}
-`;
-
-// const MainContainer = styled.div`
-//   display: flex;
-
-//   flex-grow: 1;
-// `;
 
 
 function App() {
-  // console.log("########## App render ##########");
-
+  console.log("########## App render ##########");
+  // console.log("################");
+  // console.log("################");
+  // test();
   const ref = useRef<HTMLDivElement>(null!);
   useEffect(()=>{
       console.log(ref);
@@ -77,22 +61,47 @@ function App() {
       }
   },[]);
 
-  const items = useItems() ;
-  const topFlows = useTopFlows() ;
-  console.log(items, topFlows);
+  useEffect(()=>{
+    loadBrowserSaveData();
+    const tid = setInterval(()=>{
+      //save
+      console.log("auto save");
+      saveBrowserSaveData();
+    },30*1000);
+    return ()=>{
+      clearInterval(tid);
+    } ;
+  },[]);
+
+  // const items = useItems() ;
+  // const topFlows = useTopFlows() ;
+  // console.log(items, topFlows);
+
+  const dispatch = useDispatch() ;
+
+  const [showSideBar,setShowSideBar] = useState(true) ;
 
   return (
     <AppContainer>
       <TopContainer>
         {/* <button onClick={()=>{dispatch(actionCreators.addItem(calcSymCreator()))}}>BUTTON</button> */}
-        <Head />
+        <Head 
+          isShowSideBar={showSideBar}
+          toggleSideBar={()=>setShowSideBar(prev=>!prev)}/>
       </TopContainer>
       <MainContainer ref={ref}>
         <BuildPane />
       </MainContainer>
-      <SideContainer>
-        <SideBar />
-      </SideContainer>
+      <SideBar 
+        show={showSideBar} 
+        showSideBar={()=>{setShowSideBar(true)}} 
+        hideSideBar={()=>setShowSideBar(false)}/>
+
+      <FabBar />
+
+      <TestZone/>
+      
+      <AppDialog/>
     </AppContainer>
     
   );

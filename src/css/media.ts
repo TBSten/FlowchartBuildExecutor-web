@@ -6,7 +6,7 @@ import {
     SimpleInterpolation,
 } from 'styled-components';
 
-let breakpoint = "560px" ;
+export let breakpoint = "560px" ;
 
 export const sp = (
     first: CSSObject | TemplateStringsArray,

@@ -1,17 +1,28 @@
-// import { Item, useGetItem } from "atom/syms";
 import {Item} from "redux/types/item" ;
 import {useGetItem} from "redux/reducers/items" ;
 import { ReactNode, } from "react";
 import Sym, { SymRender } from "./Sym" ;
+import styled from "styled-components";
 
+const LeftAlign = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: flex-start;
+`;
+
+let loopCnt = 0 ;
+export function useLoopCnt(){
+    return loopCnt ;
+}
 
 export default function WhileSym({id,item} :{id:string,item:Item}) {
     // console.log("WhileSym", item);
+    const loopCnt = useLoopCnt() ;
+    const loopName = "ループ"+loopCnt ;
     const renderWhile :SymRender = (ctx,w,h,lw)=>{
     };
     const renderWhileTop :SymRender = (ctx,w,h,lw)=>{
-        // ctx.fillRect(0,0,w,h);
-        // ctx.strokeRect(lw/2,lw/2, w-lw,h-lw);
         const base = 10 ;
         ctx.beginPath();
         ctx.moveTo(base,0+lw/2);
@@ -50,13 +61,21 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
             ChildrenComp = <Work id={item.syms[0]} item={flowItem} isRound={true}/> ;
             return (
                 <Sym render={renderWhile} autoSize={false} id={id}>
-                    <Sym render={renderWhileTop} id={id}>
-                        {getItem(id)?.options[0].value}/{getItem(id)?.options[1].value}
-                    </Sym>
-                    {ChildrenComp}
-                    <Sym id={id} render={renderWhileBottom}>
-                        While BOTTOM
-                    </Sym>
+                    <LeftAlign>
+                        <Sym render={renderWhileTop} id={id}>
+                            <div> {loopName} </div>
+                            { getItem(id)?.options[1].value === "前判定" ? getItem(id)?.options[0].value : ""}
+                            { getItem(id)?.options[1].value === "データがある間" ? getItem(id)?.options[0].value+" にデータがある間" : ""}
+                            { getItem(id)?.options[1].value === "後判定" ? "" : ""}
+                        </Sym>
+                        {ChildrenComp}
+                        <Sym render={renderWhileBottom} id={id}>
+                            <div> {loopName} </div>
+                            { getItem(id)?.options[1].value === "前判定" ? "" : ""}
+                            { getItem(id)?.options[1].value === "データがある間" ? "" : ""}
+                            { getItem(id)?.options[1].value === "後判定" ? getItem(id)?.options[0].value : ""}
+                        </Sym>
+                    </LeftAlign>
                 </Sym>
             ) ;
         }else{

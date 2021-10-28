@@ -3,6 +3,7 @@ import { Item } from "redux/types/item";
 import Sym, { SymRender } from "./Sym";
 import styled from "styled-components" ;
 import { useRef, useEffect } from "react";
+import {conf} from "components/sym/Sym" ;
 import React from "react";
 
 const BranchContainer = styled.div`
@@ -34,6 +35,10 @@ const ChildContainer = styled.div`
     /* background:red; */
     grid-auto-flow: column;
 `;
+const Space = styled.div`
+    width: 100%;
+    height: ${conf.height/2}px;
+`;
 const Canvas = styled.canvas`
     position: absolute;
     left: 0;
@@ -42,27 +47,49 @@ const Canvas = styled.canvas`
     height: 100%;
 `;
 
-export default function BranchSym({id, item}: {id:string, item:Item}){
+interface BranchSymProps{
+    id :string; 
+    item :Item;
+    isTagShow? :boolean;
+    isYesNo? :boolean;
+}
+
+export default function BranchSym({id, item, isTagShow=true, isYesNo=false}: BranchSymProps){
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    console.log(containerRef);
-    console.log(canvasRef);
+    const symsRefs = useRef<HTMLElement[]>([]);
     const arrowRender = ()=>{
-        const con = containerRef.current ;
-        const can = canvasRef.current ;
+        console.log("symsRefs",symsRefs);
+        // console.log(symsRefs);
+        const con = containerRef.current ;  //container
+        const can = canvasRef.current ;     //canvas
         const ctx = can?.getContext("2d");
+        const syms = symsRefs.current ;     //children
+        // console.log(syms);
         if(con && can && ctx){
             can.width = con.offsetWidth ;
             can.height = con.offsetHeight ;
-            const lw = 1 ;
-            ctx.lineWidth = lw ;
-            ctx.strokeStyle = "#020249" ;
-            ctx.strokeRect(0+lw/2,0+lw/2,50,50);
+            ctx.clearRect(0,0,can.width,can.height);
+            ctx.lineWidth = conf.lineWidth ;
+            ctx.strokeStyle = conf.baseForeC ;
+            console.log("symsArrow",syms);
+            syms.forEach((ele)=>{
+                const x = conf.width/2 ;//ele.offsetLeft
+                const y = conf.height/2 ;
+                const w = ele.offsetLeft ;
+                const h = ele.offsetTop+ele.offsetHeight-y;
+                ctx.strokeRect(x,y,w,h);
+                console.log("stroke",x,y,w,h);
+            }) ;
+            ctx.beginPath();
+            ctx.moveTo(conf.width/2, conf.height/2);
+            ctx.lineTo(conf.width/2, con.offsetHeight);
+            ctx.stroke();
         }
 
     }
     useEffect(arrowRender,[]);
-    arrowRender();
+    useEffect(arrowRender);
     const getItem = useGetItem();
     const getItemOption = useGetItemOption() ;
     const topRender :SymRender = (ctx,w,h,lw)=>{
@@ -76,10 +103,19 @@ export default function BranchSym({id, item}: {id:string, item:Item}){
         ctx.stroke();
 
     };
-    const symsItems = item.syms?.map(ele=>{
+    const symsItems = item.syms?.map((ele,idx)=>{
         const item = getItem(ele);
         if(item){
-            return <item.component id={ele} item={item} isRound={true}/> ;
+            return (
+                <item.component 
+                    id={ele} 
+                    item={item} 
+                    isRound={true} 
+                    key={ele} 
+                    ref={(el:HTMLElement)=> symsRefs.current[idx] = el } 
+                    isTagShow={isTagShow}
+                    tag={isYesNo ? (idx===0?"Yes":idx===1?"No":"#ERROR !") : null}/> 
+            );
         }else{
             return <>ERROR id:{ele}は不正です</> ;
         }
@@ -107,13 +143,16 @@ export default function BranchSym({id, item}: {id:string, item:Item}){
                     </div>
                 </OutCon>
             </TopContainer>
+            {/* 子要素のタグの出力 */}
+
             {/* 子要素の出力 */}
             <ChildContainer>
                 {symsItems}
             </ChildContainer>
+            {/* 下の空白 */}
+            <Space />
             {/* 矢印の出力 */}
             <Canvas ref={canvasRef}/>
-            {/* <div ref={el => console.log("test ref",el)}>TEST</div> */}
         </BranchContainer>
     )
 } ;
