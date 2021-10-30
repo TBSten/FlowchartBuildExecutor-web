@@ -1,9 +1,11 @@
 import {Action,} from "../types/action" ;
 import { useSelector } from "react-redux";
 import {actionTypes} from "../actions" ;
+import { ArrayTemplate, ArrayTemplates } from "redux/types/top";
 
 const init = {
     flows:[] as string[],
+    arrayTemplates:[] as ArrayTemplates,
 } ;
 export default function topReducer(state=init, action:{type :string, payload:any}){
     let newState = Object.assign({},state);
@@ -18,6 +20,29 @@ export default function topReducer(state=init, action:{type :string, payload:any
             }
             return p ;
         },[] as string[]) ;
+    }else if(action.type === actionTypes.top.arrayTemplates.add){
+        const at = action.payload ;
+        const oldATs = state.arrayTemplates ;
+        newState.arrayTemplates = [...oldATs, at] ;
+    }else if(action.type === actionTypes.top.arrayTemplates.update){
+        const name = action.payload.name ;
+        const at = action.payload.arrayTemplate ;
+        newState.arrayTemplates = state.arrayTemplates.reduce((p,v)=>{
+            if(v.name === name){
+                p.push(at);
+            }else{
+                p.push(v);
+            }
+            return p ;
+        },[] as ArrayTemplates);
+    }else if(action.type === actionTypes.top.arrayTemplates.remove){
+        const name = action.payload.name ;
+        newState.arrayTemplates = state.arrayTemplates.reduce((p,v)=>{
+            if(v.name !== name){
+                p.push(v);
+            }
+            return p ;
+        },[] as ArrayTemplates);
     }else if(action.type === actionTypes.top.load){
         const top = action.payload ;
         newState = {...top} ;
@@ -39,7 +64,28 @@ export function removeTopFlow(flowId :string) :Action{
         payload:flowId,
     } ;
 }
-export function loadTop(top :typeof init){
+export function addTopArrayTemplate(arrayTemplate :ArrayTemplate) :Action{
+    return {
+        type:actionTypes.top.arrayTemplates.add,
+        payload:arrayTemplate,
+    } ;
+}
+export function updateTopArrayTemplate(name :string, arrayTemplate :ArrayTemplate) :Action{
+    return {
+        type:actionTypes.top.arrayTemplates.update,
+        payload:{
+            name,
+            arrayTemplate,
+        },
+    } ;
+}
+export function removeTopArrayTemplate(name :string) :Action{
+    return {
+        type:actionTypes.top.arrayTemplates.remove,
+        payload:name,
+    } ;
+}
+export function loadTop(top :typeof init) :Action{
     return {
         type:actionTypes.top.load ,
         payload:top ,

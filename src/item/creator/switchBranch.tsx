@@ -5,7 +5,7 @@ import { useGetItem, setItem } from "redux/reducers/items";
 import { useSelectItemId } from "redux/reducers/selectItem";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
-import { flowCreator } from "util/itemCreator";
+import { flowCreator } from "item/creator/flow";
 import { optionTypes } from "util/syms";
 import { baseItemCreator, optionCreator } from "./base";
 

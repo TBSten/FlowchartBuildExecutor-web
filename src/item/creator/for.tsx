@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { setItem } from "redux/reducers/items";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
-import { flowCreator, whileSymCreator } from "util/itemCreator";
+import { flowCreator } from "item/creator/flow" ;
+import { whileSymCreator } from "item/creator/while";
 import { optionTypes } from "util/syms";
 import { optionCreator } from "./base";
 

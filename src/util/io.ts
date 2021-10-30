@@ -2,21 +2,32 @@ import { store } from "redux/store";
 import { Items } from "redux/types/item";
 import { loadItems } from "redux/reducers/items";
 import { loadTop } from "redux/reducers/top";
-import {
-  calcSymCreator,
-  terminalSymCreator,
-  flowCreator,
-  whileSymCreator,
-  doubleBranchSymCreator,
-  switchBranchSymCreator,
-  dataSymCreator,
-  prepareSymCreator,
-  processSymCreator,
-  forSymCreator,
-} from "./itemCreator";
+// import {
+//   calcSymCreator,
+//   terminalSymCreator,
+//   flowCreator,
+//   whileSymCreator,
+//   doubleBranchSymCreator,
+//   switchBranchSymCreator,
+//   dataSymCreator,
+//   prepareSymCreator,
+//   processSymCreator,
+//   forSymCreator,
+// } from "./itemCreator";
+import { calcSymCreator } from "item/creator/calc" ;
+import { terminalSymCreator } from "item/creator/terminal" ;
+import { flowCreator } from "item/creator/flow" ;
+import { whileSymCreator } from "item/creator/while" ;
+import { doubleBranchSymCreator } from "item/creator/doubleBranch" ;
+import { switchBranchSymCreator } from "item/creator/switchBranch" ;
+import { dataSymCreator } from "item/creator/data" ;
+import { prepareSymCreator } from "item/creator/prepare" ;
+import { processSymCreator } from "item/creator/process" ;
+import { forSymCreator } from "item/creator/for" ;
 import { optionTypes } from "./syms";
 
 import StoreJs from "store";
+import { ArrayTemplates } from "redux/types/top";
 
 export type OutputOption = {
   name: string;
@@ -37,6 +48,7 @@ export type SaveState = {
   items: OutputItems;
   top: {
     flows: string[];
+    arrayTemplates: ArrayTemplates,
   };
 };
 
@@ -63,6 +75,7 @@ export function getSaveState(): SaveState {
   });
   const top = {
     flows: state.top.flows,
+    arrayTemplates: state.top.arrayTemplates,
   };
   return {
     items,

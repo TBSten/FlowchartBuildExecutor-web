@@ -64,6 +64,7 @@ export default function Head(props :HeadProps){
         } ));
         dispatch(loadTop( {
             flows:[],
+            arrayTemplates:[],
         } ));
     }
     function handleSave(){

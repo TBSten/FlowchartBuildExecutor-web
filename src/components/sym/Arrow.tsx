@@ -4,11 +4,10 @@ import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
 import Drawer from "@material-ui/core/Drawer" ;
 
-
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import itemCreator from "util/itemCreator";
+import { itemCreators } from "item/creator";
 import { useDispatch } from "react-redux";
 import { setItem, } from "redux/reducers/items";
 import { useGetItem } from "redux/reducers/items";
@@ -88,7 +87,7 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
             setIsDrawerOpen(true);
         }
     }
-    const creators = itemCreator.map(ele=>(
+    const creators = itemCreators.map(ele=>(
         ele.creator()
     ));
     const handleAddItem = (i :number)=> (()=>{
@@ -127,7 +126,7 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
             <Drawer anchor="bottom" open={isDrawerOpen} style={{zIndex:10001,}} onClose={handleCloseDrawer} >
                 <Grid container spacing={2}>
                     {
-                        itemCreator.map((ele,idx)=>(
+                        itemCreators.map((ele,idx)=>(
                             <Grid item xs={matches?12:6} key={idx}>
                                 <Card className={classes.dMenu}>
                                     <CardActionArea onClick={handleAddItem(idx)}>

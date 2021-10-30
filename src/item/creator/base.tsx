@@ -2,15 +2,13 @@ import { Button } from "@material-ui/core";
 import { Done, DoneAll, Delete,  } from "@material-ui/icons";
 import Runtime from "exe/runtimes/Runtime";
 import { useDispatch } from "react-redux";
-import { removeItem, useGetItem, setItem } from "redux/reducers/items";
+import { removeItem, } from "redux/reducers/items";
 import { useSelectItemIds, useSelectItemId, selectItemById } from "redux/reducers/selectItem";
 import { useTopFlows, removeTopFlow } from "redux/reducers/top";
 import { 
     Item,
     Option,
 } from "redux/types/item";
-import { randomStr } from "util/functions";
-import { flowCreator } from "util/itemCreator";
 import { OptionType } from "util/syms";
 
 interface baseItemComponentProps {
@@ -57,28 +55,6 @@ const UnselectAllSymMenu = ()=>{
     return (
         <Button startIcon={<DoneAll />} onClick={handleUnselectAll} color="primary" variant="outlined">
             全て選択解除
-        </Button>
-    ) ;
-} ;
-const AddFlowSymMenu = ()=>{
-    const selectItemId = useSelectItemId();
-    const switchSymId :string = selectItemId ;
-    const getItem = useGetItem();
-    const dispatch = useDispatch();
-    function handleAddFlow(){
-        const fid = randomStr(30);
-        const f = flowCreator([]);
-        dispatch(setItem(fid,f));
-        const newSwitchSym = Object.assign({},getItem(switchSymId));
-        let newSyms = newSwitchSym.syms?newSwitchSym.syms:[] ;
-        newSyms = [...newSyms, fid] ;
-        newSwitchSym.syms = newSyms ;
-        dispatch(setItem(switchSymId,newSwitchSym));
-        //console.log(fid,f,selectItemId,newSwitchSym);
-    }
-    return (
-        <Button onClick={handleAddFlow} color="primary" variant="outlined">
-            分岐先を追加する
         </Button>
     ) ;
 } ;

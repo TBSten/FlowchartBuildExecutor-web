@@ -55,10 +55,21 @@ export const optionTypes :{ [key :string]:OptionType } = {
             </Select>
         ),
     },
-    //multi args:[{type:"text",args:null}, ]
     //arrayTemplate
-    //number args:{min,max,}
+    "arrayTemplate":{
+        name:"arrayTemplate",
+        input:()=>function ArrayTemplateInput({name,value,args,updateOption}){
+            return (
+                <>
+                    <Select>
+                    </Select>
+                </>
+            ) ;
+        },
+    },
+    //multi args:[{type:"text",args:null}, ]
 } as const;
+
 
 export function corners(w :number,h :number,lw :number) {
     return {

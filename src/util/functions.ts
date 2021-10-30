@@ -24,7 +24,25 @@ export function randomItemId() :string{
     return ans ;
 }
 
-randomItemId();
+// randomItemId();
+
+
+export function dimensionOf(value :any){
+    let ans = 0 ;
+    let w = value ;
+    while(w && w instanceof Array){
+        ans++;
+        w = w[0] ;
+    }
+    return ans ;
+}
+
+
+
+
+
+
+
 
 
 

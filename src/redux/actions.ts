@@ -20,6 +20,11 @@ const top = {
         add:"top/flows/add",
         remove:"top/flows/remove",
     },
+    arrayTemplates:{
+        add:"top/arrayTemplates/add",
+        remove:"top/arrayTemplates/remove",
+        update:"top/arrayTemplates/update",
+    },
     load:"top/load",
 } ;
 const selectItem = {
