@@ -67,7 +67,7 @@ export default function itemsReducer(
             newState[parentId] = newParentItem ;
         }else if(action.type === actionTypes.items.load){
             const items = action.payload ;
-            newState = items ;
+            newState = {...init,...items} ;
         }
         return newState ;
 }

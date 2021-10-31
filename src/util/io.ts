@@ -131,6 +131,7 @@ export function loadSaveState(saveState: SaveState) {
   store.dispatch(loadTop(top));
 }
 
+
 export function downloadTextFile(name: string, data: string) {
   const $a = document.createElement("a");
   const bom = new Uint8Array([0xef, 0xbb, 0xbf]);

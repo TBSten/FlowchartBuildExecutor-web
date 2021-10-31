@@ -45,7 +45,7 @@ export default function topReducer(state=init, action:{type :string, payload:any
         },[] as ArrayTemplates);
     }else if(action.type === actionTypes.top.load){
         const top = action.payload ;
-        newState = {...top} ;
+        newState = {...init,...top} ;
     }
     return newState ;
 }
@@ -97,3 +97,9 @@ export function useTopFlows(){
     const topFlows = useSelector((state:{top:{flows:string[]}}) => state.top.flows);
     return topFlows ;
 }
+export function useTopArrayTemplates() {
+    const topAT = useSelector((state:{top:typeof init}) => state.top.arrayTemplates ) ;
+    console.log(useSelector((s:any)=>s));
+    return topAT ;
+}
+

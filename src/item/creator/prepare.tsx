@@ -18,6 +18,8 @@ export function prepareSymCreator() :Item{
             optionCreator("対象",　"ARR",　optionTypes["text"]),
             optionCreator("初期値",　"0",　optionTypes["text"]),
             optionCreator("要素数",　"5",　optionTypes["text"]),
+            optionCreator("TEST",　"x",　optionTypes["text"]),
+            optionCreator("配列テンプレート",　"",　optionTypes["arrayTemplate"]),
 
         ]
     );

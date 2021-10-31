@@ -1,7 +1,9 @@
 // import { ReactNode } from "react";
 import {TextField, Select, Checkbox, MenuItem, } from "@material-ui/core" ;
 import React, { FC, useState, useEffect,  } from "react";
-
+import { useTopArrayTemplates } from "redux/reducers/top";
+import Button from "components/util/Button" ;
+import { SelectChangeEvent } from "@mui/material/Select";
 
 export type OptionType = {
     name:string;
@@ -59,10 +61,31 @@ export const optionTypes :{ [key :string]:OptionType } = {
     "arrayTemplate":{
         name:"arrayTemplate",
         input:()=>function ArrayTemplateInput({name,value,args,updateOption}){
+            const ats = useTopArrayTemplates() ;
+            function handleNew(){
+            }
+            function handleEdit(){
+            }
             return (
                 <>
-                    <Select>
+                    <Select value={value} onChange={e=> updateOption(name, e.target.value as string) }>
+                        <MenuItem value="None">None</MenuItem>
+                    {
+                        ats.map(at => (
+                            <MenuItem key={at.name} value={at.name}> 
+                                {at.name} : {at.value} 
+                            </MenuItem>
+                        ))
+                    }
+                        <MenuItem value="Test">Test</MenuItem>
                     </Select>
+                    <div>
+                        <Button onClick={handleNew}>New</Button>
+                        <Button onClick={handleEdit}>Edit</Button>
+                    </div>
+
+                    {/* new and edit dialog */}
+
                 </>
             ) ;
         },

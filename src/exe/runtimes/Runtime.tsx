@@ -232,8 +232,10 @@ export default class Runtime {
         // console.log("resolve msgBox Promise");
         resolve();
       });
-      store.dispatch({payload:null, ...onCloseAction,});
-      store.dispatch({payload:null, ...openAction});
+      // store.dispatch({payload:null, ...onCloseAction,});
+      // store.dispatch({payload:null, ...openAction});
+      store.dispatch(onCloseAction);
+      store.dispatch(openAction);
     });
   }
   sleep(msec :number){

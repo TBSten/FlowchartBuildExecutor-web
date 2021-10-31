@@ -1,5 +1,5 @@
-import {Action,} from "../types/action" ;
 import { useDispatch, useSelector } from "react-redux";
+import { Action } from "redux/types/action";
 import {actionTypes} from "../actions" ;
 
 const init:{
@@ -44,6 +44,7 @@ export function openAppDialog(content:React.ReactNode) :Action{
 export function hideAppDialog() :Action{
     return {
         type:actionTypes.app.dialog.hide,
+        payload:undefined,
     } ;
 } ;
 export function setOnCloseAppDialog(onClose:()=>void) :Action{
