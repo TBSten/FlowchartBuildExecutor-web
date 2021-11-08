@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, } from "react";
 import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
 import Drawer from "@material-ui/core/Drawer" ;
+import DialogActions from "@material-ui/core/DialogActions" ;
 
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
@@ -52,9 +53,6 @@ interface ArrowProps{
 }
 
 export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
-    // const mode = useMode();
-    // const addItem = useAddItem();
-    // const addSymToFlow = useAddSymToFlow();
     const classes = useStyles();
     const matches = useMediaQuery(`(max-width:${breakpoint})`);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -141,11 +139,16 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
                             </Grid>
                         ))
                     }
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                         <Button　color="primary" variant="outlined" onClick={handleCloseDrawer}>
                             キャンセル
                         </Button>
-                    </Grid>
+                    </Grid> */}
+                    <DialogActions>
+                        <Button　color="primary" variant="outlined" onClick={handleCloseDrawer}>
+                            キャンセル
+                        </Button>
+                    </DialogActions>
                 </Grid>
             </Drawer>
         </ArrowContainer>

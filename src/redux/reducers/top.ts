@@ -36,7 +36,7 @@ export default function topReducer(state=init, action:{type :string, payload:any
             return p ;
         },[] as ArrayTemplates);
     }else if(action.type === actionTypes.top.arrayTemplates.remove){
-        const name = action.payload.name ;
+        const name = action.payload ;
         newState.arrayTemplates = state.arrayTemplates.reduce((p,v)=>{
             if(v.name !== name){
                 p.push(v);
@@ -47,6 +47,7 @@ export default function topReducer(state=init, action:{type :string, payload:any
         const top = action.payload ;
         newState = {...init,...top} ;
     }
+    console.log("top updated :::",newState);
     return newState ;
 }
 
@@ -101,5 +102,13 @@ export function useTopArrayTemplates() {
     const topAT = useSelector((state:{top:typeof init}) => state.top.arrayTemplates ) ;
     console.log(useSelector((s:any)=>s));
     return topAT ;
+}
+export function useTopArrayTemplate(name:string) :ArrayTemplate | null{
+    const ats = useTopArrayTemplates();
+    let ans :(ArrayTemplate | null) = null ;
+    ats.forEach(at => {
+        if(at.name === name) ans = at ;
+    });
+    return ans ;
 }
 

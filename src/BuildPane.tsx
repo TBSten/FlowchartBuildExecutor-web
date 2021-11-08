@@ -7,6 +7,8 @@ import {sp} from "./css/media" ;
 import { useZoom } from "redux/reducers/edits";
 import { selectItemById,useSelectItemIds } from "redux/reducers/selectItem" ;
 import SelectAllIcon from '@material-ui/icons/SelectAll';
+import { assignLoopCnt, } from "components/sym/WhileSym" ;
+
 
 const FlowContainer = styled.div`
     display:inline-grid;
@@ -32,6 +34,7 @@ export default function BuildPane(){
     const zoom = useZoom();
     const dispatch = useDispatch() ;
     const selectItemIds = useSelectItemIds() ;
+    assignLoopCnt();
     
     const memodChild = (
         <FlowContainer style={{transform:`scale(${zoom})`}}>

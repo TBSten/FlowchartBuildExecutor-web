@@ -4,8 +4,12 @@ import DialogTitle from "@material-ui/core/DialogTitle" ;
 import List from "@material-ui/core/List" ;
 import ListItem from "@material-ui/core/ListItem" ;
 import ListItemText from "@material-ui/core/ListItemText" ;
+import Container from "@material-ui/core/Container" ;
+import IconButton from "@material-ui/core/IconButton" ;
 import {makeStyles} from "@material-ui/core" ;
 import PlayArrow from "@material-ui/icons/PlayArrow" ;
+import ZoomIn from "@material-ui/icons/ZoomIn" ;
+import ZoomOut from "@material-ui/icons/ZoomOut" ;
 import { useDispatch } from "react-redux";
 import {setMode,useMode} from "redux/reducers/mode" ;
 import { Edit } from "@material-ui/icons";
@@ -13,6 +17,8 @@ import { useRuntime, setRuntime, setExecutingId } from "redux/reducers/exes";
 import { runtimes } from "exe/runtimes" ;
 import Runtime from "exe/runtimes/Runtime";
 import { useTopFlows } from "redux/reducers/top";
+import { setZoom, incZoom } from "redux/reducers/edits";
+
 
 const useStyles = makeStyles({
     root :{
@@ -20,6 +26,13 @@ const useStyles = makeStyles({
         right: "25px",
         bottom: "10px",
         zIndex: 10,
+        padding: 0,
+        display:"grid",
+        gridTemplateRows:"1fr",
+        gridAutoFlow:"column",
+        gap:"10px",
+        width:"auto",
+        alignItems:"center",
     },
 });
 
@@ -51,41 +64,54 @@ export default function ExeButton(){
         dispatch(setExecutingId("none"));
     }
     return (
-        <Fab variant="extended" color="primary" classes={{root : classes.root}}
-            onClick={handleExeMode}>
-            {
-            mode==="edit"?
-                <>
-                    <PlayArrow />
-                    実行
-                </>
-            :
-            mode==="exe"?
-                <>
-                    <Edit />
-                    編集
-                    <Dialog open={runtime===null}>
-                        <DialogTitle> ダイアログ </DialogTitle>
-                        <List>
-                            {
-                                runtimes.map(el=>{
-                                    const runtime = new el(topFlows,[]) ;
-                                    return (
-                                        <ListItem button onClick={(e)=>selectRuntime(runtime,e)} key={runtime.name}>
-                                            <ListItemText>{runtime.name}</ListItemText>
-                                        </ListItem>
-                                    ) ;
-                                })
-                            }
+        <Container classes={classes} >
 
-                        </List>
-                    </Dialog>
-                </>
-            :
-            "ERROR !"
-            }
-            
-        </Fab>
+            <Fab color="primary" size="small" onClick={()=>dispatch(incZoom(+0.1))}>
+                <ZoomIn />
+            </Fab>
+
+            <Fab color="primary" size="small" onClick={()=>dispatch(incZoom(-0.1))}>
+                <ZoomOut />
+            </Fab>
+
+            <Fab 
+                variant="extended" 
+                color="primary" 
+                onClick={handleExeMode}>
+                {
+                mode==="edit"?
+                    <>
+                        <PlayArrow />
+                        実行
+                    </>
+                :
+                mode==="exe"?
+                    <>
+                        <Edit />
+                        編集
+                        <Dialog open={runtime===null}>
+                            <DialogTitle> ダイアログ </DialogTitle>
+                            <List>
+                                {
+                                    runtimes.map(el=>{
+                                        const runtime = new el(topFlows,[]) ;
+                                        return (
+                                            <ListItem button onClick={(e)=>selectRuntime(runtime,e)} key={runtime.name}>
+                                                <ListItemText>{runtime.name}</ListItemText>
+                                            </ListItem>
+                                        ) ;
+                                    })
+                                }
+
+                            </List>
+                        </Dialog>
+                    </>
+                :
+                "ERROR !"
+                }
+                
+            </Fab>
+        </Container>
     ) ;
 }
 

@@ -12,9 +12,9 @@ export function terminalSymCreator(type :"はじめ"|"おわり" ="はじめ") :
             // {name:"タイプ", value:type, type:optionTypes["select"], args:["はじめ","おわり"] } , 
             // {name:"はじめのテキスト", value:"", type:optionTypes["text"] } , 
             // {name:"おわりの返り値", value:"", type:optionTypes["text"] } , 
-            optionCreator("タイプ",type , optionTypes["select"],["はじめ","おわり"] ),
-            optionCreator("はじめのテキスト",　"",　optionTypes["text"]),
-            optionCreator("おわりの返り値",　"",　optionTypes["text"]),
+            optionCreator("タイプ",type , optionTypes["select"],["はじめ","おわり"],false ),
+            optionCreator("はじめのテキスト",　"",　optionTypes["text"],null,(item)=>(item.options[0].value==="はじめ")),
+            optionCreator("おわりの返り値",　"",　optionTypes["text"],null,(item)=>(item.options[0].value==="おわり")),
         ]
     );
     return ans ;

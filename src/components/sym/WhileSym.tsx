@@ -11,9 +11,10 @@ const LeftAlign = styled.div`
     align-items: flex-start;
 `;
 
-let loopCnt = 0 ;
-export function useLoopCnt(){
-    return loopCnt ;
+export function useLoopCnt() :number{
+    return 0 ;
+}
+export function assignLoopCnt() {
 }
 
 export default function WhileSym({id,item} :{id:string,item:Item}) {

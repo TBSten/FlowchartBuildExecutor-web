@@ -1,9 +1,6 @@
 // import { ReactNode } from "react";
 import {TextField, Select, Checkbox, MenuItem, } from "@material-ui/core" ;
 import React, { FC, useState, useEffect,  } from "react";
-import { useTopArrayTemplates } from "redux/reducers/top";
-import Button from "components/util/Button" ;
-import { SelectChangeEvent } from "@mui/material/Select";
 
 export type OptionType = {
     name:string;
@@ -15,7 +12,6 @@ export type OptionType = {
     }>;
 
 } ;
-
 
 
 export const optionTypes :{ [key :string]:OptionType } = {
@@ -35,15 +31,35 @@ export const optionTypes :{ [key :string]:OptionType } = {
                 updateOption(name,inputValue);
             } ;
             return (
-                <TextField size="small" variant="outlined" value={inputValue} onBlur={handleUpdate} onChange={handleChange}/>
+                <TextField 
+                    size="small" 
+                    variant="outlined" 
+                    value={inputValue} 
+                    onChange={handleChange}
+                    onBlur={handleUpdate} 
+                    onKeyPress={(e)=>{ if(e.key === "Enter"){ handleUpdate() } }}//エンターキー押下時
+                    />
             )
         },
     },
     "check":{
         name:"check",
-        input:()=>({name,value,updateOption})=>(
-            <Checkbox value={value} onChange={(e)=>{updateOption(name,e.target.checked);console.log("onChange",e.target.checked)}}/>
-        ),
+        input:()=>({name,value,updateOption})=>{
+            const [inputValue, setInputValue] = useState(value);
+            console.log(inputValue);
+            return (
+                <Checkbox 
+                    value={inputValue} 
+                    checked={inputValue as boolean}
+                    onChange={(e,checked)=>{
+                        // updateOption(name,e.target.checked);
+                        setInputValue(prev=>{
+                            updateOption(name, checked);
+                            return checked;
+                        });
+                    }}/>
+            ) ;
+        },
     },
     "select":{
         name:"select",
@@ -58,39 +74,7 @@ export const optionTypes :{ [key :string]:OptionType } = {
         ),
     },
     //arrayTemplate
-    "arrayTemplate":{
-        name:"arrayTemplate",
-        input:()=>function ArrayTemplateInput({name,value,args,updateOption}){
-            const ats = useTopArrayTemplates() ;
-            function handleNew(){
-            }
-            function handleEdit(){
-            }
-            return (
-                <>
-                    <Select value={value} onChange={e=> updateOption(name, e.target.value as string) }>
-                        <MenuItem value="None">None</MenuItem>
-                    {
-                        ats.map(at => (
-                            <MenuItem key={at.name} value={at.name}> 
-                                {at.name} : {at.value} 
-                            </MenuItem>
-                        ))
-                    }
-                        <MenuItem value="Test">Test</MenuItem>
-                    </Select>
-                    <div>
-                        <Button onClick={handleNew}>New</Button>
-                        <Button onClick={handleEdit}>Edit</Button>
-                    </div>
-
-                    {/* new and edit dialog */}
-
-                </>
-            ) ;
-        },
-    },
-    //multi args:[{type:"text",args:null}, ]
+    //multi args:[{type:"text"},{type:"select",args:[]} ]
 } as const;
 
 

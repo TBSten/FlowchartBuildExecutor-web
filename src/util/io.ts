@@ -1,5 +1,5 @@
 import { store } from "redux/store";
-import { Items } from "redux/types/item";
+import { Item, Items } from "redux/types/item";
 import { loadItems } from "redux/reducers/items";
 import { loadTop } from "redux/reducers/top";
 // import {
@@ -34,7 +34,6 @@ export type OutputOption = {
   value: any;
   type: string;
   args: any;
-  visible: boolean;
 };
 export type OutputItem = {
   itemType: string;
@@ -64,7 +63,7 @@ export function getSaveState(): SaveState {
         value: op.value,
         type: op.type.name,
         args: op.args,
-        visible: op.visible,
+        // visible: op.isVisible(item),
       };
     });
     items[el] = {
@@ -89,7 +88,7 @@ export function loadSaveState(saveState: SaveState) {
   Object.keys(saveState.items).forEach((el) => {
     const item = saveState.items[el];
     // items[el] = {};
-    let put = null;
+    let put:Item|null = null;
     if (item.itemType === "Calc") {
       put = calcSymCreator();
     } else if (item.itemType === "Terminal") {
@@ -113,20 +112,24 @@ export function loadSaveState(saveState: SaveState) {
     }else {
       throw new Error("unvalid type :" + item.itemType);
     }
+    const work = put ;
+    console.log("load option ",work);
     put.syms = item.syms;
-    put.options = item.options.map((el) => {
+    put.options = item.options.map((el,idx) => {
       const type = optionTypes[el.type];
-      // console.log("put", el);
-      return {
+      const ansOption = {
+        ...work.options[idx],
         ...el,
         type,
       };
+      return ansOption ;
     });
+    put = work ;
     items[el] = put;
   });
   //top
   const top = saveState.top;
-  console.log("load", items, top);
+  // console.log("load", items, top);
   store.dispatch(loadItems(items));
   store.dispatch(loadTop(top));
 }

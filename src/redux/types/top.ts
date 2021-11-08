@@ -1,8 +1,8 @@
-import { Variable } from "exe/runtimes/types";
+import { VariableValue } from "exe/runtimes/types";
 
 export interface ArrayTemplate{
     name :string;
-    value :Variable;
+    value :VariableValue;
 } ;
 
 export type ArrayTemplates = ArrayTemplate[] ;

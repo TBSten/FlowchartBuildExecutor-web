@@ -90,7 +90,7 @@ export default function Head(props :HeadProps){
                 <Typography variant="h6" style={{flexGrow:1}}>
                     FBE
                 </Typography>
-                <ZoomBar key={"zoom"} >
+                {/* <ZoomBar key={"zoom"} >
                     <IconButton color="inherit" onClick={()=>{dispatch(incZoom(+0.1));}} key={"zoomup"}>
                         <ZoomIn />
                     </IconButton>
@@ -100,7 +100,7 @@ export default function Head(props :HeadProps){
                     <IconButton color="inherit" onClick={()=>{dispatch(incZoom(-0.1));}} key={"zoomdown"}>
                         <ZoomOut />
                     </IconButton>
-                </ZoomBar>
+                </ZoomBar> */}
 
                 <Drawer anchor="left" open={drawerOpen} onClose={()=>{setDrawerOpen(false)}}>
                     <List>

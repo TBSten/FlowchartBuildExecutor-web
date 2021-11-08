@@ -51,34 +51,34 @@ export function switchBranchSymCreator(syms? :string[]) :Item{
     );
     ans.syms = syms ;
     // ans.menus = ans.menus.filter(el=>el.name !== "記号の操作")
-    ans.menus.push({"name":"分岐先","component":[AddFlowSymMenu,]});
-    ans.execute = async (runtime,item,)=>{
-        const con = item.options[0].value ;
-        const symItems = (item.syms?item.syms:[]).map(el=>{
-            const ans = runtime.getItem(el) ; 
-            if(ans){
-                return ans ;
-            }else{
-                throw new Error("unvalid item "+ans) ;
-            }
-        });
-        let idx :number|null = null ;
-        symItems.forEach((el,i)=>{
-            if(idx === null && el.options[0].name === "タグ"){
-                if(el.options[0].value === "その他"){
-                    idx = i ;
-                }else if(runtime.eval(el.options[0].value) === runtime.eval(con)){
-                    idx = i ;
-                }else{
-                }
-            }
-        });
-        if(idx && item.syms){
-            runtime.addExeItemId(0,item.syms[idx]);
-        }else{
-            throw new Error("unvalid branch "+item) ;
-        }
-    } ;
+    // ans.menus.push({"name":"分岐先","component":[AddFlowSymMenu,]});
+    // ans.execute = async (runtime,item,)=>{
+    //     const con = item.options[0].value ;
+    //     const symItems = (item.syms?item.syms:[]).map(el=>{
+    //         const ans = runtime.getItem(el) ; 
+    //         if(ans){
+    //             return ans ;
+    //         }else{
+    //             throw new Error("unvalid item "+ans) ;
+    //         }
+    //     });
+    //     let idx :number|null = null ;
+    //     symItems.forEach((el,i)=>{
+    //         if(idx === null && el.options[0].name === "タグ"){
+    //             if(el.options[0].value === "その他"){
+    //                 idx = i ;
+    //             }else if(runtime.eval(el.options[0].value) === runtime.eval(con)){
+    //                 idx = i ;
+    //             }else{
+    //             }
+    //         }
+    //     });
+    //     if(idx && item.syms){
+    //         runtime.addExeItemId(0,item.syms[idx]);
+    //     }else{
+    //         throw new Error("unvalid branch "+item) ;
+    //     }
+    // } ;
     return ans ;
 }
 
@@ -96,9 +96,9 @@ export function useSwitchSymCreator() :()=>Item{
         f1.options[0].value = "1" ;
         f2.options[0].value = "2" ;
         f3.options[0].value = "その他" ;
-        f1.menus = f1.menus.filter(el=>(el.name !== "記号の操作"))
-        f2.menus = f2.menus.filter(el=>(el.name !== "記号の操作"))
-        f3.menus = f3.menus.filter(el=>(el.name !== "記号の操作"))
+        // f1.menus = f1.menus.filter(el=>(el.name !== "記号の操作"))
+        // f2.menus = f2.menus.filter(el=>(el.name !== "記号の操作"))
+        // f3.menus = f3.menus.filter(el=>(el.name !== "記号の操作"))
         dispatch(setItem(f1Id,f1));
         dispatch(setItem(f2Id,f2));
         dispatch(setItem(f3Id,f3));
