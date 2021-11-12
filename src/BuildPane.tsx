@@ -37,7 +37,7 @@ export default function BuildPane(){
     assignLoopCnt();
     
     const memodChild = (
-        <FlowContainer style={{transform:`scale(${zoom})`}}>
+        <FlowContainer style={{transform:`scale(${zoom})`}} id="fbe-buildpane">
             {
                 topFlows.map((ele,idx)=>{
                     const item = getItem(ele) ;

@@ -35,6 +35,8 @@ import {
  } from "util/io" ;
 import { loadItems } from "redux/reducers/items";
 import { loadTop } from "redux/reducers/top";
+import { downloadBp } from "util/html2Image" ;
+
 
 const ZoomBar = styled.div`
     color:white;
@@ -79,6 +81,12 @@ export default function Head(props :HeadProps){
         }catch(e){
             console.error(e);
             alert("ファイルの読み込みに失敗しました");
+        }
+    }
+    function handleExportImg(){
+        const fileName = prompt("ファイル名を設定してください");
+        if(fileName){
+            downloadBp("png",fileName);
         }
     }
     return (
@@ -138,6 +146,19 @@ export default function Head(props :HeadProps){
                             </ListItemIcon>
                             <ListItemText>
                                 インポート
+                            </ListItemText>
+                        </ListItem>
+
+                        {/* エクスポート */}
+                        <ListSubheader >
+                            エクスポート
+                        </ListSubheader>
+                        <ListItem button onClick={makeHandleSelectItem(handleExportImg)}>
+                            <ListItemIcon>
+                                <InsertDriveFile />
+                            </ListItemIcon>
+                            <ListItemText>
+                                画像に変換
                             </ListItemText>
                         </ListItem>
 

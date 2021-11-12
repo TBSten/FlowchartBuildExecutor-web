@@ -3,6 +3,7 @@ import { useState, } from "react" ;
 import { downloadTextFile, getSaveState, inputTextFile, loadBrowserSaveData, loadSaveState, saveBrowserSaveData, } from "util/io" ;
 import { useAppDialog } from "redux/reducers/app" ;
 import { declutterItems } from "util/io" ;
+import { test } from "util/html2Image" ;
 
 export default function TestZone(){
     //console.log("test ###################");
@@ -45,6 +46,8 @@ export default function TestZone(){
                     <hr/>
                     <button onClick={()=>dialog.show("OK")}>open app dialog</button>
                     <button onClick={()=>dialog.hide()}>hide app dialog</button>
+                    <hr/>
+                    <button onClick={()=>test()}>buildPane {"->"} image</button>
                     <hr/>
                     {/* <button onClick={()=>{declutterItems()}}>declutterItems</button> */}
                 </>
