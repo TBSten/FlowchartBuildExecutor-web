@@ -1,5 +1,4 @@
-import { Done, DoneAll, Delete, } from "@material-ui/icons";
-import { ContentCopy, } from "@mui/icons-material" ;
+import { Done, DoneAll, Delete, FileCopy, } from "@material-ui/icons";
 import Runtime from "exe/runtimes/Runtime";
 import { removeItem, setItem } from "redux/reducers/items";
 import { removeTopFlow } from "redux/reducers/top";
@@ -7,6 +6,7 @@ import { Item, Option } from "redux/types/item";
 import { OptionType } from "util/syms";
 import { store } from "redux/store" ;
 import { deepCopy, randomStr } from "util/functions";
+import { selectItemById } from "redux/reducers/selectItem";
 
 interface baseItemComponentProps {
     item: Item;
@@ -88,7 +88,7 @@ export function baseItemCreator(
                 //要素をフローに追加
                 store.dispatch(setItem(parentId,newParentSym));
             }, 
-            icon: <ContentCopy />,
+            icon: <FileCopy />,
         },
     ];
     async function execute(e: Runtime, item: Item) {
