@@ -53,10 +53,10 @@ export default class MsgBoxRuntime extends Runtime {
         this.description = "ターミナルタブに一覧で出力します" ;
         this.outputHistory = [] ;
     }
-    async output(data :VariableValue){
+    async output(data :string){
         console.log("<<<<<<<<output start");
         // await this.msgBox(data.toString());
-        this.outputHistory = [...this.outputHistory, data.toString(), ] ;
+        this.outputHistory = [...this.outputHistory, this.eval(data).toString(), ] ;
         console.log("<<<<<<<<output end");
     }
     async input(msg :string) {

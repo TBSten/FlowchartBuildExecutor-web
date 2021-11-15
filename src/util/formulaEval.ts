@@ -1,4 +1,4 @@
-import { Variable, VariableValue } from "exe/runtimes/types";
+import { ArrayBaseType, Variable, VariableValue } from "exe/runtimes/types";
 
 function regEscape(str: string) {
   return str.replace(/[-\/\\^$*+?.()|\[\]{}]/g, "\\$&");
@@ -22,6 +22,7 @@ export class Evaler {
     "=",
     "!=",
     "<>",
+    // ",",
   ];
   constructor(vars: Variable[]) {
     this.vars = vars;
@@ -185,7 +186,9 @@ export class Evaler {
     return ans;
   }
   getOpePriority(ope: string) {
-    if (ope === "[" || ope === "]") {
+    if(ope === ","){
+      return 0;
+    }else if (ope === "[" || ope === "]") {
       return 1;
     } else if (
       ope === ">" ||
@@ -243,6 +246,7 @@ export class Evaler {
     } else if (typeof lt === "boolean") {
       return lt ? "true" : "false";
     }
+    //配列に対応させたい
     throw new Error("unvalid literal :" + lt);
   }
 
@@ -334,6 +338,16 @@ export class Evaler {
       if (typeof lL === "number" && typeof rL === "number") {
         const ans = lL !== rL;
         return this.ltToToken(ans);
+      }
+    } else if(o === ",") {
+      const lL = this.tokenToLt(l);
+      const rL = this.tokenToLt(r);
+      if(lL instanceof Array ){
+        const ans = [...lL, rL];
+        return this.ltToToken(ans as ArrayBaseType);
+      } else {
+        const ans = [lL, rL];
+        return this.ltToToken(ans as ArrayBaseType);
       }
     }
     throw new Error("unvalid ope :" + o);

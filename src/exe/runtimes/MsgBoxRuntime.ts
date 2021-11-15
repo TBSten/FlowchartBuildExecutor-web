@@ -7,14 +7,12 @@ export default class MsgBoxRuntime extends Runtime {
         this.name = "メッセージボックス" ;
         this.description = "出力をメッセージボックスで行います" ;
     }
-    async output(data :VariableValue){
+    async output(data :string){
         console.log("<<<<<<<<output start");
-        await this.msgBox(data.toString());
+        await this.msgBox(this.eval(data).toString());
         console.log("<<<<<<<<output end");
     }
     async input(msg :string) {
         return await this.inputBox(msg);
     }
 }
-
-

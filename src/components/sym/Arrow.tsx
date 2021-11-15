@@ -3,7 +3,11 @@ import { useRef, useState, useEffect, } from "react";
 import AddIcon from "@material-ui/icons/Add" ;
 import IconButton from "@material-ui/core/IconButton" ;
 import Drawer from "@material-ui/core/Drawer" ;
+import Dialog from "@material-ui/core/Dialog" ;
+import DialogTitle from "@material-ui/core/DialogTitle" ;
 import DialogActions from "@material-ui/core/DialogActions" ;
+import List from "@material-ui/core/List" ;
+import ListItem from "@material-ui/core/ListItem" ;
 
 import {conf} from "./Sym" ;
 import { makeStyles } from "@material-ui/styles";
@@ -14,10 +18,11 @@ import { setItem, } from "redux/reducers/items";
 import { useGetItem } from "redux/reducers/items";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
-import { Card, CardContent, CardActionArea, Typography, Grid, Button } from "@material-ui/core";
+import { Card, CardContent, CardActionArea, Typography, Grid, Button, DialogContent } from "@material-ui/core";
 import { breakpoint } from "css/media";
 import { useMode } from "redux/reducers/mode";
 import { selectItemById } from "redux/reducers/selectItem";
+import { unsetClipboard } from "redux/reducers/edits";
 
 
 
@@ -105,7 +110,6 @@ export default function Arrow({idx,parentFlowId,addable=true}: ArrowProps){
         setIsDrawerOpen(false);
     } ;
     const mode = useMode() ;
-
     return (
         <ArrowContainer>
             {

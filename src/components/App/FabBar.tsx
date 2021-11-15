@@ -17,7 +17,7 @@ import { useRuntime, setRuntime, setExecutingId } from "redux/reducers/exes";
 import { runtimes } from "exe/runtimes" ;
 import Runtime from "exe/runtimes/Runtime";
 import { useTopFlows } from "redux/reducers/top";
-import { setZoom, incZoom } from "redux/reducers/edits";
+import { incZoom } from "redux/reducers/edits";
 
 
 const useStyles = makeStyles({
@@ -33,6 +33,11 @@ const useStyles = makeStyles({
         gap:"10px",
         width:"auto",
         alignItems:"center",
+    },
+    maxWidthMd:{
+        gridTemplateRows:"auto",
+        gridTemplateColumns:"1fr",
+        gridAutoFlow:"column",
     },
 });
 

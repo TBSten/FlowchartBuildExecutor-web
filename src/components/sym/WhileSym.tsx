@@ -61,7 +61,7 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
             const Work = flowItem.component ;
             ChildrenComp = <Work id={item.syms[0]} item={flowItem} isRound={true}/> ;
             return (
-                <Sym render={renderWhile} autoSize={false} id={id}>
+                // <Sym render={renderWhile} autoSize={false} id={id}>
                     <LeftAlign>
                         <Sym render={renderWhileTop} id={id}>
                             <div> {loopName} </div>
@@ -77,7 +77,7 @@ export default function WhileSym({id,item} :{id:string,item:Item}) {
                             { getItem(id)?.options[1].value === "後判定" ? getItem(id)?.options[0].value : ""}
                         </Sym>
                     </LeftAlign>
-                </Sym>
+                // </Sym>
             ) ;
         }else{
             // console.log("flowItem :",flowItem,"is deleted !",item);

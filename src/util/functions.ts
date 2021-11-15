@@ -1,3 +1,4 @@
+import lodash from "lodash" ;
 
 
 export function randomNumber(min=0, max=100,integer=true) :number{
@@ -38,6 +39,9 @@ export function dimensionOf(value :any){
 }
 
 
+export function deepCopy<V>(value:V){
+    return lodash.cloneDeep(value);
+}
 
 
 

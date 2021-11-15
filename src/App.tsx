@@ -26,7 +26,7 @@ const AppContainer = styled.div`
   overflow: auto;
   ${sp`
     grid-template-columns: 1fr;
-    grid-template-rows: auto 3fr auto;
+    grid-template-rows: auto 5fr 5fr;
   `}
 `;
 const TopContainer = styled.div`

@@ -67,7 +67,7 @@ export default function ForSym({id,item} :{id:string,item:Item}){
     const loopCnt = useLoopCnt() ;
     const loopName = `ループ${loopCnt}` ;
     return (
-        <Sym render={()=>{}} id={id} autoSize={false}>
+        // <Sym render={()=>{}} id={id} autoSize={false}>
             <LeftAlign>
                 <Sym render={renderForTop} id={id} autoSize={true}>
                     <ForContent>
@@ -88,7 +88,7 @@ export default function ForSym({id,item} :{id:string,item:Item}){
                     </ForContent>
                 </Sym>
             </LeftAlign>
-        </Sym>
+        // </Sym>
     ) ;
 }
 

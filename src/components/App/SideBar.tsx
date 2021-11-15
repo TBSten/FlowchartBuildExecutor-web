@@ -388,7 +388,7 @@ export default function SideBar(props: SideBarProps) {
         if(multiSelect){
             menus.push(
                 {
-                    label: "複数選択解除",
+                    label: "複数選択モード:ON",
                     onClick: handleToggleMultiSelect, 
                     icon: <Done />,
                 },
@@ -396,7 +396,7 @@ export default function SideBar(props: SideBarProps) {
         }else{
             menus.push(
                 {
-                    label: "複数選択する",
+                    label: "複数選択モード:OFF",
                     onClick: handleToggleMultiSelect, 
                     icon: <DoneAll />,
                 },

@@ -1,8 +1,9 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actionTypes } from "../actions";
 
 const init = {
   zoom: 1.0,
+  clipboard:[] as string[],
 };
 export default function editsReducer(
   state = init,
@@ -20,6 +21,12 @@ export default function editsReducer(
         newState.zoom = newZoom;
       }
       break;
+    case actionTypes.edit.clipboard.set:
+      newState.clipboard = [...action.payload];
+      break;
+    case actionTypes.edit.clipboard.unset:
+      newState.clipboard = [] ;
+      break;
   }
   return newState;
 }
@@ -35,9 +42,39 @@ export function incZoom(value: number) {
     payload: value,
   };
 }
+export function setClipboard(ids:string[]){
+  return {
+    type: actionTypes.edit.clipboard.set,
+    payload:ids,
+  } ;
+}
+export function unsetClipboard(){
+  return {
+    type: actionTypes.edit.clipboard.set,
+    payload:"none",
+  } ;
+}
 export function useZoom() {
   const zoom = useSelector(
-    (state: { edits: { zoom: string } }) => state.edits.zoom
+    (state: { edits: typeof init }) => state.edits.zoom
   );
   return zoom;
 }
+export function useClipboard(){
+  const clipboard = useSelector(
+    (state: { edits: typeof init }) => state.edits.clipboard
+  );
+  const dispatch = useDispatch();
+  function set(ids:string[]){
+    dispatch(setClipboard(ids));
+  }
+  function unset(){
+    dispatch(unsetClipboard());
+  }
+  return {
+    clipboard,
+    set,
+    unset,
+  } ;
+}
+

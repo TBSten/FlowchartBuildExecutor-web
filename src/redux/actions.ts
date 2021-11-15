@@ -40,6 +40,10 @@ const edit={
         set:"edit/zoom/set",
         inc:"edit/zoom/inc",
     },
+    clipboard:{
+        set:"edit/clipboard/set",
+        unset:"edit/clipboard/unset",
+    },
 } ;
 const exe={
     runtime:{

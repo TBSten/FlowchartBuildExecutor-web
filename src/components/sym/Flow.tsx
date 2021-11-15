@@ -47,7 +47,8 @@ export default React.forwardRef(
         const tag = props.tag ? props.tag : props.item.options[0].value ;
         function handleSelectFlow(){
             // console.log("handleSelectFlow",props.id);
-            if(!props.tag){
+            console.log("handleSelectFlow",props.id);
+            if(!props.tag && isTagShow){
                 dispatch(selectItemById(props.id));
             }
         }

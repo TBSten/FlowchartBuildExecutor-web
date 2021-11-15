@@ -152,9 +152,9 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
 
     return (
         useMemo(()=>
-            <SymContainer autoSize={autoSize}>
+            <SymContainer autoSize={autoSize} >
                 <Canvas width={conf.width} height={conf.height} ref={canvasRef}/>
-                <Child onClick={handleClick} autoSize={autoSize}>{children}</Child>
+                <Child onMouseDown={handleClick} autoSize={autoSize}>{children}</Child>
             </SymContainer>
             ,
             [

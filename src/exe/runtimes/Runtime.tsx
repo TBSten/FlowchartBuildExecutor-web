@@ -214,7 +214,7 @@ export default class Runtime {
     //console.log("input ", msg);
     return "";
   }
-  async output(data: VariableValue):Promise<void> {
+  async output(data: string):Promise<void> {
     //console.log("output ", data);
   }
   msgBox(msg: string) {

@@ -19,7 +19,8 @@ export function dataSymCreator() :Item{
         const type = item.options[0].value;
         const target = item.options[1].value ;
         if(type === "出力"){
-            const outdata = e.eval(target) ;
+            // const outdata = e.eval(target) ;
+            const outdata = target ;
             if(outdata || 
                 outdata === false || 
                 outdata === 0 ){

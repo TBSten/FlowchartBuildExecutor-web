@@ -1,98 +1,41 @@
-import { Button } from "@material-ui/core";
-import { Done, DoneAll, Delete } from "@material-ui/icons";
+import { Done, DoneAll, Delete, } from "@material-ui/icons";
+import { ContentCopy, } from "@mui/icons-material" ;
 import Runtime from "exe/runtimes/Runtime";
-import { useDispatch } from "react-redux";
-import { removeItem } from "redux/reducers/items";
-import {
-    useSelectItemIds,
-    useSelectItemId,
-    selectItemById,
-} from "redux/reducers/selectItem";
-import { useTopFlows, removeTopFlow } from "redux/reducers/top";
+import { removeItem, setItem } from "redux/reducers/items";
+import { removeTopFlow } from "redux/reducers/top";
 import { Item, Option } from "redux/types/item";
 import { OptionType } from "util/syms";
 import { store } from "redux/store" ;
+import { deepCopy, randomStr } from "util/functions";
 
 interface baseItemComponentProps {
     item: Item;
     id: string;
 }
-const DeleteSymMenu = () => {
-    const selectItemIds = useSelectItemIds();
-    const topFlows = useTopFlows();
-    const dispatch = useDispatch();
-    const handleRemove = () => {
-        //console.log(selectItemIds);
-        selectItemIds.forEach((id) => {
-            dispatch(removeItem(id));
-            if (topFlows.includes(id)) {
-                dispatch(removeTopFlow(id));
-            }
-        });
-    };
-    return (
-        <Button
-            startIcon={<Delete />}
-            onClick={handleRemove}
-            color="primary"
-            variant="outlined"
-        >
-            記号を削除
-        </Button>
-    );
-};
-const UnselectSymMenu = () => {
-    const selectItemId = useSelectItemId();
-    const dispatch = useDispatch();
-    const handleUnselect = () => {
-        dispatch(selectItemById(selectItemId));
-    };
-    return (
-        <Button
-            startIcon={<Done />}
-            onClick={handleUnselect}
-            color="primary"
-            variant="outlined"
-        >
-            選択解除
-        </Button>
-    );
-};
-const UnselectAllSymMenu = () => {
-    const dispatch = useDispatch();
-    const handleUnselectAll = () => {
-        dispatch(selectItemById("none"));
-    };
-    return (
-        <Button
-            startIcon={<DoneAll />}
-            onClick={handleUnselectAll}
-            color="primary"
-            variant="outlined"
-        >
-            全て選択解除
-        </Button>
-    );
-};
 
 export function baseItemCreator(
     itemType: string,
     component: (props: baseItemComponentProps) => React.ReactNode,
     options: Option<any>[]
 ): Item {
-    // const defMenus = [
-    //     //delete
-    //     {
-    //         name: "記号の操作",
-    //         component: [DeleteSymMenu],
-    //     },
-    //     //select
-    //     {
-    //         name: "記号の選択",
-    //         component: [UnselectSymMenu, UnselectAllSymMenu],
-    //     },
-    // ];
     const defMenus = [
+        {
+            label: "選択解除",
+            onClick: () => {
+                // alert("Delete");
+                const selectItemId = store.getState().selectItem.id ;
+                store.dispatch(selectItemById(selectItemId));
+            }, 
+            icon: <Done />,
+        },
+        {
+            label: "全て選択解除",
+            onClick: () => {
+                // alert("Delete");
+                store.dispatch(selectItemById("none"));
+            }, 
+            icon: <DoneAll />,
+        },
         {
             label: "記号の削除",
             onClick: () => {
@@ -115,21 +58,37 @@ export function baseItemCreator(
             icon: <Delete />,
         },
         {
-            label: "選択解除",
+            label: "複製",
             onClick: () => {
-                // alert("Delete");
-                const selectItemId = store.getState().selectItem.id ;
-                store.dispatch(selectItemById(selectItemId));
+                //selectItemを複製してselectItemの次に追加
+                const state = store.getState() ;
+                const sourceId = state.selectItem.id ;
+                const sourceSym = state.items[sourceId];
+                const newId = randomStr(30) ;
+                const newSym = deepCopy(sourceSym);
+                let parentId = "" ;//sourceIdをsyms内に含むflowのid
+                Object.keys(state.items).forEach(id=>{
+                    const item = state.items[id] ;
+                    if(item.syms?.includes(sourceId)){
+                        parentId = id ;
+                    }
+                }) ;
+                const newParentSym = deepCopy(state.items[parentId]) ;
+                if(newParentSym.syms){
+                    newParentSym.syms = newParentSym.syms.reduce((p,symId)=>{
+                        p.push(symId);
+                        if(symId === sourceId){
+                            p.push(newId);
+                        }
+                        return p ;
+                    },[] as string[]);
+                }
+                //要素追加
+                store.dispatch(setItem(newId,newSym));
+                //要素をフローに追加
+                store.dispatch(setItem(parentId,newParentSym));
             }, 
-            icon: <Done />,
-        },
-        {
-            label: "全て選択解除",
-            onClick: () => {
-                // alert("Delete");
-                store.dispatch(selectItemById("none"));
-            }, 
-            icon: <DoneAll />,
+            icon: <ContentCopy />,
         },
     ];
     async function execute(e: Runtime, item: Item) {
