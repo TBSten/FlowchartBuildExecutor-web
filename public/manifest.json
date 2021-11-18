@@ -4,8 +4,8 @@
 	"description":		"",
 	"start_url":		".",
 	"display":			"minimal-ui",
-	"background_color":	"#fff",
-	"theme_color":		"#fff",
+	"background_color":	"#0fff95",
+	"theme_color":		"#0fff95",
 	"orientation":		"any",
 	"icons": [
 		{
