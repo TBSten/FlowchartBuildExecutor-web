@@ -1,9 +1,10 @@
 import {Action,} from "../types/action" ;
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {actionTypes} from "../actions" ;
 import { ArrayTemplate, ArrayTemplates } from "redux/types/top";
 
 const init = {
+    title:"Untitled" as string,
     flows:[] as string[],
     arrayTemplates:[] as ArrayTemplates,
 } ;
@@ -46,8 +47,10 @@ export default function topReducer(state=init, action:{type :string, payload:any
     }else if(action.type === actionTypes.top.load){
         const top = action.payload ;
         newState = {...init,...top} ;
+    }else if(action.type === actionTypes.top.title.set){
+        newState.title = action.payload ;
     }
-    console.log("top updated :::",newState);
+    // console.log("top updated :::",newState);
     return newState ;
 }
 
@@ -92,6 +95,12 @@ export function loadTop(top :typeof init) :Action{
         payload:top ,
     } ;
 }
+export function setTitle(title:string){
+    return {
+        type:actionTypes.top.title.set,
+        payload:title,
+    } ;
+}
 
 //hooks
 export function useTopFlows(){
@@ -100,7 +109,7 @@ export function useTopFlows(){
 }
 export function useTopArrayTemplates() {
     const topAT = useSelector((state:{top:typeof init}) => state.top.arrayTemplates ) ;
-    console.log(useSelector((s:any)=>s));
+    // console.log(useSelector((s:any)=>s));
     return topAT ;
 }
 export function useTopArrayTemplate(name:string) :ArrayTemplate | null{
@@ -111,4 +120,11 @@ export function useTopArrayTemplate(name:string) :ArrayTemplate | null{
     });
     return ans ;
 }
-
+export function useTitle(){
+    const title = useSelector((state:{top:typeof init})=>state.top.title);
+    const dispatch = useDispatch();
+    function set(newTitle: string){
+        dispatch(setTitle(newTitle));
+    }
+    return [title,set] as const ;
+}

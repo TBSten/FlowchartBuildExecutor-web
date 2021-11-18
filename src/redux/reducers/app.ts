@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Action } from "redux/types/action";
+import { deepCopy } from "util/functions";
 import {actionTypes} from "../actions" ;
 
 const init:{
@@ -18,13 +19,19 @@ const init:{
 export default function appReducer(state=init, action:{type :string, payload:any}){
     //console.log("app reducer");
     //console.log(state);
-    let newState = Object.assign({},state);
+    // let newState = Object.assign({},state);
+    let newState = deepCopy(state);
     if(action.type === actionTypes.app.dialog.show){
         newState.dialog.open = true ;
         newState.dialog.content = action.payload ;
     }else if(action.type === actionTypes.app.dialog.hide){
         newState.dialog.open = false ;
         newState.dialog.content = "" ;
+        //onCloseの発火
+        if(state.dialog.open === true ){
+            newState.dialog.onClose() ;
+        }
+        console.log("--- hide ",newState.dialog);
     }else if(action.type === actionTypes.app.dialog.setOnClose){
         newState.dialog.onClose = action.payload ;
     }

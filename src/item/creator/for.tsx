@@ -7,6 +7,7 @@ import { flowCreator } from "item/creator/flow" ;
 import { whileSymCreator } from "item/creator/while";
 import { optionTypes } from "util/syms";
 import { optionCreator } from "./base";
+import ExecuteError from "error/ExecuteError";
 
 export function forSymCreator(syms?:string[]) :Item{
     const ans = whileSymCreator(syms) ;
@@ -56,7 +57,9 @@ export function forSymCreator(syms?:string[]) :Item{
                 //終了なら
                 runtime.putTemp(key, null);
             }else{
-                throw new Error("unvalid ForSym condition :"+con) ;
+                throw new ExecuteError(
+                    "unvalid ForSym condition :"+con,
+                    `条件式が不正です。条件式が正しいか確認してください。（条件式:${condition}）`) ;
             }
         }else if(status === "for end"){
             //インクリメント
@@ -66,6 +69,7 @@ export function forSymCreator(syms?:string[]) :Item{
             await runtime.next() ;
         }else{
             throw new Error("unvalid ForSym status:"+status) ;
+
         }
     } ;
     return ans ;

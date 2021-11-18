@@ -18,11 +18,12 @@ export default function DataSym({id, item}: {id:string, item:Item}){
     };
     const typ = item.options[0].value ;
     const tar = item.options[1].value ;
+    const isNum = item.options[2].value ;
     return(
         <Sym id={id} render={render}>
             {
                 typ === "キーボード入力"?
-                `${tar}を入力`
+                `${tar}を入力${isNum?"(数値)":""}`
                 :
                 typ === "ファイルから入力"?
                 `${tar}から1行読む`

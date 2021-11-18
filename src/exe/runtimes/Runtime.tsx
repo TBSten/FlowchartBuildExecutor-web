@@ -3,9 +3,11 @@ import { Variable, VariableValue, } from "./types";
 import { store } from "redux/store";
 import { setExecutingId } from "redux/reducers/exes";
 import { Evaler } from "util/formulaEval";
-import { openAppDialog, setOnCloseAppDialog, } from "redux/reducers/app";
-import { DialogContent, DialogTitle } from "@material-ui/core";
+import { hideAppDialog, openAppDialog, setOnCloseAppDialog, } from "redux/reducers/app";
+import { DialogActions, DialogContent, DialogTitle } from "@material-ui/core";
 import { TabData } from "components/App/types";
+import ExecuteError from "error/ExecuteError";
+import Button from "components/util/Button";
 
 
 export type Executable = (
@@ -149,9 +151,16 @@ export default class Runtime {
           } else {
             throw new Error("unvalid item " + exeItem + "(" + exeItemId + ")");
           }
-        } catch (e) {
-          console.error(e);
-          alert("エラーが発生しました");
+        } catch (e ) {
+          if(e instanceof ExecuteError){
+            console.error(e.displayMessage);
+            console.error(e);
+            await this.onError(e,e.displayMessage);
+          }else{
+            console.error(e);
+            // alert("エラーが発生しました");
+            await this.onError(e as Error,null);
+          }
         }
       } else {
         //すでに終了しています
@@ -172,6 +181,21 @@ export default class Runtime {
       let s = this.getSpeed()*(-1000/9) + 10000/9+1;
       console.log("sleep:",s);
       await this.sleep(s) ;
+    }
+  }
+  async onError(e:Error, displayMessage?:string|null){
+    if(displayMessage){
+      const text = `${displayMessage}` ;
+      // alert(`#エラー : ${displayMessage}`);
+      console.log("--- test-1");
+      await this.msgBoxWithTitle("#エラー",text);
+      console.log("--- test-2");
+    }else{
+      const text = "エラーが発生しましたが原因が分かりません。FBE開発チームに問い合わせてください。" ;
+      // alert("#不明なエラー : エラーが発生しましたが原因が分かりません。FBE開発チームに問い合わせてください。");
+      console.log("--- test-3");
+      await this.msgBoxWithTitle("#不明なエラー",text);
+      console.log("--- test-4");
     }
   }
   async exeAll(){
@@ -217,26 +241,36 @@ export default class Runtime {
   async output(data: string):Promise<void> {
     //console.log("output ", data);
   }
-  msgBox(msg: string) {
+  msgBoxWithTitle(title:string, msg: string) {
     return new Promise<void>((resolve,reject)=>{
       // console.log("start msgBox Promise");
+      const onCloseAction = setOnCloseAppDialog(()=>{
+        // console.log("resolve msgBox Promise");
+        console.log("close");
+        resolve();
+      });
+      const hideAction = hideAppDialog() ;
       const openAction = openAppDialog(
         <>
-          <DialogTitle>表示</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogContent>
             <div>{msg}</div>
           </DialogContent>
+          <DialogActions>
+            <Button onClick={()=>{store.dispatch(hideAction );console.log("hide app dialog")}}>
+              閉じる
+            </Button>
+          </DialogActions>
         </>
       ) ;
-      const onCloseAction = setOnCloseAppDialog(()=>{
-        // console.log("resolve msgBox Promise");
-        resolve();
-      });
       // store.dispatch({payload:null, ...onCloseAction,});
       // store.dispatch({payload:null, ...openAction});
       store.dispatch(onCloseAction);
       store.dispatch(openAction);
     });
+  }
+  msgBox(msg: string){
+    return this.msgBoxWithTitle("表示",msg) ;
   }
   sleep(msec :number){
     return new Promise<void>((resolve,reject)=>{
@@ -249,9 +283,15 @@ export default class Runtime {
       }
     }) ;
   }
-  async inputBox(msg: string = "入力") {
-    return window.prompt(msg) ;
+  inputBox(msg: string = "入力") {
+    return new Promise<string|null>((resolve,reject)=>{
+      const ans = window.prompt(msg) ;
+      resolve(ans);
+    });
   }
+  // async inputBox(msg: string = "入力"){
+  //   return window.prompt(msg);
+  // }
   getProcesses() {
     const ans: { [key: string]: string } = {};
     this.flowIds.forEach((el) => {

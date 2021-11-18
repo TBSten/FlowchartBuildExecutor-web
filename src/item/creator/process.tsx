@@ -1,4 +1,5 @@
 import ProcessSym from "components/sym/ProcessSym";
+import ExecuteError from "error/ExecuteError";
 import { Item } from "redux/types/item";
 import { optionTypes } from "util/syms";
 import { baseItemCreator, optionCreator } from "./base";
@@ -21,7 +22,9 @@ export function processSymCreator() :Item{
         if(id){
             runtime.addExeItemId(0,id);
         }else{
-            throw new Error("unvalid callSymText :"+callSymText) ;
+            throw new ExecuteError(
+                "unvalid callSymText :"+callSymText,
+                `不正な処理を呼び出しました。存在していない処理を呼び出していないか確認してください。（処理名:${callSymText}）`) ;
         }
     } ;
     return ans ;

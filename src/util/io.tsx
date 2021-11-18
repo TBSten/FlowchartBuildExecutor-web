@@ -46,6 +46,7 @@ export type OutputItems = {
 export type SaveState = {
   items: OutputItems;
   top: {
+    title:string;
     flows: string[];
     arrayTemplates: ArrayTemplates,
   };
@@ -73,6 +74,7 @@ export function getSaveState(): SaveState {
     };
   });
   const top = {
+    title: state.top.title,
     flows: state.top.flows,
     arrayTemplates: state.top.arrayTemplates,
   };
@@ -189,7 +191,8 @@ export function clearBrowserSave() {
 
 //ダウンロード・アップロード
 export function downloadSaveState(){
-  const name = "FBE_SaveData.fbe" ;
+  const state = store.getState();
+  const name = `${state.top.title}.fbe` ;
   const data = getSaveState() ;
   downloadTextFile(name, JSON.stringify(data)) ;
 }

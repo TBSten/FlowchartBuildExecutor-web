@@ -9,7 +9,7 @@ export interface TabData{
 // サイドバーのメニューから開くことができるメニュー
 export interface SideBarMenu{
     label:string;
-    onClick:()=>void;
+    onClick:(itemId?:string)=>void;
     icon?:ReactNode;
 }
 

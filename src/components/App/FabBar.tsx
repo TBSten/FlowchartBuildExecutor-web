@@ -34,10 +34,16 @@ const useStyles = makeStyles({
         width:"auto",
         alignItems:"center",
     },
+    /*sp 
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    justify-items: end;
+    */
     maxWidthMd:{
         gridTemplateRows:"auto",
         gridTemplateColumns:"1fr",
-        gridAutoFlow:"column",
+        gridAutoFlow:"row",
+        justifyItems:"end",
     },
 });
 

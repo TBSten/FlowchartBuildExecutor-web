@@ -20,9 +20,12 @@ const LastRow = styled.li`
     color: #eeff00;
     transition:1s;
 `;
+const RedRow = styled.li`
+    color: #eb0000;
+`;
 
 function TerminalTab(){
-    const runtime = useRuntime() as MsgBoxRuntime;
+    const runtime = useRuntime() as TerminalRuntime;
     const history = runtime.outputHistory ?? [];
     useEffect(()=>{
         console.log("TerminalTab.mount");
@@ -45,7 +48,7 @@ function TerminalTab(){
         </TerminalContainer>
     ) ;
 }
-export default class MsgBoxRuntime extends Runtime {
+export default class TerminalRuntime extends Runtime {
     outputHistory :string[] ;
     constructor(flowIds: string[], vars: Variable[]){
         super(flowIds, vars) ;
@@ -70,6 +73,10 @@ export default class MsgBoxRuntime extends Runtime {
                 comp:<TerminalTab />
             },
         ] ;
+    }
+    async onError(e:Error, displayName:string|null){
+        super.onError(e,displayName);
+        //outputHistoryにエラーとして登録
     }
 }
 

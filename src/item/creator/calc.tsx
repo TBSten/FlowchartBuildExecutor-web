@@ -2,6 +2,7 @@ import CalcSym from "components/sym/CalcSym";
 import { Item } from "redux/types/item";
 import { baseItemCreator, optionCreator,  } from "./base";
 import { optionTypes } from "util/syms";
+import ExecuteError from "error/ExecuteError";
 
 export function calcSymCreator() :Item{
     const ans = baseItemCreator(
@@ -21,7 +22,9 @@ export function calcSymCreator() :Item{
         if(value || value === 0){
             e.setVar(variable,value);
         }else{
-            throw new Error("unvalid variable value :"+value) ;
+            throw new ExecuteError(
+                "unvalid variable value :"+value,
+                `計算結果が不正です。正しい計算式か確認してください。(式:${formula} , 計算結果:${value})`) ;
         }
     } ;
     return ans ;

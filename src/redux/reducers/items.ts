@@ -13,6 +13,7 @@ export default function itemsReducer(
     state :Items =init, 
     action:{type :string, payload:any}){
         let newState :Items = Object.assign({},state);
+
         if(action.type === actionTypes.items.add){
             const newItem = action.payload ;
             // console.log("add !",action.payload);
@@ -68,6 +69,38 @@ export default function itemsReducer(
         }else if(action.type === actionTypes.items.load){
             const items = action.payload ;
             newState = {...init,...items} ;
+        }else if(action.type === actionTypes.items.exchange){
+            const itemId1 = action.payload.itemId1 ;
+            const itemId2 = action.payload.itemId2 ;
+            const item1 = newState[itemId1];
+            const item2 = newState[itemId2];
+            if(itemId1 && itemId2){
+                Object.keys(newState).forEach(itemId=>{
+                    //itemIdのアイテムについて
+                    //アイテム自体の入れ替えチェック
+                    if(itemId === itemId1){
+                        newState[itemId1] = item2 ;
+                    }
+                    if(itemId === itemId2){
+                        newState[itemId2] = item1 ;
+                    }
+                    //アイテムの子要素の入れ替えチェック
+                    const item = newState[itemId] ;
+                    if(item && item.syms){
+                        for(let idx = 0 ; idx < item.syms.length;idx++){
+                            const symId = item.syms[idx] ;
+                            if(symId === itemId1){
+                                item.syms[idx] = itemId2;
+                            }
+                            if(symId === itemId1){
+                                item.syms[idx] = itemId1;
+                            }
+                        }
+                    }
+                });
+            }else{
+                //エラー
+            }
         }
         return newState ;
 }
@@ -134,7 +167,15 @@ export function loadItems(items :Items){
         payload:items,
     } ;
 }
-
+export function exchangeItem(itemId1:string, itemId2:string){
+    return {
+        type:actionTypes.items.exchange,
+        payload:{
+            itemId1,
+            itemId2
+        }
+    } ;
+}
 
 
 

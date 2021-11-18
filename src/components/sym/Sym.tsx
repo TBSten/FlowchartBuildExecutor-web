@@ -4,17 +4,26 @@ import {selectItemById, useSelectItemIds, } from "redux/reducers/selectItem" ;
 import { useRef,  ReactNode, useEffect, useCallback, useMemo, useState,  } from "react";
 import styled, { css } from "styled-components" ;
 import { useExecutingId, useRuntime } from "redux/reducers/exes";
+import MenuDialog from "components/App/MenuDialog";
+import { exchangeItem, useGetItem } from "redux/reducers/items";
+import { useMode } from "redux/reducers/mode";
+import { useDragAndDrop } from "redux/reducers/edits";
 
 
 export const conf = {
+    //size,offset
     width: 180,
     height: 40,
+    //color
     baseBackC: "white",
     baseForeC: "black",
     selectBackC: "white",
     selectForeC: "blue",
     exeBackC: "white",
     exeForeC: "green",
+    movingBackC: "#0000ff5e",
+    movingForeC: "black",
+    //other
     lineWidth: 2,
 };
 
@@ -101,6 +110,9 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
     const selectItemIds = useSelectItemIds();
     const executingId = useExecutingId();
     const runtime = useRuntime();
+    const getItem = useGetItem();
+    const mode = useMode();
+    const {to,from,setTo,setFrom} = useDragAndDrop();
 
     const dispatch = useDispatch();
 
@@ -117,6 +129,11 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
                 const lw = conf.lineWidth ;
                 //init
                 ctx.clearRect(0,0,w,h);
+                if(from === id || to === id){
+                    ctx.fillStyle = conf.movingBackC ;
+                    ctx.strokeStyle = conf.movingForeC ;
+                    ctx.fillRect(0,0,w,h);
+                }
                 const isSelect = selectItemIds.includes(id) ;
                 const isExe = runtime !== null&& executingId === id ;
                 if(isExe){
@@ -134,7 +151,15 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
                 render(ctx, w, h , lw);
             }
         }
-    },[executingId,id,render,runtime,selectItemIds.includes(id),]);
+    },[
+        executingId,
+        id,
+        render,
+        runtime,
+        selectItemIds.includes(id),
+        from,
+        to,
+    ]);
     useEffect(() => {
         // console.log("canvas render");
         canvasRender();
@@ -150,11 +175,48 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
         e.stopPropagation();
     },[id,dispatch,]);
 
+    const [openMenuDialog,setOpenMenuDialog] = useState(false);
+    const handleContextMenu = (e:React.MouseEvent<HTMLDivElement>)=>{
+        e.preventDefault();
+        setOpenMenuDialog(true);
+    } ;
+
+    const handleDragStart = ()=>{
+        setFrom(id);
+    };
+    const handleDragOver = (e:React.DragEvent<HTMLDivElement>)=>{
+        e.preventDefault();
+    } ;
+    const handleDrop = ()=>{
+        setTo(id);
+        dispatch(exchangeItem(from,id));
+        setFrom("");
+        setTo("");
+    };
+    const handleDragEnter = ()=>{
+        setTo(id);
+    } ;
+
     return (
         useMemo(()=>
-            <SymContainer autoSize={autoSize} >
+            <SymContainer autoSize={autoSize}>
                 <Canvas width={conf.width} height={conf.height} ref={canvasRef}/>
-                <Child onMouseDown={handleClick} autoSize={autoSize}>{children}</Child>
+                <Child 
+                    autoSize={autoSize} 
+                    // onMouseDown={handleClick} 
+                    onClick={handleClick} 
+                    onContextMenu={handleContextMenu}
+                    onDragStart={handleDragStart} 
+                    onDrop={handleDrop}
+                    onDragEnter={handleDragEnter}
+                    onDragOver={handleDragOver}
+                    draggable>{children}</Child>
+
+                <MenuDialog 
+                    open={openMenuDialog} 
+                    onClose={()=>setOpenMenuDialog(false)} 
+                    menus={getItem(id).menus}
+                    itemId={id}/>
             </SymContainer>
             ,
             [
@@ -162,6 +224,9 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
                 autoSize,
                 children,
                 canvasRef,
+                openMenuDialog,
+                to,
+                from,
             ]
         )
     ) ;

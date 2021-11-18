@@ -3,7 +3,12 @@ import { actionTypes } from "../actions";
 
 const init = {
   zoom: 1.0,
-  clipboard:[] as string[],
+  clipboard:[] as string[], //削除可能
+  dragAndDrop:{
+    from:"",
+    to:"",
+  },
+
 };
 export default function editsReducer(
   state = init,
@@ -27,9 +32,18 @@ export default function editsReducer(
     case actionTypes.edit.clipboard.unset:
       newState.clipboard = [] ;
       break;
+    case actionTypes.edit.dragAndDrop.from.set:
+      newState.dragAndDrop.from = action.payload ;
+      break;
+    case actionTypes.edit.dragAndDrop.to.set:
+      newState.dragAndDrop.to = action.payload ;
+      break;
+
   }
   return newState;
 }
+
+//actionCreators
 export function setZoom(value: number) {
   return {
     type: actionTypes.edit.zoom.set,
@@ -54,6 +68,20 @@ export function unsetClipboard(){
     payload:"none",
   } ;
 }
+export function setDragAndDropFrom(itemId:string){
+  return {
+    type: actionTypes.edit.dragAndDrop.from.set,
+    payload: itemId,
+  } ;
+}
+export function setDragAndDropTo(itemId:string){
+  return {
+    type: actionTypes.edit.dragAndDrop.to.set,
+    payload: itemId,
+  } ;
+}
+
+//hooks
 export function useZoom() {
   const zoom = useSelector(
     (state: { edits: typeof init }) => state.edits.zoom
@@ -77,4 +105,19 @@ export function useClipboard(){
     unset,
   } ;
 }
-
+export function useDragAndDrop(){
+  const {from,to} = useSelector((state:{edits:typeof init})=>state.edits.dragAndDrop);
+  const dispatch = useDispatch();
+  function setFrom(itemId:string){
+    dispatch(setDragAndDropFrom(itemId));
+  }
+  function setTo(itemId:string){
+    dispatch(setDragAndDropTo(itemId));
+  }
+  return {
+    from,
+    to,
+    setFrom,
+    setTo,
+  } ;
+}

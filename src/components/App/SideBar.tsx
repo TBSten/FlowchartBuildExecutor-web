@@ -15,11 +15,11 @@ import {
     Chip,
 } from "@material-ui/core";
 import { Cancel } from "@material-ui/icons";
+import MuiPaper from "@material-ui/core/Paper";
 
 import styled from "styled-components";
 import { sp } from "../../css/media";
 import { useGetItem, setOption, setItem } from "redux/reducers/items";
-import MuiPaper from "@material-ui/core/Paper";
 import {
     toggleMulti,
     useSelectItemId,
@@ -49,6 +49,7 @@ import { Option } from "redux/types/item";
 import TracerPane from "./TracerPane";
 import Runtime from "exe/runtimes/Runtime";
 import { SideBarMenu, TabData } from "./types";
+import MenuDialog from "components/App/MenuDialog" ;
 
 const SideContainer = styled(MuiPaper)`
     grid-column: 2 / 3;
@@ -263,6 +264,7 @@ function ControllPane({ runtime }: ControllPaneProps) {
     );
 }
 
+
 export default function SideBar(props: SideBarProps) {
     const mode = useMode();
     const selectItemId = useSelectItemId();
@@ -437,6 +439,12 @@ export default function SideBar(props: SideBarProps) {
                         onDelete={handleToggleMultiSelect}/>:""}
                 </div>
 
+                <MenuDialog 
+                    open={menuDialogOpen} 
+                    onClose={()=>setMenuDialogOpen(false)}
+                    menus={menus}
+                    itemId={selectItemId}/>
+                {/* 
                 <Dialog open={menuDialogOpen} onClose={()=>setMenuDialogOpen(false)}>
                     <DialogTitle>メニュー</DialogTitle>
                     <DialogContent>
@@ -464,6 +472,8 @@ export default function SideBar(props: SideBarProps) {
                         </Button>
                     </DialogActions>
                 </Dialog>
+
+                */}
             </>
         );
     } else if (mode === "exe") {

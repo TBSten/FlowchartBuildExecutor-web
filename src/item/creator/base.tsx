@@ -7,6 +7,7 @@ import { OptionType } from "util/syms";
 import { store } from "redux/store" ;
 import { deepCopy, randomStr } from "util/functions";
 import { selectItemById } from "redux/reducers/selectItem";
+import { SideBarMenu } from "components/App/types";
 
 interface baseItemComponentProps {
     item: Item;
@@ -18,7 +19,7 @@ export function baseItemCreator(
     component: (props: baseItemComponentProps) => React.ReactNode,
     options: Option<any>[]
 ): Item {
-    const defMenus = [
+    const defMenus:SideBarMenu[] = [
         {
             label: "選択解除",
             onClick: () => {
@@ -38,7 +39,7 @@ export function baseItemCreator(
         },
         {
             label: "記号の削除",
-            onClick: () => {
+            onClick: (itemId) => {
                 //# selectItemIdx, dispatch , topFlows
                 
                 // const selectItemIds = useSelectItemIds();
@@ -54,39 +55,48 @@ export function baseItemCreator(
                         dispatch(removeTopFlow(id));
                     }
                 });
+                if(itemId){
+                    dispatch(removeItem(itemId));
+                }
             }, 
             icon: <Delete />,
         },
         {
             label: "複製",
-            onClick: () => {
-                //selectItemを複製してselectItemの次に追加
-                const state = store.getState() ;
-                const sourceId = state.selectItem.id ;
-                const sourceSym = state.items[sourceId];
-                const newId = randomStr(30) ;
-                const newSym = deepCopy(sourceSym);
-                let parentId = "" ;//sourceIdをsyms内に含むflowのid
-                Object.keys(state.items).forEach(id=>{
-                    const item = state.items[id] ;
-                    if(item.syms?.includes(sourceId)){
-                        parentId = id ;
-                    }
-                }) ;
-                const newParentSym = deepCopy(state.items[parentId]) ;
-                if(newParentSym.syms){
-                    newParentSym.syms = newParentSym.syms.reduce((p,symId)=>{
-                        p.push(symId);
-                        if(symId === sourceId){
-                            p.push(newId);
+            onClick: (itemId) => {
+                if(itemId) {
+                    //selectItemを複製してselectItemの次に追加
+                    const state = store.getState() ;
+                    // const sourceId = state.selectItem.id ;
+                    const sourceId = itemId ;
+                    const sourceSym = state.items[sourceId];
+                    const newId = randomStr(30) ;
+                    const newSym = deepCopy(sourceSym);
+                    let parentId = "" ;//sourceIdをsyms内に含むflowのid
+                    Object.keys(state.items).forEach(id=>{
+                        const item = state.items[id] ;
+                        if(item.syms?.includes(sourceId)){
+                            parentId = id ;
                         }
-                        return p ;
-                    },[] as string[]);
+                    }) ;
+                    const newParentSym = deepCopy(state.items[parentId]) ;
+                    if(newParentSym.syms){
+                        newParentSym.syms = newParentSym.syms.reduce((p,symId)=>{
+                            p.push(symId);
+                            if(symId === sourceId){
+                                p.push(newId);
+                            }
+                            return p ;
+                        },[] as string[]);
+                    }
+                    //要素追加
+                    store.dispatch(setItem(newId,newSym));
+                    //要素をフローに追加
+                    store.dispatch(setItem(parentId,newParentSym));
+                    console.log(newSym);
+                }else{
+                    console.warn("unvalid item id to copy ",itemId);
                 }
-                //要素追加
-                store.dispatch(setItem(newId,newSym));
-                //要素をフローに追加
-                store.dispatch(setItem(parentId,newParentSym));
             }, 
             icon: <FileCopy />,
         },

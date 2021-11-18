@@ -14,8 +14,12 @@ const items = {
         remove:"items/sym/remove",
     },
     load:"items/load",
+    exchange:"items/exchange",
 } ;
 const top = {
+    title:{
+        set:"top/title/set",
+    },
     flow:{
         add:"top/flows/add",
         remove:"top/flows/remove",
@@ -43,6 +47,14 @@ const edit={
     clipboard:{
         set:"edit/clipboard/set",
         unset:"edit/clipboard/unset",
+    },
+    dragAndDrop:{
+        from:{
+            set:"edit/dragAndDrop/from/set",
+        },
+        to:{
+            set:"edit/dragAndDrop/to/set",
+        },
     },
 } ;
 const exe={

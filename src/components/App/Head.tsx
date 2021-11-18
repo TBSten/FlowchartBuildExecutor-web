@@ -1,4 +1,5 @@
 import { useState, } from "react" ;
+import {store} from "redux/store" ;
 import {
     AppBar, 
     Toolbar,
@@ -34,8 +35,9 @@ import {
     loadSaveStateFromLocalFile,
  } from "util/io" ;
 import { loadItems } from "redux/reducers/items";
-import { loadTop } from "redux/reducers/top";
+import { loadTop, useTitle } from "redux/reducers/top";
 import { downloadBp } from "util/html2Image" ;
+import InputableText from "components/util/InputableText";
 
 
 const ZoomBar = styled.div`
@@ -53,6 +55,8 @@ export default function Head(props :HeadProps){
     const {toggleSideBar,isShowSideBar,...otherProps} = props ;
     const dispatch = useDispatch() ;
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [title,setTitle] = useTitle() ;
+
     function makeHandleSelectItem(cb:()=>void){
         return function (){
             setDrawerOpen(false);
@@ -65,6 +69,7 @@ export default function Head(props :HeadProps){
             //全削除
         } ));
         dispatch(loadTop( {
+            title:"",
             flows:[],
             arrayTemplates:[],
         } ));
@@ -84,7 +89,8 @@ export default function Head(props :HeadProps){
         }
     }
     function handleExportImg(){
-        const fileName = prompt("ファイル名を設定してください");
+        const state = store.getState();
+        const fileName = prompt("ファイル名を設定してください",state.top.title);
         if(fileName){
             downloadBp("png",fileName);
         }
@@ -96,20 +102,10 @@ export default function Head(props :HeadProps){
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" style={{flexGrow:1}}>
-                    FBE
+                    {/* FBE */}
+                    <InputableText value={title} onChange={(newTitle)=>setTitle(newTitle)}/>
+                    {/* { title } */}
                 </Typography>
-                {/* <ZoomBar key={"zoom"} >
-                    <IconButton color="inherit" onClick={()=>{dispatch(incZoom(+0.1));}} key={"zoomup"}>
-                        <ZoomIn />
-                    </IconButton>
-                    <Button color="inherit" startIcon={<Search />} onClick={()=>{dispatch(setZoom(1.0));}} key={"zoomreset"}>
-                        リセット
-                    </Button>
-                    <IconButton color="inherit" onClick={()=>{dispatch(incZoom(-0.1));}} key={"zoomdown"}>
-                        <ZoomOut />
-                    </IconButton>
-                </ZoomBar> */}
-
                 <Drawer anchor="left" open={drawerOpen} onClose={()=>{setDrawerOpen(false)}}>
                     <List>
                         {/* ファイル */}
