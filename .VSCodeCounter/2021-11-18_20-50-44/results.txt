@@ -1,0 +1,133 @@
+Date : 2021-11-18 20:50:44
+Directory : d:\Dev\fbe-on-web-react
+Total : 84 files,  50894 codes, 606 comments, 2132 blanks, all 53632 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| JSON             |          4 |     35,103 |          3 |          7 |     35,113 |
+| Log              |          1 |     10,902 |          0 |      1,615 |     12,517 |
+| TypeScript React |         49 |      3,619 |        445 |        364 |      4,428 |
+| TypeScript       |         23 |      1,214 |        133 |        123 |      1,470 |
+| HTML             |          1 |         20 |         23 |          1 |         44 |
+| CSS              |          2 |         14 |          2 |          2 |         18 |
+| SCSS             |          2 |         13 |          0 |          9 |         22 |
+| Markdown         |          1 |          9 |          0 |         10 |         19 |
+| JavaScript       |          1 |          0 |          0 |          1 |          1 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                           | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                              |         84 |     50,894 |        606 |      2,132 |     53,632 |
+| public                                                         |          2 |         45 |         23 |          2 |         70 |
+| src                                                            |         77 |      4,860 |        580 |        499 |      5,939 |
+| src\components                                                 |         25 |      1,970 |        221 |        170 |      2,361 |
+| src\components\App                                             |          9 |        961 |        154 |         67 |      1,182 |
+| src\components\sym                                             |         13 |        918 |         51 |         88 |      1,057 |
+| src\components\util                                            |          3 |         91 |         16 |         15 |        122 |
+| src\css                                                        |          5 |         50 |         28 |         20 |         98 |
+| src\error                                                      |          1 |          7 |          0 |          3 |         10 |
+| src\exe                                                        |          6 |        519 |         28 |         34 |        581 |
+| src\exe\runtimes                                               |          6 |        519 |         28 |         34 |        581 |
+| src\item                                                       |         13 |        608 |        112 |         73 |        793 |
+| src\item\creator                                               |         12 |        596 |        112 |         71 |        779 |
+| src\prac                                                       |          1 |         27 |          0 |         11 |         38 |
+| src\redux                                                      |         12 |        766 |         44 |         74 |        884 |
+| src\redux\reducers                                             |          7 |        623 |         42 |         51 |        716 |
+| src\redux\types                                                |          3 |         32 |          0 |         10 |         42 |
+| src\util                                                       |          7 |        740 |        110 |         67 |        917 |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                       | language         | code       | comment    | blank      | total      |
++----------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| d:\Dev\fbe-on-web-react\README.md                              | Markdown         |          9 |          0 |         10 |         19 |
+| d:\Dev\fbe-on-web-react\package-lock.json                      | JSON             |     34,988 |          0 |          1 |     34,989 |
+| d:\Dev\fbe-on-web-react\package.json                           | JSON             |         63 |          0 |          1 |         64 |
+| d:\Dev\fbe-on-web-react\public\index.html                      | HTML             |         20 |         23 |          1 |         44 |
+| d:\Dev\fbe-on-web-react\public\manifest.json                   | JSON             |         25 |          0 |          1 |         26 |
+| d:\Dev\fbe-on-web-react\src\App.tsx                            | TypeScript React |         82 |         11 |         21 |        114 |
+| d:\Dev\fbe-on-web-react\src\BuildPane.tsx                      | TypeScript React |         64 |         11 |         11 |         86 |
+| d:\Dev\fbe-on-web-react\src\components\App\AppDialog.tsx       | TypeScript React |         14 |          5 |          3 |         22 |
+| d:\Dev\fbe-on-web-react\src\components\App\FabBar.tsx          | TypeScript React |        111 |          7 |         11 |        129 |
+| d:\Dev\fbe-on-web-react\src\components\App\Head.tsx            | TypeScript React |        164 |         12 |          7 |        183 |
+| d:\Dev\fbe-on-web-react\src\components\App\MenuDialog.tsx      | TypeScript React |         47 |          0 |          4 |         51 |
+| d:\Dev\fbe-on-web-react\src\components\App\SideBar.tsx         | TypeScript React |        454 |        121 |         23 |        598 |
+| d:\Dev\fbe-on-web-react\src\components\App\TestZone.tsx        | TypeScript React |         59 |          4 |          4 |         67 |
+| d:\Dev\fbe-on-web-react\src\components\App\TracerPane.tsx      | TypeScript React |         41 |          1 |          5 |         47 |
+| d:\Dev\fbe-on-web-react\src\components\App\VariableTracer.tsx  | TypeScript React |         61 |          2 |          6 |         69 |
+| d:\Dev\fbe-on-web-react\src\components\App\types.tsx           | TypeScript React |         10 |          2 |          4 |         16 |
+| d:\Dev\fbe-on-web-react\src\components\sym\Arrow.tsx           | TypeScript React |        145 |          8 |         11 |        164 |
+| d:\Dev\fbe-on-web-react\src\components\sym\BranchSym.tsx       | TypeScript React |        146 |          6 |          8 |        160 |
+| d:\Dev\fbe-on-web-react\src\components\sym\CalcSym.tsx         | TypeScript React |         13 |          0 |          2 |         15 |
+| d:\Dev\fbe-on-web-react\src\components\sym\DataSym.tsx         | TypeScript React |         36 |          0 |          6 |         42 |
+| d:\Dev\fbe-on-web-react\src\components\sym\DoubleBranchSym.tsx | TypeScript React |          7 |          0 |          2 |          9 |
+| d:\Dev\fbe-on-web-react\src\components\sym\Flow.tsx            | TypeScript React |        107 |          6 |          8 |        121 |
+| d:\Dev\fbe-on-web-react\src\components\sym\ForSym.tsx          | TypeScript React |         85 |          5 |          5 |         95 |
+| d:\Dev\fbe-on-web-react\src\components\sym\PrepareSym.tsx      | TypeScript React |         26 |          0 |          6 |         32 |
+| d:\Dev\fbe-on-web-react\src\components\sym\ProcessSym.tsx      | TypeScript React |         21 |          0 |          7 |         28 |
+| d:\Dev\fbe-on-web-react\src\components\sym\SwitchBranchSym.tsx | TypeScript React |          7 |          0 |          3 |         10 |
+| d:\Dev\fbe-on-web-react\src\components\sym\Sym.tsx             | TypeScript React |        198 |         15 |         22 |        235 |
+| d:\Dev\fbe-on-web-react\src\components\sym\TerminalSym.tsx     | TypeScript React |         40 |          2 |          3 |         45 |
+| d:\Dev\fbe-on-web-react\src\components\sym\WhileSym.tsx        | TypeScript React |         87 |          9 |          5 |        101 |
+| d:\Dev\fbe-on-web-react\src\components\util\Button.tsx         | TypeScript React |         11 |          0 |          6 |         17 |
+| d:\Dev\fbe-on-web-react\src\components\util\InputableText.tsx  | TypeScript React |         22 |          2 |          4 |         28 |
+| d:\Dev\fbe-on-web-react\src\components\util\MultiText.tsx      | TypeScript React |         58 |         14 |          5 |         77 |
+| d:\Dev\fbe-on-web-react\src\css\App.scss                       | SCSS             |          0 |          0 |          6 |          6 |
+| d:\Dev\fbe-on-web-react\src\css\global.css                     | CSS              |         13 |          1 |          2 |         16 |
+| d:\Dev\fbe-on-web-react\src\css\global.min.css                 | CSS              |          1 |          1 |          0 |          2 |
+| d:\Dev\fbe-on-web-react\src\css\global.scss                    | SCSS             |         13 |          0 |          3 |         16 |
+| d:\Dev\fbe-on-web-react\src\css\media.ts                       | TypeScript       |         23 |         26 |          9 |         58 |
+| d:\Dev\fbe-on-web-react\src\error\ExecuteError.ts              | TypeScript       |          7 |          0 |          3 |         10 |
+| d:\Dev\fbe-on-web-react\src\exe\runtimes\MsgBoxRuntime.ts      | TypeScript       |         17 |          0 |          2 |         19 |
+| d:\Dev\fbe-on-web-react\src\exe\runtimes\Runtime.tsx           | TypeScript React |        309 |         24 |         14 |        347 |
+| d:\Dev\fbe-on-web-react\src\exe\runtimes\TableRuntime.tsx      | TypeScript React |         94 |          0 |          7 |        101 |
+| d:\Dev\fbe-on-web-react\src\exe\runtimes\TerminalRuntime.tsx   | TypeScript React |         76 |          3 |          4 |         83 |
+| d:\Dev\fbe-on-web-react\src\exe\runtimes\index.ts              | TypeScript       |          9 |          0 |          4 |         13 |
+| d:\Dev\fbe-on-web-react\src\exe\runtimes\types.ts              | TypeScript       |         14 |          1 |          3 |         18 |
+| d:\Dev\fbe-on-web-react\src\index.tsx                          | TypeScript React |         13 |         10 |          9 |         32 |
+| d:\Dev\fbe-on-web-react\src\item\corners.tsx                   | TypeScript React |         12 |          0 |          2 |         14 |
+| d:\Dev\fbe-on-web-react\src\item\creator\base.tsx              | TypeScript React |        118 |         11 |          6 |        135 |
+| d:\Dev\fbe-on-web-react\src\item\creator\calc.tsx              | TypeScript React |         31 |          2 |          3 |         36 |
+| d:\Dev\fbe-on-web-react\src\item\creator\data.tsx              | TypeScript React |         58 |          5 |          6 |         69 |
+| d:\Dev\fbe-on-web-react\src\item\creator\doubleBranch.tsx      | TypeScript React |         49 |          4 |          4 |         57 |
+| d:\Dev\fbe-on-web-react\src\item\creator\flow.tsx              | TypeScript React |         30 |          1 |          3 |         34 |
+| d:\Dev\fbe-on-web-react\src\item\creator\for.tsx               | TypeScript React |         69 |         10 |         10 |         89 |
+| d:\Dev\fbe-on-web-react\src\item\creator\index.tsx             | TypeScript React |         32 |          1 |          9 |         42 |
+| d:\Dev\fbe-on-web-react\src\item\creator\prepare.tsx           | TypeScript React |         49 |          6 |          6 |         61 |
+| d:\Dev\fbe-on-web-react\src\item\creator\process.tsx           | TypeScript React |         29 |          2 |          6 |         37 |
+| d:\Dev\fbe-on-web-react\src\item\creator\switchBranch.tsx      | TypeScript React |         44 |         58 |          8 |        110 |
+| d:\Dev\fbe-on-web-react\src\item\creator\terminal.tsx          | TypeScript React |         16 |          3 |          4 |         23 |
+| d:\Dev\fbe-on-web-react\src\item\creator\while.tsx             | TypeScript React |         71 |          9 |          6 |         86 |
+| d:\Dev\fbe-on-web-react\src\prac\AtomTest.tsx                  | TypeScript React |         27 |          0 |         11 |         38 |
+| d:\Dev\fbe-on-web-react\src\react-app-env.d.ts                 | TypeScript       |          0 |          1 |          1 |          2 |
+| d:\Dev\fbe-on-web-react\src\redux\actions.ts                   | TypeScript       |         79 |          1 |          7 |         87 |
+| d:\Dev\fbe-on-web-react\src\redux\reducers\app.ts              | TypeScript       |         67 |         14 |          7 |         88 |
+| d:\Dev\fbe-on-web-react\src\redux\reducers\edits.ts            | TypeScript       |        116 |          2 |          6 |        124 |
+| d:\Dev\fbe-on-web-react\src\redux\reducers\exes.ts             | TypeScript       |         42 |          2 |          4 |         48 |
+| d:\Dev\fbe-on-web-react\src\redux\reducers\items.ts            | TypeScript       |        163 |          8 |         11 |        182 |
+| d:\Dev\fbe-on-web-react\src\redux\reducers\mode.ts             | TypeScript       |         26 |          2 |          5 |         33 |
+| d:\Dev\fbe-on-web-react\src\redux\reducers\selectItem.ts       | TypeScript       |         87 |         10 |         13 |        110 |
+| d:\Dev\fbe-on-web-react\src\redux\reducers\top.ts              | TypeScript       |        122 |          4 |          5 |        131 |
+| d:\Dev\fbe-on-web-react\src\redux\store.ts                     | TypeScript       |         32 |          1 |          6 |         39 |
+| d:\Dev\fbe-on-web-react\src\redux\types\action.ts              | TypeScript       |          4 |          0 |          2 |          6 |
+| d:\Dev\fbe-on-web-react\src\redux\types\item.ts                | TypeScript       |         22 |          0 |          5 |         27 |
+| d:\Dev\fbe-on-web-react\src\redux\types\top.ts                 | TypeScript       |          6 |          0 |          3 |          9 |
+| d:\Dev\fbe-on-web-react\src\reportWebVitals.ts                 | TypeScript       |         13 |          0 |          3 |         16 |
+| d:\Dev\fbe-on-web-react\src\setupTests.ts                      | TypeScript       |          1 |          4 |          1 |          6 |
+| d:\Dev\fbe-on-web-react\src\test.js                            | JavaScript       |          0 |          0 |          1 |          1 |
+| d:\Dev\fbe-on-web-react\src\util\declutter.ts                  | TypeScript       |          3 |          0 |          3 |          6 |
+| d:\Dev\fbe-on-web-react\src\util\formulaEval.ts                | TypeScript       |        327 |         56 |          5 |        388 |
+| d:\Dev\fbe-on-web-react\src\util\functions.ts                  | TypeScript       |         34 |          1 |         15 |         50 |
+| d:\Dev\fbe-on-web-react\src\util\hooks.tsx                     | TypeScript React |         32 |         14 |          9 |         55 |
+| d:\Dev\fbe-on-web-react\src\util\html2Image.tsx                | TypeScript React |         60 |          0 |         11 |         71 |
+| d:\Dev\fbe-on-web-react\src\util\io.tsx                        | TypeScript React |        204 |         34 |         12 |        250 |
+| d:\Dev\fbe-on-web-react\src\util\syms.tsx                      | TypeScript React |         80 |          5 |         12 |         97 |
+| d:\Dev\fbe-on-web-react\tsconfig.json                          | JSON             |         27 |          3 |          4 |         34 |
+| d:\Dev\fbe-on-web-react\yarn-error.log                         | Log              |     10,902 |          0 |      1,615 |     12,517 |
+| Total                                                          |                  |     50,894 |        606 |      2,132 |     53,632 |
++----------------------------------------------------------------+------------------+------------+------------+------------+------------+
