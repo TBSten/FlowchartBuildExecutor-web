@@ -9,28 +9,28 @@ import { flowCreator } from "item/creator/flow";
 import { optionTypes } from "util/syms";
 import { baseItemCreator, optionCreator } from "./base";
 
-const AddFlowSymMenu = ()=>{
-    const selectItemId = useSelectItemId();
-    const switchSymId :string = selectItemId ;
-    const getItem = useGetItem();
-    const dispatch = useDispatch();
-    function handleAddFlow(){
-        const fid = randomStr(30);
-        const f = flowCreator([]);
-        dispatch(setItem(fid,f));
-        const newSwitchSym = Object.assign({},getItem(switchSymId));
-        let newSyms = newSwitchSym.syms?newSwitchSym.syms:[] ;
-        newSyms = [...newSyms, fid] ;
-        newSwitchSym.syms = newSyms ;
-        dispatch(setItem(switchSymId,newSwitchSym));
-        //console.log(fid,f,selectItemId,newSwitchSym);
-    }
-    return (
-        <Button onClick={handleAddFlow} color="primary" variant="outlined">
-            分岐先を追加する
-        </Button>
-    ) ;
-} ;
+// const AddFlowSymMenu = ()=>{
+//     const selectItemId = useSelectItemId();
+//     const switchSymId :string = selectItemId ;
+//     const getItem = useGetItem();
+//     const dispatch = useDispatch();
+//     function handleAddFlow(){
+//         const fid = randomStr(30);
+//         const f = flowCreator([]);
+//         dispatch(setItem(fid,f));
+//         const newSwitchSym = Object.assign({},getItem(switchSymId));
+//         let newSyms = newSwitchSym.syms?newSwitchSym.syms:[] ;
+//         newSyms = [...newSyms, fid] ;
+//         newSwitchSym.syms = newSyms ;
+//         dispatch(setItem(switchSymId,newSwitchSym));
+//         //console.log(fid,f,selectItemId,newSwitchSym);
+//     }
+//     return (
+//         <Button onClick={handleAddFlow} color="primary" variant="outlined">
+//             分岐先を追加する
+//         </Button>
+//     ) ;
+// } ;
 
 
 export function switchBranchSymCreator(syms? :string[]) :Item{

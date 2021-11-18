@@ -5,13 +5,13 @@ import {
     Tabs,
     Tab,
     Slider,
-    List,
-    ListItem,
-    ListItemText,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
+    // List,
+    // ListItem,
+    // ListItemText,
+    // Dialog,
+    // DialogTitle,
+    // DialogContent,
+    // DialogActions,
     Chip,
 } from "@material-ui/core";
 import { Cancel } from "@material-ui/icons";
@@ -86,17 +86,17 @@ const SideBarContainer = styled.div`
         box-sizing: border-box;
     `}
 `;
-const Menus = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    & > * {
-        margin-right: 10px;
-        margin-bottom: 20px;
-    }
-`;
+// const Menus = styled.div`
+//     width: 100%;
+//     display: flex;
+//     flex-direction: row;
+//     justify-content: flex-start;
+//     flex-wrap: wrap;
+//     & > * {
+//         margin-right: 10px;
+//         margin-bottom: 20px;
+//     }
+// `;
 const ZoomBar = styled.div`
     display: none;
     ${sp`
@@ -110,11 +110,11 @@ const ToggleSideShowCon = styled.div`
         display: none;
     `}
 `;
-const ToggleSideShow = styled.div`
-    position: absolute;
-    right: 0;
-    top: 0;
-`;
+// const ToggleSideShow = styled.div`
+//     position: absolute;
+//     right: 0;
+//     top: 0;
+// `;
 const RightAlign = styled.div`
     text-align: right;
     width: 100%;

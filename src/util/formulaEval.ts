@@ -356,32 +356,32 @@ export class Evaler {
 
 export function test() {
   //console.log("eval test !!!");
-  const vars = [
-    { name: "test", value: "iine !" },
-    { name: "変数", value: 10 },
-    { name: "ARR", value: ["this is ", 3, " length array"] },
-  ];
-  const evaler = new Evaler(vars);
-  const fs = [
-    "1+2",
-    "1-2+3",
-    "2+3*4",
-    "3*4+2",
-    "変数+2",
-    'test+"aaa"',
-    "ARR[2-1]",
-    "ARR[0]+ARR[1]+ARR[2]",
-    "ARR[1-1]",
-  ];
-  //console.log("variables:::", vars);
-  fs.forEach((el) => {
-    //console.log("============");
-    const st = new Date();
-    const ans = evaler.eval(el);
-    const et = new Date();
-    //console.log(el, "==>>", ans);
-    //console.log(typeof ans);
-    //console.log("time :", et.valueOf() - st.valueOf(), "ms");
-  });
+  // const vars = [
+  //   { name: "test", value: "iine !" },
+  //   { name: "変数", value: 10 },
+  //   { name: "ARR", value: ["this is ", 3, " length array"] },
+  // ];
+  // const evaler = new Evaler(vars);
+  // const fs = [
+  //   "1+2",
+  //   "1-2+3",
+  //   "2+3*4",
+  //   "3*4+2",
+  //   "変数+2",
+  //   'test+"aaa"',
+  //   "ARR[2-1]",
+  //   "ARR[0]+ARR[1]+ARR[2]",
+  //   "ARR[1-1]",
+  // ];
+  // //console.log("variables:::", vars);
+  // fs.forEach((el) => {
+  //   //console.log("============");
+  //   const st = new Date();
+  //   const ans = evaler.eval(el);
+  //   const et = new Date();
+  //   //console.log(el, "==>>", ans);
+  //   //console.log(typeof ans);
+  //   //console.log("time :", et.valueOf() - st.valueOf(), "ms");
+  // });
   //console.log("============");
 }

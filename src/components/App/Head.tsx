@@ -5,7 +5,7 @@ import {
     Toolbar,
     Typography,
     IconButton,
-    Button,
+    // Button,
     Drawer,
     List,
     ListItem,
@@ -15,9 +15,9 @@ import {
 } from "@material-ui/core";
 import {
     Menu as MenuIcon,
-    ZoomIn,
-    ZoomOut,
-    Search,
+    // ZoomIn,
+    // ZoomOut,
+    // Search,
     InsertDriveFile,
     Save,
     ViewArray,
@@ -25,7 +25,7 @@ import {
     CloudUpload,
 } from "@material-ui/icons";
 import { useDispatch } from "react-redux";
-import { setZoom, incZoom } from "redux/reducers/edits";
+// import { setZoom, incZoom } from "redux/reducers/edits";
 import styled from "styled-components" ;
 import {sp} from "css/media" ;
 import {
@@ -40,12 +40,12 @@ import { downloadBp } from "util/html2Image" ;
 import InputableText from "components/util/InputableText";
 
 
-const ZoomBar = styled.div`
-    color:white;
-    ${sp`
-        display:none;
-    `}
-`;
+// const ZoomBar = styled.div`
+//     color:white;
+//     ${sp`
+//         display:none;
+//     `}
+// `;
 
 interface HeadProps{
     isShowSideBar:boolean;

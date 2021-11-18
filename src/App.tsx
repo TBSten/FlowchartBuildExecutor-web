@@ -2,8 +2,8 @@
 import "./css/global.min.css" ;
 import MuiPaper from "@material-ui/core/Paper" ;
 import {sp, } from "./css/media" ;
-import { useEffect, useRef, useCallback, useState } from "react";
-import {useDispatch} from "react-redux";
+import { useEffect, useRef, useState } from "react";
+// import {useDispatch} from "react-redux";
 import BuildPane from "./BuildPane";
 
 import Head from "components/App/Head";
@@ -11,9 +11,9 @@ import SideBar from "components/App/SideBar";
 import styled from "styled-components" ;
 import FabBar from "components/App/FabBar" ;
 import AppDialog from "components/App/AppDialog" ;
-import TestZone from "components/App/TestZone";
+// import TestZone from "components/App/TestZone";
 
-import {test} from "util/formulaEval" ;
+// import {test} from "util/formulaEval" ;
 import { loadBrowserSaveData, saveBrowserSaveData } from "util/io";
 
 const AppContainer = styled.div`
@@ -76,7 +76,7 @@ function App() {
   // const topFlows = useTopFlows() ;
   // console.log(items, topFlows);
 
-  const dispatch = useDispatch() ;
+  // const dispatch = useDispatch() ;
 
   const [showSideBar,setShowSideBar] = useState(true) ;
 
@@ -99,7 +99,7 @@ function App() {
 
       <FabBar />
 
-      <TestZone/>
+      {/* <TestZone/> */}
       
       <AppDialog/>
     </AppContainer>

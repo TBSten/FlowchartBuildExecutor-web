@@ -115,7 +115,7 @@ export function loadSaveState(saveState: SaveState) {
       throw new Error("unvalid type :" + item.itemType);
     }
     const work = put ;
-    console.log("load option ",work);
+    // console.log("load option ",work);
     put.syms = item.syms;
     put.options = item.options.map((el,idx) => {
       const type = optionTypes[el.type];
@@ -152,7 +152,7 @@ export function inputTextFile() {
     inputer.type = "file";
     inputer.onchange = (e) => {
       const target = e.target as HTMLInputElement;
-      console.log(target.files);
+      // console.log(target.files);
       if (target.files) {
         const file = target.files[0];
         const reader = new FileReader();
@@ -242,7 +242,7 @@ export function declutterItems(items :Items){
     p[id] = newItem;
     return p ;
   },{} as Items);
-  console.log(requireItems);
+  // console.log(requireItems);
   // store.dispatch(loadItems(requireItems)) ;
   return requireItems ;
 } ;

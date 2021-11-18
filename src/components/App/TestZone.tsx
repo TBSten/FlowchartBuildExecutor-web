@@ -2,13 +2,13 @@ import { useState, } from "react" ;
 
 import { downloadTextFile, getSaveState, inputTextFile, loadBrowserSaveData, loadSaveState, saveBrowserSaveData, } from "util/io" ;
 import { useAppDialog } from "redux/reducers/app" ;
-import { declutterItems } from "util/io" ;
+// import { declutterItems } from "util/io" ;
 import { test } from "util/html2Image" ;
 
 export default function TestZone(){
     //console.log("test ###################");
     const [show,setShow] = useState(true);
-    const [file, setFile] = useState("");
+    const [file, /*setFile*/ ] = useState("");
     const dialog = useAppDialog();
     //console.log(dialog);
     async function inputFile(){

@@ -1,5 +1,5 @@
 import Runtime from "./Runtime" ;
-import { Variable,VariableValue } from "./types";
+import { Variable, } from "./types";
 
 export default class MsgBoxRuntime extends Runtime {
     constructor(flowIds: string[], vars: Variable[]){

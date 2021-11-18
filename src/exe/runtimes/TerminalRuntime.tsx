@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useRuntime } from "redux/reducers/exes";
 import Runtime from "./Runtime" ;
-import { Variable,VariableValue } from "./types";
-import { TabData } from "components/App/types";
+import { Variable, } from "./types";
+// import { TabData } from "components/App/types";
 import styled from "styled-components" ;
 
 const TerminalContainer = styled.div`
