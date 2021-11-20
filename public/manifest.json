@@ -4,9 +4,9 @@
 	"description":		"",
 	"start_url":		".",
 	"display":			"minimal-ui",
-	"background_color":	"#0fff95",
-	"theme_color":		"#0fff95",
-	"orientation":		"any",
+	"background_color":	"#3f51b5",
+	"theme_color":		"#3f51b5",
+	"orientation":		"portrait",
 	"icons": [
 		{
 			"src": "/android-chrome-36x36.png",
