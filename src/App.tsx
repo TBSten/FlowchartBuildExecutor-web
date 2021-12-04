@@ -48,10 +48,8 @@ const MainContainer = styled(MuiPaper)`
 
 function App() {
   console.log("########## App render ##########");
-  // console.log("################");
-  // console.log("################");
-  // test();
   const ref = useRef<HTMLDivElement>(null!);
+
   useEffect(()=>{
       console.log(ref);
       if(ref.current){
@@ -61,11 +59,14 @@ function App() {
   },[]);
 
   useEffect(()=>{
+    console.log("--- load start");
     loadBrowserSaveData();
+    console.log("--- load end");
     const tid = setInterval(()=>{
       //save
-      console.log("auto save");
+      console.log("auto save start");
       saveBrowserSaveData();
+      // console.log("auto save end");
     },30*1000);
     return ()=>{
       clearInterval(tid);
@@ -80,7 +81,6 @@ function App() {
 
   const [showSideBar,setShowSideBar] = useState(true) ;
 
-  
   return (
     <AppContainer>
       <TopContainer>
