@@ -3,7 +3,7 @@ export type Token = string ;
 export type Lt = string | number | boolean ;
 export type Ope = {
     pattern:string ,
-    run:(left:Token,right?:Token)=>Lt ,
+    run:(left?:Token,right?:Token)=>Lt ,
     priority:number,
 } ;
 export type Variable = {
@@ -19,9 +19,9 @@ function isValidLt(lt:Lt|null|undefined) :boolean{
         ? true :false;
 }
 function tokenToLt(token:Token):Lt{
-    // console.log("tokenToLt",token)
-    if(new RegExp(ltPatterns[0]()).test(token)){
-        // console.log("  parseFloat",parseFloat(token))
+    console.log("tokenToLt",token)
+    if(new RegExp(ltPatterns[0](),"g").test(token)){
+        console.log(new RegExp(ltPatterns[0](),"g"))
         return parseFloat(token);
     }
     const isDoubleQuateStr = token.match(/^("(.*)")$/) ;
@@ -37,7 +37,7 @@ function tokenToLt(token:Token):Lt{
     if(token === "true" || token === "false"){
         return token === "true" ? true : false ;
     }
-    if(new RegExp(ltPatterns[3]()).test(token)){
+    if(new RegExp(ltPatterns[3](),"g").test(token)){
         console.log(" use var : ",getVar(token))
         const v = getVar(token) ;
         if(v){
@@ -58,6 +58,9 @@ function ltToToken(lt:Lt):Token{
     }
     if(typeof lt === "boolean"){
         return lt ? "true" : "false" ;
+    }
+    if(lt === undefined){
+        return "undefined" ;
     }
     throw new Error("unvalid lt :"+lt) ;
 }
@@ -91,19 +94,29 @@ const opes :Ope[] = [
         pattern:esc("+"),
         priority:5,
         run:(left,right)=>{
-            if(left && right){
-                const leftLt = tokenToLt(left) ;
-                const rightLt = tokenToLt(right) ;
-                if(typeof leftLt === "string" && typeof rightLt === "string"){
-                    return leftLt+rightLt;
-                }else if(typeof leftLt === "string" && typeof rightLt === "number"){
-                    return leftLt+rightLt;
-                }else if(typeof leftLt === "number" && typeof rightLt === "string"){
-                    return leftLt+rightLt;
-                }else if(typeof leftLt === "number" && typeof rightLt === "number"){
-                    return leftLt+rightLt;
+            if(left === undefined && right !== undefined){
+                const rLt = tokenToLt(right) ;
+                if(typeof rLt === "number"){
+                    return rLt ;
                 }
             }
+            if(left && right){
+                const lLt = tokenToLt(left) ;
+                const rLt = tokenToLt(right) ;
+                if(typeof lLt === "number" && typeof rLt === "number"){
+                    return lLt + rLt ;
+                }
+                if(typeof lLt === "string" && typeof rLt === "number"){
+                    return lLt + rLt ;
+                }
+                if(typeof lLt === "number" && typeof rLt === "string"){
+                    return lLt + rLt ;
+                }
+                if(typeof lLt === "string" && typeof rLt === "string"){
+                    return lLt + rLt ;
+                }
+            }
+            console.error(left,right);
             throw new Error("+演算子の左辺または右辺が不正です") ;
         }
     },
@@ -111,6 +124,12 @@ const opes :Ope[] = [
         pattern:esc("-"),
         priority:5,
         run:(left,right)=>{
+            if(left === undefined && right !== undefined){
+                const rLt = tokenToLt(right) ;
+                if(typeof rLt === "number"){
+                    return -1 * rLt ;
+                }
+            }
             if(left && right){
                 const lLt = tokenToLt(left) ;
                 const rLt = tokenToLt(right) ;
@@ -302,7 +321,7 @@ const opes :Ope[] = [
 
 ] ;
 const ltPatterns = [
-    ()=>`[0-9]+\\.?[0-9]*`,
+    ()=>`^[1-9][0-9]*\\.?[0-9]*`,
     ()=>`".*"`,
     ()=>`'.*'`,
     ()=>{
@@ -342,7 +361,7 @@ function toTokens(formula:string){
             `|${opes.map(o=>o.pattern).join("|")}`+     
             `|\\(|\\)`+
         `)`, "g"
-    )).filter(t=>t).map(t=>t.replace(" ",""));
+    )).map(t=>t.replace(" ","")).filter(t=>t && t !== " ");
 }
 
 function toRpn(tokens:Token[]):Token[]{
@@ -404,12 +423,13 @@ function toRpn(tokens:Token[]):Token[]{
 function evalRpn(rpn:Token[]){
     const ans :Lt[] = [] ;
     rpn.forEach(token=>{
-        console.log("evalRpn loop",token,isLt(token),isOpe(token));
+        // console.log("evalRpn loop",token,isLt(token),isOpe(token));
         if(isLt(token)){
             const lt = tokenToLt(token) ;
             if(lt || lt === 0 || lt === "" || lt === false){
                 ans.push(lt);
             }else{
+                console.error(token)
                 console.error(lt);
                 throw new Error("unknown error");
             }
@@ -417,15 +437,13 @@ function evalRpn(rpn:Token[]){
             const right = ans.pop();
             const left = ans.pop() ;
             const ope = getOpe(token) ;
-            console.log(left,ope,right)
-            if(isValidLt(left) && isValidLt(right) && ope){
-                if(
-                    left !== null && left !== undefined && 
-                    right !== null && right !== undefined 
-                ){
-                    const calced = ope.run(ltToToken(left),ltToToken(right)) ;
-                    ans.push(calced);
-                }
+            const lLt = left === undefined ? undefined : ltToToken(left) ;
+            const rLt = right === undefined ? undefined : ltToToken(right) ;
+            if(ope){
+                console.log(lLt,ope,rLt);
+                const calced = ope.run(lLt,rLt) ;
+                console.log("  =>",calced);
+                ans.push(calced);
             }else{
                 console.error(left,ope,right);
                 throw new Error("unknown error");
@@ -443,15 +461,15 @@ function evalRpn(rpn:Token[]){
     }
 }
 function evalFormula(formula:string,vars:Variable[]=[]){
-    console.log("= evalFormula ",formula, vars,"=========")
+    // console.log("= evalFormula ",formula, vars,"=========")
     variables=vars ;
     const ts = toTokens(formula);
-    console.log("tokens",ts)
+    // console.log("tokens",ts)
     const rpn = toRpn(ts);
-    console.log("rpn",rpn)
+    // console.log("rpn",rpn)
     const ans = evalRpn(rpn);
-    console.log("ans",ans);
-    console.log("==========================")
+    // console.log("ans",ans);
+    // console.log("==========================")
     return ans ;
 }
 
