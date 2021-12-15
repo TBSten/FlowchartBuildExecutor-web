@@ -11,8 +11,8 @@ export default function InputableText({value,onChange}:InputableTextProps){
     function handleInputMode(){setMode("input")}
     return (
         mode==="view"?
-            <div onClick={handleInputMode}>
-                {value}
+            <div onClick={handleInputMode} style={{minHeight:"1em"}}>
+                {value?value:"! none title !"}
             </div>
         :
             <TextField

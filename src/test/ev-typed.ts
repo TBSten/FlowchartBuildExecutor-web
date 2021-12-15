@@ -129,7 +129,7 @@ const opes :Ope[] = [
     },
 ] ;
 const ltPatterns = [
-    ()=>`[\\+,\\-]?[0-9]+`,
+    ()=>`^([0-9]+)$`,
     ()=>`".*"`,
     ()=>`'.*'`,
     ()=>{
@@ -147,12 +147,10 @@ function isLt(token:Token){
     //     /"(.*)"/.test(token) ||
     //     /'(.*)'/.test(token)
     // ) ;
-    const ans = ltPatterns.reduce((p,ltp)=>{
-        // console.log("-------",token,ltp,new RegExp(ltp()).test(token))
+    return ltPatterns.reduce((p,ltp)=>{
+        // console.log("-------",token,ltp,new RegExp(ltp).test(token))
         return p || new RegExp(ltp()).test(token) ;
     },false);
-    // console.log(ans);
-    return ans ;
 }
 function priority(opeToken:Token){
     if(opeToken === "+"){
@@ -170,10 +168,10 @@ function priority(opeToken:Token){
 function toTokens(formula:string){
     return formula.split(new RegExp(
         `(`+
-            `${ltPatterns.map(ltp=>ltp()).join("|")}`+
-            `|${opes.map(o=>o.pattern).join("|")}`+     
+            `${opes.map(o=>o.pattern).join("|")}`+     //演算子
+            `|${ltPatterns.map(ltp=>ltp()).join("|")}`+
             `|\\(|\\)`+
-        `)`, "g"
+        `)`
     )).filter(t=>t).map(t=>t.replace(" ",""));
 }
 
@@ -216,7 +214,6 @@ function toRpn(tokens:Token[]):Token[]{
             }
         }else{
             console.error(" ?????????????????????????????")
-            throw new Error("unvalid token :"+t) ;
         }
     }
     for(let i = stack.length-1 ; i >= 0 ; i--){
@@ -266,7 +263,6 @@ function evalRpn(rpn:Token[]){
 function evalFormula(formula:string,vars:Variable[]=[]){
     variables=vars ;
     const ts = toTokens(formula);
-    console.log("tokens",ts)
     const rpn = toRpn(ts);
     const ans = evalRpn(rpn);
     return ans ;
@@ -297,7 +293,7 @@ function test(){
         console.log("\n")
     })
 }
-// test() ;
+test() ;
 
 export {
     evalFormula,

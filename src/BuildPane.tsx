@@ -8,6 +8,7 @@ import { useZoom } from "redux/reducers/edits";
 import { selectItemById,useSelectItemIds } from "redux/reducers/selectItem" ;
 import SelectAllIcon from '@material-ui/icons/SelectAll';
 import { assignLoopCnt, } from "components/sym/WhileSym" ;
+import AppDialog from "components/App/AppDialog" ;
 
 
 const FlowContainer = styled.div`
@@ -66,6 +67,9 @@ export default function BuildPane(){
                     }
                 })
             }
+
+            <AppDialog/>
+
         </FlowContainer>
     );
     

@@ -1,14 +1,21 @@
 import { Item } from "redux/types/item";
 import { Variable, VariableValue, } from "./types";
 import { store } from "redux/store";
-import { setExecutingId } from "redux/reducers/exes";
-import { Evaler } from "util/formulaEval";
-import { hideAppDialog, openAppDialog, setOnCloseAppDialog, } from "redux/reducers/app";
-import { DialogActions, DialogContent, DialogTitle } from "@material-ui/core";
+import { setExecutingId, } from "redux/reducers/exes";
+import { evalFormula } from "util/formulaEval";
+import { hideAppDialog, hideAppSnackbar, openAppDialog, openAppSnackbar, setOnCloseAppDialog, setOnCloseAppSnackbar, } from "redux/reducers/app";
+import { DialogActions, DialogContent, DialogTitle, Snackbar } from "@material-ui/core";
 import { TabData } from "components/App/types";
 import ExecuteError from "error/ExecuteError";
 import Button from "components/util/Button";
+import styled from "styled-components";
 
+const ExeViewCon = styled.div`
+  background:white;
+  padding:1rem;
+  border-radius:0.5rem;
+  box-shadow:0 0 5px black;
+`;
 
 export type Executable = (
   exe: Runtime,
@@ -67,7 +74,7 @@ export default class Runtime {
         i++
       ) {}
       if (i < this.variables.length) {
-        const arrV = this.variables[i].value as any[];
+        const arrV = this.variables[i].value as unknown as any[];
         arrV[idx] = value;
       } else {
         throw new Error("unvalid array :" + arr);
@@ -88,7 +95,7 @@ export default class Runtime {
         }
       });
       if (0 <= idx && typeof evKey === "number") {
-        let ans = this.variables[idx].value;
+        let ans = this.variables[idx].value as unknown;
         if (ans instanceof Array) {
           return ans[evKey];
         } else {
@@ -187,15 +194,17 @@ export default class Runtime {
     if(displayMessage){
       const text = `${displayMessage}` ;
       // alert(`#エラー : ${displayMessage}`);
-      console.log("--- test-1");
-      await this.msgBoxWithTitle("#エラー",text);
-      console.log("--- test-2");
+      await this.dialog({
+        title:"#エラー",
+        msg:text
+      });
     }else{
       const text = "エラーが発生しましたが原因が分かりません。FBE開発チームに問い合わせてください。" ;
       // alert("#不明なエラー : エラーが発生しましたが原因が分かりません。FBE開発チームに問い合わせてください。");
-      console.log("--- test-3");
-      await this.msgBoxWithTitle("#不明なエラー",text);
-      console.log("--- test-4");
+      await this.dialog({
+        title:"#不明なエラー",
+        msg:text,
+      });
     }
   }
   async exeAll(){
@@ -214,9 +223,13 @@ export default class Runtime {
       //すでに終了している
     }
   }
-  exit() {
+  async exit() {
     store.dispatch(setExecutingId("none"));
-    this.msgBox("終了しました");
+    store.dispatch(hideAppSnackbar());
+    await this.dialog({
+      title:"実行終了",
+      msg: "終了しました",
+    });
   }
   isExited() :boolean{
     if(this.status === "done"){
@@ -241,13 +254,49 @@ export default class Runtime {
   async output(data: string):Promise<void> {
     //console.log("output ", data);
   }
-  msgBoxWithTitle(title:string, msg: string) {
+  msgBox(msg: string){
     return new Promise<void>((resolve,reject)=>{
-      // console.log("start msgBox Promise");
+      // const onCloseAction = setOnCloseAppDialog(()=>{
+      //   console.log("close");
+      //   resolve();
+      // });
+      // const hideAction = hideAppDialog() ;
+      // const openAction = openAppDialog(
+      //   <>
+      //     <DialogTitle>{title}</DialogTitle>
+      //     <DialogContent>
+      //       <div>{msg}</div>
+      //     </DialogContent>
+      //     <DialogActions>
+      //       <Button onClick={()=>{store.dispatch(hideAction );console.log("hide app dialog")}}>
+      //         閉じる
+      //       </Button>
+      //     </DialogActions>
+      //   </>
+      // ) ;
+      // store.dispatch(onCloseAction);
+      // store.dispatch(openAction);
+
+      //専用のメッセージボックスで表示
+      store.dispatch(setOnCloseAppSnackbar(()=>{
+        hideAppSnackbar();
+      }));
+      store.dispatch(openAppSnackbar(
+        msg
+      ));
+      setTimeout(()=>{
+        const state = store.getState();
+        if(state.app.snackbar.content === msg){
+          store.dispatch(hideAppSnackbar());
+        }
+      },Math.min(msg.length*900,8*1000));
+      resolve();
+    });
+  }
+  async dialog({title,msg}:{title?:string,msg:string}){
       const onCloseAction = setOnCloseAppDialog(()=>{
-        // console.log("resolve msgBox Promise");
         console.log("close");
-        resolve();
+        Promise.resolve();
       });
       const hideAction = hideAppDialog() ;
       const openAction = openAppDialog(
@@ -263,14 +312,8 @@ export default class Runtime {
           </DialogActions>
         </>
       ) ;
-      // store.dispatch({payload:null, ...onCloseAction,});
-      // store.dispatch({payload:null, ...openAction});
       store.dispatch(onCloseAction);
       store.dispatch(openAction);
-    });
-  }
-  msgBox(msg: string){
-    return this.msgBoxWithTitle("表示",msg) ;
   }
   sleep(msec :number){
     return new Promise<void>((resolve,reject)=>{
@@ -313,9 +356,13 @@ export default class Runtime {
   }
 
   eval(formula: string) {
-    const evaler = new Evaler(this.variables);
-    const ans = evaler.eval(formula);
-    return ans;
+    // const evaler = new Evaler(this.variables);
+    // const ans = evaler.eval(formula);
+    // return ans;
+    return evalFormula(
+      formula,
+      this.variables
+    );
   }
 
   getTabs() :TabData[]{

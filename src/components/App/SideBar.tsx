@@ -51,6 +51,7 @@ import Runtime from "exe/runtimes/Runtime";
 import { SideBarMenu, TabData } from "./types";
 import MenuDialog from "components/App/MenuDialog" ;
 
+
 const SideContainer = styled(MuiPaper)`
     grid-column: 2 / 3;
     grid-row: 2 / 3;
@@ -141,7 +142,7 @@ interface OptionLineProps {
 }
 
 function OptionLine({ele,updateOption,Input,}: OptionLineProps) {
-    console.log("OptionLine render");
+    // console.log("OptionLine render");
     return (
         <tr>
             <td>{ele.name}</td>
@@ -311,7 +312,7 @@ export default function SideBar(props: SideBarProps) {
                     dispatch(setOption(selectItemId, name, value));
                 };
 
-                console.log(ele);
+                // console.log(ele);
                 if (ele.isVisible(item) === true) {
                     return (
                         <OptionLine
@@ -528,6 +529,8 @@ export default function SideBar(props: SideBarProps) {
                         </>
                     } */}
                         <hr />
+
+                        {/* <ExeView /> */}
                     </>
                 ) : (
                     <>ランタイムを選んでください</>

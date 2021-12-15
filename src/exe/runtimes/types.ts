@@ -1,10 +1,12 @@
+import {Lt} from "util/formulaEval" ;
+
 //Variable types
 export type BaseType = 
-  string | boolean | number ;
+  Lt ;
 export type ArrayBaseType = 
-  BaseType | BaseType[] ;
+  Lt ;
 export type VariableValue =
-  ArrayBaseType | ArrayBaseType[] ;
+  Lt ;
 export class Variable {
   name: string;
   value: VariableValue;

@@ -33,7 +33,7 @@ export function prepareSymCreator() :Item{
             for(let i = 0;i < cnt;i++){
                 arr[i] = first as BaseType ;
             }
-            runtime.setVar(target,arr);
+            runtime.setVar(target,arr as any);
         }else if(type === "2次元配列"){
             const arr :BaseType[][] = [] ;
             const cnts = count.split(/\*|,/) ;
@@ -45,7 +45,7 @@ export function prepareSymCreator() :Item{
                     arr[i][j] = first as BaseType ;
                 }
             }
-            runtime.setVar(target,arr);
+            runtime.setVar(target,arr as any);
         }else{
             throw new Error("unvalid type :"+type) ;
         }

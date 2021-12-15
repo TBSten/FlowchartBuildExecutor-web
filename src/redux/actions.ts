@@ -64,12 +64,21 @@ const exe={
     executingId:{
         set:"exe/executingId/set",
     },
+
 } ;
 const app = {
     dialog:{
         show:"app/dialog/show",
         hide:"app/dialog/hide",
         setOnClose:"app/dialog/setOnClose",
+    },
+    snackbar:{
+        show:"app/snackbar/show",
+        hide:"app/snackbar/hide",
+        setOnClose:"app/snackbar/setOnClose",
+    },
+    isLoading:{
+        set:"app/isLoading/set",
     },
 } ;
 

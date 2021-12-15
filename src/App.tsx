@@ -11,10 +11,13 @@ import SideBar from "components/App/SideBar";
 import styled from "styled-components" ;
 import FabBar from "components/App/FabBar" ;
 import AppDialog from "components/App/AppDialog" ;
+import AppSnackBar from "components/App/AppSnackBar" ;
 // import TestZone from "components/App/TestZone";
 
 // import {test} from "util/formulaEval" ;
 import { loadBrowserSaveData, saveBrowserSaveData } from "util/io";
+import { useIsLoading } from "redux/reducers/app";
+import { Backdrop, CircularProgress } from "@material-ui/core";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -49,6 +52,10 @@ const MainContainer = styled(MuiPaper)`
 function App() {
   console.log("########## App render ##########");
   const ref = useRef<HTMLDivElement>(null!);
+  const {
+    isLoading,
+    startLoad,
+    finishLoad } = useIsLoading();
 
   useEffect(()=>{
       console.log(ref);
@@ -59,9 +66,13 @@ function App() {
   },[]);
 
   useEffect(()=>{
+    //ロード中オン
     console.log("--- load start");
     loadBrowserSaveData();
     console.log("--- load end");
+    //ロード中オフ
+    finishLoad();
+
     const tid = setInterval(()=>{
       //save
       console.log("auto save start");
@@ -82,6 +93,11 @@ function App() {
   const [showSideBar,setShowSideBar] = useState(true) ;
 
   return (
+    isLoading?
+    <Backdrop open={isLoading}>
+      <CircularProgress/>
+    </Backdrop>
+    :
     <AppContainer>
       <TopContainer>
         {/* <button onClick={()=>{dispatch(actionCreators.addItem(calcSymCreator()))}}>BUTTON</button> */}
@@ -102,6 +118,9 @@ function App() {
       {/* <TestZone/> */}
       
       <AppDialog/>
+
+      <AppSnackBar />
+
     </AppContainer>
     
   );

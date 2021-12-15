@@ -25,21 +25,22 @@ const VariableTracer :React.FC<VariableTracerProps> =
     ({name, value})=>{
 
     let Comp :JSX.Element|any[] = <># ERROR unvalid value:{value}</> ;
-    if(!(value instanceof Array)){
+    if(!(value as unknown instanceof Array)){
         Comp = <>{value}</> ;
     }else{
-        if(! (value[0] instanceof Array)){
+        const _value = value as unknown as any[]
+        if(! (_value[0] instanceof Array)){
             //1次元配列
             Comp = (
                 <BlockRow>
-                    {value.map(el=>(
+                    {_value.map(el=>(
                         <Block>{el}</Block>
                     ))}
                 </BlockRow>
             );
-        }else if(value[0] instanceof Array){
+        }else if(_value[0] instanceof Array){
             //2次元配列
-            const arr = value as any[][] ;
+            const arr = _value as any[][] ;
             Comp = arr.map(row=>(
                 <BlockRow>{row.map(el=>(
                     <Block>{el}</Block>
