@@ -2,8 +2,9 @@
 export type Token = string ;
 export type Lt = string | number | boolean ;
 export type Ope = {
-    pattern:string,
-    run:(left:Token,right?:Token)=>Lt 
+    pattern:string ,
+    run:(left:Token,right?:Token)=>Lt ,
+    priority:number,
 } ;
 export type Variable = {
     name:string,
@@ -13,7 +14,11 @@ export type Variable = {
 function esc(str:string){
     return str.replace(/[-\/\\^$*+?.()|\[\]{}]/g, '\\$&');
 }
-function tokenToLt(token:Token){
+function isValidLt(lt:Lt|null|undefined) :boolean{
+    return lt || lt === 0 || lt === false || lt === "" 
+        ? true :false;
+}
+function tokenToLt(token:Token):Lt{
     // console.log("tokenToLt",token)
     if(new RegExp(ltPatterns[0]()).test(token)){
         // console.log("  parseFloat",parseFloat(token))
@@ -29,6 +34,9 @@ function tokenToLt(token:Token){
         const ans = isSingleQuateStr[2];
         return ans ;
     }
+    if(token === "true" || token === "false"){
+        return token === "true" ? true : false ;
+    }
     if(new RegExp(ltPatterns[3]()).test(token)){
         console.log(" use var : ",getVar(token))
         const v = getVar(token) ;
@@ -39,7 +47,7 @@ function tokenToLt(token:Token){
     }
     throw new Error("unvalid token :"+token) ;
 }
-function ltToToken(lt:Lt){
+function ltToToken(lt:Lt):Token{
     // console.log(lt,lt.toString())
     // console.log("ltToToken",lt,typeof lt);
     if(typeof lt === "string"){
@@ -47,6 +55,9 @@ function ltToToken(lt:Lt){
     }
     if(typeof lt === "number" ){
         return lt.toString() ;
+    }
+    if(typeof lt === "boolean"){
+        return lt ? "true" : "false" ;
     }
     throw new Error("unvalid lt :"+lt) ;
 }
@@ -66,9 +77,19 @@ function getVar(name:string){
     return ans ;
 }
 
+/*
+
+7	%,^
+6	*,/
+5	+,-
+4	=,>,<,>=,<=,!=,<>
+3	かつ,または
+
+*/
 const opes :Ope[] = [
     {
         pattern:esc("+"),
+        priority:5,
         run:(left,right)=>{
             if(left && right){
                 const leftLt = tokenToLt(left) ;
@@ -88,6 +109,7 @@ const opes :Ope[] = [
     },
     {
         pattern:esc("-"),
+        priority:5,
         run:(left,right)=>{
             if(left && right){
                 const lLt = tokenToLt(left) ;
@@ -101,6 +123,7 @@ const opes :Ope[] = [
     },
     {
         pattern:esc("*"),
+        priority:6,
         run:(left,right)=>{
             if(left && right){
                 const lLt = tokenToLt(left) ;
@@ -116,6 +139,7 @@ const opes :Ope[] = [
     },
     {
         pattern:esc("/"),
+        priority:6,
         run:(left,right)=>{
             if(left && right){
                 const lLt = tokenToLt(left) ;
@@ -127,9 +151,158 @@ const opes :Ope[] = [
             throw new Error("/演算子の左辺または右辺が不正です") ;
         }
     },
+    {
+        pattern:esc("%"),
+        priority:7,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                if(typeof lLt === "number" && typeof rLt === "number"){
+                    return lLt % rLt ;
+                }
+            }
+            throw new Error("%演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("^"),
+        priority:7,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                if(typeof lLt === "number" && typeof rLt === "number"){
+                    return Math.pow(lLt,rLt) ;
+                }
+            }
+            throw new Error("^演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("="),
+        priority:4,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt === rLt ;
+            }
+            throw new Error("=演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc(">"),
+        priority:4,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt > rLt ;
+            }
+            throw new Error(">演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("<"),
+        priority:4,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt < rLt ;
+            }
+            throw new Error("<演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc(">="),
+        priority:4,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt >= rLt ;
+            }
+            throw new Error(">=演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("<="),
+        priority:4,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt <= rLt ;
+            }
+            throw new Error("<=演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("!="),
+        priority:4,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt !== rLt ;
+            }
+            throw new Error("!=演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("<>"),
+        priority:4,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt !== rLt ;
+            }
+            throw new Error("<>演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("かつ"),
+        priority:3,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt && rLt ? true : false;
+            }
+            throw new Error("かつ演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("または"),
+        priority:3,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt || rLt ? true : false;
+            }
+            throw new Error("または演算子の左辺または右辺が不正です") ;
+        },
+    },
+    {
+        pattern:esc("又は"),
+        priority:3,
+        run:(left,right)=>{
+            if(left && right){
+                const lLt = tokenToLt(left);
+                const rLt = tokenToLt(right);
+                return lLt || rLt ? true : false;
+            }
+            throw new Error("または演算子の左辺または右辺が不正です") ;
+        },
+    },
+
 ] ;
 const ltPatterns = [
-    ()=>`[\\+,\\-]?[0-9]+`,
+    ()=>`[0-9]+\\.?[0-9]*`,
     ()=>`".*"`,
     ()=>`'.*'`,
     ()=>{
@@ -155,14 +328,9 @@ function isLt(token:Token){
     return ans ;
 }
 function priority(opeToken:Token){
-    if(opeToken === "+"){
-        return 1 ;
-    }else if(opeToken === "-"){
-        return 1 ;
-    }else if(opeToken === "*"){
-        return 2 ;
-    }else if(opeToken === "/"){
-        return 2 ;
+    const ope = getOpe(opeToken) ;
+    if(ope){
+        return ope.priority ;
     }
     throw new Error("unvalid operator : "+opeToken) ;
 }
@@ -236,20 +404,31 @@ function toRpn(tokens:Token[]):Token[]{
 function evalRpn(rpn:Token[]){
     const ans :Lt[] = [] ;
     rpn.forEach(token=>{
+        console.log("evalRpn loop",token,isLt(token),isOpe(token));
         if(isLt(token)){
             const lt = tokenToLt(token) ;
-            if(lt){
+            if(lt || lt === 0 || lt === "" || lt === false){
                 ans.push(lt);
             }else{
+                console.error(lt);
                 throw new Error("unknown error");
             }
         }else if(isOpe(token)){
             const right = ans.pop();
             const left = ans.pop() ;
             const ope = getOpe(token) ;
-            if(left && right && ope){
-                const calced = ope.run(ltToToken(left),ltToToken(right)) ;
-                ans.push(calced);
+            console.log(left,ope,right)
+            if(isValidLt(left) && isValidLt(right) && ope){
+                if(
+                    left !== null && left !== undefined && 
+                    right !== null && right !== undefined 
+                ){
+                    const calced = ope.run(ltToToken(left),ltToToken(right)) ;
+                    ans.push(calced);
+                }
+            }else{
+                console.error(left,ope,right);
+                throw new Error("unknown error");
             }
         }else{
             throw new Error("unvalid formula : on token is "+token);
@@ -264,11 +443,15 @@ function evalRpn(rpn:Token[]){
     }
 }
 function evalFormula(formula:string,vars:Variable[]=[]){
+    console.log("= evalFormula ",formula, vars,"=========")
     variables=vars ;
     const ts = toTokens(formula);
     console.log("tokens",ts)
     const rpn = toRpn(ts);
+    console.log("rpn",rpn)
     const ans = evalRpn(rpn);
+    console.log("ans",ans);
+    console.log("==========================")
     return ans ;
 }
 
@@ -297,6 +480,7 @@ function test(){
         console.log("\n")
     })
 }
+
 // test() ;
 
 export {

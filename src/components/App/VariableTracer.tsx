@@ -26,7 +26,13 @@ const VariableTracer :React.FC<VariableTracerProps> =
 
     let Comp :JSX.Element|any[] = <># ERROR unvalid value:{value}</> ;
     if(!(value as unknown instanceof Array)){
-        Comp = <>{value}</> ;
+        if(value === true) {
+            Comp = <>true</>
+        }else if(value === false) {
+            Comp = <>false</>
+        }else{
+            Comp = <>{value}</> ;
+        }
     }else{
         const _value = value as unknown as any[]
         if(! (_value[0] instanceof Array)){

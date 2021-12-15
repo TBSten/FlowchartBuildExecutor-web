@@ -19,7 +19,7 @@ export function calcSymCreator() :Item{
         const formula = item.options[0].value ;
         const variable = item.options[1].value ;
         const value = e.eval(formula) ;
-        if(value || value === 0){
+        if(value || value === 0 || value === false || value === ""){
             e.setVar(variable,value);
         }else{
             throw new ExecuteError(
