@@ -367,14 +367,14 @@ export default class Runtime {
 
   getTabs() :TabData[]{
     const ans :TabData[] = [
-      {
-        label:"TEST",
-        comp:(
-          <div>
-            TestTab
-          </div>
-        ),
-      },
+      // {
+      //   label:"TEST",
+      //   comp:(
+      //     <div>
+      //       TestTab
+      //     </div>
+      //   ),
+      // },
     ] ;
     return ans ;
   }

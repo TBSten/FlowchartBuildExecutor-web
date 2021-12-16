@@ -6,6 +6,7 @@ export type Ope = {
     run:(left?:Token,right?:Token)=>Lt ,
     priority:number,
 } ;
+
 export type Variable = {
     name:string,
     value:Lt,
@@ -19,9 +20,9 @@ function isValidLt(lt:Lt|null|undefined) :boolean{
         ? true :false;
 }
 function tokenToLt(token:Token):Lt{
-    console.log("tokenToLt",token)
+    // console.log("tokenToLt",token)
     if(new RegExp(ltPatterns[0](),"g").test(token)){
-        console.log(new RegExp(ltPatterns[0](),"g"))
+        // console.log(new RegExp(ltPatterns[0](),"g"))
         return parseFloat(token);
     }
     const isDoubleQuateStr = token.match(/^("(.*)")$/) ;
@@ -65,10 +66,13 @@ function ltToToken(lt:Lt):Token{
     throw new Error("unvalid lt :"+lt) ;
 }
 function getOpe(opeToken:Token){
-    const ope :Ope|null = opes.reduce((p,v)=>{
-        return new RegExp(v.pattern).test(opeToken) ? v : p ;
-    },null as null | Ope);
-    return ope ;
+    const sorted = opes.sort((o1,o2)=>o2.pattern.length - o1.pattern.length) ;
+    // console.log("sorted",sorted)
+    // const ope :Ope|null = sorted.reduce((p,v)=>{
+    //     return new RegExp(v.pattern).test(opeToken) ? v : p ;
+    // },null as null | Ope);
+    const ope = sorted.find(o=>new RegExp(o.pattern).test(opeToken)) ;
+    return ope !== undefined ? ope : null ;
 }
 function getVar(name:string){
     const ans = variables.reduce((p,v)=>{
@@ -152,7 +156,7 @@ const opes :Ope[] = [
                     return lLt * rLt ;
                 }
             }
-            console.log(left,right);
+            // console.log(left,right);
             throw new Error("*演算子の左辺または右辺が不正です") ;
         }
     },
@@ -321,7 +325,7 @@ const opes :Ope[] = [
 
 ] ;
 const ltPatterns = [
-    ()=>`^[1-9][0-9]*\\.?[0-9]*`,
+    ()=>`[0-9]+`,
     ()=>`".*"`,
     ()=>`'.*'`,
     ()=>{
@@ -341,7 +345,9 @@ function isLt(token:Token){
     // ) ;
     const ans = ltPatterns.reduce((p,ltp)=>{
         // console.log("-------",token,ltp,new RegExp(ltp()).test(token))
-        return p || new RegExp(ltp()).test(token) ;
+        const match = new RegExp(`^(${ltp()})$`,"g").test(token) ;
+        // console.log(token,"is lt check",ltp(),match);
+        return p || match ;
     },false);
     // console.log(ans);
     return ans ;
@@ -355,10 +361,14 @@ function priority(opeToken:Token){
 }
 
 function toTokens(formula:string){
+    // console.log("opes",);
+    const sortedOpes = opes.sort((o1,o2)=>{
+        return o2.pattern.length - o1.pattern.length
+    });
     return formula.split(new RegExp(
         `(`+
             `${ltPatterns.map(ltp=>ltp()).join("|")}`+
-            `|${opes.map(o=>o.pattern).join("|")}`+     
+            `|${sortedOpes.map(o=>o.pattern).join("|")}`+     
             `|\\(|\\)`+
         `)`, "g"
     )).map(t=>t.replace(" ","")).filter(t=>t && t !== " ");
@@ -437,12 +447,13 @@ function evalRpn(rpn:Token[]){
             const right = ans.pop();
             const left = ans.pop() ;
             const ope = getOpe(token) ;
+            // console.log("token to ope",token,ope)
             const lLt = left === undefined ? undefined : ltToToken(left) ;
             const rLt = right === undefined ? undefined : ltToToken(right) ;
             if(ope){
-                console.log(lLt,ope,rLt);
+                // console.log(lLt,ope,rLt);
                 const calced = ope.run(lLt,rLt) ;
-                console.log("  =>",calced);
+                // console.log("  =>",calced);
                 ans.push(calced);
             }else{
                 console.error(left,ope,right);
@@ -464,9 +475,9 @@ function evalFormula(formula:string,vars:Variable[]=[]){
     // console.log("= evalFormula ",formula, vars,"=========")
     variables=vars ;
     const ts = toTokens(formula);
-    // console.log("tokens",ts)
+    console.log("tokens",ts)
     const rpn = toRpn(ts);
-    // console.log("rpn",rpn)
+    console.log("rpn",rpn)
     const ans = evalRpn(rpn);
     // console.log("ans",ans);
     // console.log("==========================")
