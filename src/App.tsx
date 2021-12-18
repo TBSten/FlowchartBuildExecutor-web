@@ -85,8 +85,6 @@ function App() {
       saveBrowserSaveData();
       // console.log("auto save end");
     },30*1000);
-    
-    
 
     return ()=>{
       clearInterval(tid);
