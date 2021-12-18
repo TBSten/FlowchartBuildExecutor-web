@@ -86,17 +86,12 @@ function App() {
       // console.log("auto save end");
     },30*1000);
     
+    
 
     return ()=>{
       clearInterval(tid);
     } ;
   },[]);
-
-  // const items = useItems() ;
-  // const topFlows = useTopFlows() ;
-  // console.log(items, topFlows);
-
-  // const dispatch = useDispatch() ;
 
   const [showSideBar,setShowSideBar] = useState(true) ;
 
