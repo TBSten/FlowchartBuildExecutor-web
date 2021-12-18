@@ -34,11 +34,6 @@ const useStyles = makeStyles({
         width:"auto",
         alignItems:"center",
     },
-    /*sp 
-    grid-template-columns: 1fr;
-    grid-auto-flow: row;
-    justify-items: end;
-    */
     maxWidthMd:{
         gridTemplateRows:"auto",
         gridTemplateColumns:"1fr",
@@ -84,6 +79,16 @@ export default function ExeButton(){
             <Fab color="primary" size="small" onClick={()=>dispatch(incZoom(-0.1))}>
                 <ZoomOut />
             </Fab>
+
+            {mode==="exe"?
+                <>
+
+                <Fab color="primary" onClick={()=>runtime.next()}>
+                    <PlayArrow />
+                </Fab>
+
+                </>
+                :""}
 
             <Fab 
                 variant="extended" 

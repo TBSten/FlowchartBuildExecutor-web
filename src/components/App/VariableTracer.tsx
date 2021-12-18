@@ -39,17 +39,17 @@ const VariableTracer :React.FC<VariableTracerProps> =
             //1次元配列
             Comp = (
                 <BlockRow>
-                    {_value.map(el=>(
-                        <Block>{el}</Block>
+                    {_value.map((el,i)=>(
+                        <Block key={i}>{el}</Block>
                     ))}
                 </BlockRow>
             );
         }else if(_value[0] instanceof Array){
             //2次元配列
             const arr = _value as any[][] ;
-            Comp = arr.map(row=>(
-                <BlockRow>{row.map(el=>(
-                    <Block>{el}</Block>
+            Comp = arr.map((row,i)=>(
+                <BlockRow key={i}>{row.map((el,i)=>(
+                    <Block key={i}>{el}</Block>
                 ))}</BlockRow>
             ))
         }

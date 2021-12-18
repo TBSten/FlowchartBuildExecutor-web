@@ -1,6 +1,8 @@
 
 export type Token = string ;
-export type Lt = string | number | boolean ;
+export type Lt = 
+    string | number | boolean | 
+    string[] | number[] | boolean[] ;
 export type Ope = {
     pattern:string ,
     run:(left?:Token,right?:Token)=>Lt ,
@@ -21,7 +23,7 @@ function isValidLt(lt:Lt|null|undefined) :boolean{
 }
 function tokenToLt(token:Token):Lt{
     // console.log("tokenToLt",token)
-    if(new RegExp(ltPatterns[0](),"g").test(token)){
+    if(new RegExp(`^(${ltPatterns[0]()})$`,"g").test(token)){
         // console.log(new RegExp(ltPatterns[0](),"g"))
         return parseFloat(token);
     }
@@ -473,6 +475,7 @@ function evalRpn(rpn:Token[]){
 }
 function evalFormula(formula:string,vars:Variable[]=[]){
     // console.log("= evalFormula ",formula, vars,"=========")
+    const _start = new Date();
     variables=vars ;
     const ts = toTokens(formula);
     console.log("tokens",ts)
@@ -481,6 +484,7 @@ function evalFormula(formula:string,vars:Variable[]=[]){
     const ans = evalRpn(rpn);
     // console.log("ans",ans);
     // console.log("==========================")
+    console.log("eval ",new Date().getTime()-_start.getTime());
     return ans ;
 }
 

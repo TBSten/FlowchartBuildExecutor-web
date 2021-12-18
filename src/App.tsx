@@ -18,6 +18,8 @@ import AppSnackBar from "components/App/AppSnackBar" ;
 import { loadBrowserSaveData, saveBrowserSaveData } from "util/io";
 import { useIsLoading } from "redux/reducers/app";
 import { Backdrop, CircularProgress } from "@material-ui/core";
+import { setMode } from "redux/reducers/mode";
+import { useDispatch } from "react-redux";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -56,6 +58,7 @@ function App() {
     isLoading,
     startLoad,
     finishLoad } = useIsLoading();
+  const dispatch = useDispatch() ;
 
   useEffect(()=>{
       console.log(ref);
@@ -66,19 +69,24 @@ function App() {
   },[]);
 
   useEffect(()=>{
-    //ロード中オン
-    console.log("--- load start");
+    //セーブデータのロード
+    const start = new Date() ;
+    startLoad();
     loadBrowserSaveData();
-    console.log("--- load end");
     //ロード中オフ
+    console.log("loaded save data from browser in "+
+      (new Date().getTime()-start.getTime())+"ms")
     finishLoad();
 
+    //オートセーブ
     const tid = setInterval(()=>{
       //save
       console.log("auto save start");
       saveBrowserSaveData();
       // console.log("auto save end");
     },30*1000);
+    
+
     return ()=>{
       clearInterval(tid);
     } ;

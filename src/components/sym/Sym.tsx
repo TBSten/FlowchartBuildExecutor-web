@@ -16,11 +16,11 @@ export const conf = {
     height: 40,
     //color
     baseBackC: "white",
-    baseForeC: "black",
+    baseForeC: "#242424",
     selectBackC: "white",
-    selectForeC: "blue",
+    selectForeC: "#5688e3",
     exeBackC: "white",
-    exeForeC: "green",
+    exeForeC: "#0fcf17",
     movingBackC: "#0000ff5e",
     movingForeC: "black",
     //other
@@ -28,8 +28,7 @@ export const conf = {
 };
 
 const SymContainer = styled.div<{autoSize :boolean}>`
-    /* width: ${conf.width}px ;
-    height: ${conf.height}px ; */
+
     display: flex;
     flex-direction: column ;
     justify-content: center;
@@ -111,7 +110,7 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
     const executingId = useExecutingId();
     const runtime = useRuntime();
     const getItem = useGetItem();
-    const mode = useMode();
+    // const mode = useMode();
     const {to,from,setTo,setFrom} = useDragAndDrop();
 
     const dispatch = useDispatch();

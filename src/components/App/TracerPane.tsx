@@ -13,10 +13,12 @@ const TracerCon = styled.div`
     background: #ececec;
     overflow: auto;
     width: max-content;
-    display:grid;
     gap:16px;
     padding: 1rem;
     box-sizing: border-box;
+    width:100%;
+    display:flex;
+    flex-wrap:wrap ;
     ${sp`
         padding: 5px ;
     `}
@@ -37,7 +39,7 @@ export default function TracerPane(){
                     ) ;
                 })
                 :
-                <li> none Variables </li>
+                <b> 変数がありません </b>
             }
             </TracerCon>
         </ScCon>
