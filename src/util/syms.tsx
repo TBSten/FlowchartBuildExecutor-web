@@ -13,7 +13,6 @@ export type OptionType = {
 
 } ;
 
-
 export const optionTypes :{ [key :string]:OptionType } = {
     "text":{
         name:"text",
@@ -25,7 +24,8 @@ export const optionTypes :{ [key :string]:OptionType } = {
             const handleChange = (e :React.ChangeEvent<HTMLInputElement>)=>{
                 setInputValue(e.target.value);
                 // updateOption(name,e.target.value);
-
+                e.preventDefault();
+                e.stopPropagation();
             }
             const handleUpdate = ()=>{
                 updateOption(name,inputValue);

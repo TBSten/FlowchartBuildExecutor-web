@@ -30,7 +30,7 @@ const AppContainer = styled.div`
   grid-template-rows: auto 1fr ;
   gap:5px;
   overflow: auto;
-  ${sp`
+  ${ sp`
     grid-template-columns: 1fr;
     grid-template-rows: auto 5fr 5fr;
   `}
@@ -60,8 +60,8 @@ function App() {
     isLoading,
     startLoad,
     finishLoad } = useIsLoading();
-  const dispatch = useDispatch();
-  const multiSelect = useMultiSelect();
+  // const dispatch = useDispatch();
+  // const multiSelect = useMultiSelect();
 
   useEffect(()=>{
       console.log(ref);
@@ -89,44 +89,8 @@ function App() {
       // console.log("auto save end");
     },30*1000);
 
-    const keyFlgs = {
-      multiSelect,
-      save:false,
-    } ;
-    const keydownHandler = (e:KeyboardEvent)=>{
-      //シフトキー
-      if(!keyFlgs.multiSelect && e.shiftKey){
-        console.log("multi start")
-        dispatch(toggleMulti(true));
-        keyFlgs.multiSelect = true ;
-        return false ;
-      }
-    } ;
-    const keyupHandler = (e:KeyboardEvent)=>{
-      //シフトキー
-      if(keyFlgs.multiSelect && !e.shiftKey){
-        console.log("multi end")
-        dispatch(toggleMulti(false));
-        keyFlgs.multiSelect = false ;
-      }
-    } ;
-    const keypressHandler = (e:KeyboardEvent)=>{
-      //保存
-      if( e.key === "s" ){
-        saveBrowserSaveData();
-        return false ;
-      }
-      return true ;
-    };
-    window.addEventListener("keydown",keydownHandler);
-    window.addEventListener("keyup",keyupHandler);
-    window.addEventListener("keypress",keypressHandler);
-
     return ()=>{
       clearInterval(tid);
-      window.removeEventListener("keydown",keydownHandler);
-      window.removeEventListener("keyup",keyupHandler);
-      window.removeEventListener("keypress",keypressHandler);
     } ;
   },[]);
   
