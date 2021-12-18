@@ -28,6 +28,7 @@ import { optionTypes } from "./syms";
 
 import StoreJs from "store";
 import { ArrayTemplates } from "redux/types/top";
+import { openAppSnackbar,hideAppSnackbar } from "redux/reducers/app" ;
 
 export type OutputOption = {
   name: string;
@@ -46,6 +47,7 @@ export type OutputItems = {
 export type SaveState = {
   items: OutputItems;
   top: {
+    version:string;
     title:string;
     flows: string[];
     arrayTemplates: ArrayTemplates,
@@ -64,7 +66,6 @@ export function getSaveState(): SaveState {
         value: op.value,
         type: op.type.name,
         args: op.args,
-        // visible: op.isVisible(item),
       };
     });
     items[el] = {
@@ -74,6 +75,7 @@ export function getSaveState(): SaveState {
     };
   });
   const top = {
+    version:"1.0.0",
     title: state.top.title,
     flows: state.top.flows,
     arrayTemplates: state.top.arrayTemplates,
@@ -176,8 +178,14 @@ export function inputTextFile() {
 //ブラウザ
 const BROWSER_SAVEDATA_KEY = "fbe-save-temp";
 export function saveBrowserSaveData() {
+  store.dispatch(openAppSnackbar(
+    <>保存中</>
+  ));
   const saveData = getSaveState() ;
   StoreJs.set(BROWSER_SAVEDATA_KEY, saveData);
+  setTimeout(()=>{
+    store.dispatch(hideAppSnackbar());
+  },3000);
 }
 export function loadBrowserSaveData() {
   const saveData = StoreJs.get(BROWSER_SAVEDATA_KEY) as SaveState;

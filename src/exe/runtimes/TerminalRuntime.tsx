@@ -58,8 +58,9 @@ export default class TerminalRuntime extends Runtime {
     }
     async output(data :string){
         console.log("<<<<<<<<output start");
+        const lines = data.split(",").map(el=>this.eval(el).toString());
         // await this.msgBox(data.toString());
-        this.outputHistory = [...this.outputHistory, this.eval(data).toString(), ] ;
+        this.outputHistory = [...this.outputHistory, ...lines ] ;
         console.log("<<<<<<<<output end");
     }
     async input(msg :string) {

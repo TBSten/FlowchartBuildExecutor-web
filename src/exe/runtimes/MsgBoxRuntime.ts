@@ -9,7 +9,10 @@ export default class MsgBoxRuntime extends Runtime {
     }
     async output(data :string){
         console.log("<<<<<<<<output start");
-        await this.msgBox(this.eval(data).toString());
+        const lines = data.split(",").map(el=>this.eval(el).toString());
+        for (let line in lines){
+            await this.msgBox(this.eval(line).toString());
+        }
         console.log("<<<<<<<<output end");
     }
     async input(msg :string) {
