@@ -105,6 +105,7 @@ export default function itemsReducer(
         return newState ;
 }
 
+//hooks
 export function useItems(){
     const items = useSelector((state:{items:Items}) => state.items);
     return items ;
