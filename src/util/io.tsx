@@ -1,19 +1,7 @@
 import { store } from "redux/store";
 import { Item, Items } from "redux/types/item";
-import { loadItems } from "redux/reducers/items";
-import { loadTop } from "redux/reducers/top";
-// import {
-//   calcSymCreator,
-//   terminalSymCreator,
-//   flowCreator,
-//   whileSymCreator,
-//   doubleBranchSymCreator,
-//   switchBranchSymCreator,
-//   dataSymCreator,
-//   prepareSymCreator,
-//   processSymCreator,
-//   forSymCreator,
-// } from "./itemCreator";
+import { loadItems } from "redux/items/actions";
+import { loadTop } from "redux/top/actions";
 import { calcSymCreator } from "item/creator/calc" ;
 import { terminalSymCreator } from "item/creator/terminal" ;
 import { flowCreator } from "item/creator/flow" ;
@@ -28,7 +16,7 @@ import { optionTypes } from "./syms";
 
 import StoreJs from "store";
 import { ArrayTemplates } from "redux/types/top";
-import { openAppSnackbar,hideAppSnackbar } from "redux/reducers/app" ;
+import { openAppSnackbar,hideAppSnackbar, setOnCloseAppSnackbar } from "redux/app/actions" ;
 
 export type OutputOption = {
   name: string;

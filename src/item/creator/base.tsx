@@ -1,13 +1,14 @@
 import { Done, DoneAll, Delete, FileCopy, } from "@material-ui/icons";
 import Runtime from "exe/runtimes/Runtime";
-import { removeItem, setItem } from "redux/reducers/items";
-import { removeTopFlow } from "redux/reducers/top";
+import { removeItem, setItem } from "redux/items/actions";
+import { removeTopFlow } from "redux/top/actions";
 import { Item, Option } from "redux/types/item";
 import { OptionType } from "util/syms";
 import { store } from "redux/store" ;
 import { deepCopy, randomStr } from "util/functions";
-import { selectItemById } from "redux/reducers/selectItem";
+import { selectItemById } from "redux/app/actions";
 import { SideBarMenu } from "components/App/types";
+
 
 interface baseItemComponentProps {
     item: Item;
@@ -24,7 +25,7 @@ export function baseItemCreator(
             label: "選択解除",
             onClick: () => {
                 // alert("Delete");
-                const selectItemId = store.getState().selectItem.id ;
+                const selectItemId = store.getState().app.selectItemId ;
                 store.dispatch(selectItemById(selectItemId));
             }, 
             icon: <Done />,
@@ -46,7 +47,7 @@ export function baseItemCreator(
                 // const topFlows = useTopFlows();
                 // const dispatch = useDispatch();
                 const state = store.getState() ;
-                const selectItemIds = state.selectItem.ids ;
+                const selectItemIds = state.app.selectItemIds ;
                 const topFlows = state.top.flows ;
                 const dispatch = store.dispatch ;
                 selectItemIds.forEach((id) => {

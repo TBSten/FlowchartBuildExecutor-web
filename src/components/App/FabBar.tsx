@@ -11,13 +11,15 @@ import PlayArrow from "@material-ui/icons/PlayArrow" ;
 import ZoomIn from "@material-ui/icons/ZoomIn" ;
 import ZoomOut from "@material-ui/icons/ZoomOut" ;
 import { useDispatch } from "react-redux";
-import {setMode,useMode} from "redux/reducers/mode" ;
+import {setMode} from "redux/app/actions" ;
+import {useMode} from "redux/app/hooks" ;
 import { Edit } from "@material-ui/icons";
-import { useRuntime, setRuntime, setExecutingId } from "redux/reducers/exes";
+import { useRuntime } from "redux/app/hooks";
+import { setRuntime, setExecutingId } from "redux/app/actions";
 import { runtimes } from "exe/runtimes" ;
 import Runtime from "exe/runtimes/Runtime";
-import { useTopFlows } from "redux/reducers/top";
-import { incZoom } from "redux/reducers/edits";
+import { useTopFlows } from "redux/top/hooks";
+import { incZoom } from "redux/app/actions";
 
 
 const useStyles = makeStyles({
@@ -69,6 +71,12 @@ export default function ExeButton(){
         dispatch(setRuntime(runtime));
         dispatch(setExecutingId("none"));
     }
+    function handleExeNext(){
+        if(runtime){
+            runtime.next();
+            dispatch(setRuntime(runtime))
+        }
+    }
     return (
         <Container classes={classes} >
 
@@ -83,12 +91,12 @@ export default function ExeButton(){
             {mode==="exe"?
                 <>
 
-                <Fab color="primary" onClick={()=>runtime.next()}>
+                <Fab color="primary" onClick={handleExeNext} disabled={runtime?.isExited()}>
                     <PlayArrow />
                 </Fab>
 
                 </>
-                :""}
+            :""}
 
             <Fab 
                 variant="extended" 

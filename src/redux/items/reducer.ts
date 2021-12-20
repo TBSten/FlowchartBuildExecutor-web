@@ -1,29 +1,23 @@
-// import {calcSymCreator, doubleBranchSymCreator, flowCreator, terminalSymCreator, whileSymCreator} from "../../util/itemCreator" ; 
 
-import { Item, Items, Option } from "redux/types/item";
-import { useSelector } from "react-redux";
-import { Action } from "redux/types/action";
-import { actionTypes } from "redux/actions" ; 
+import { Items } from "redux/types/item";
+import { actionTypes } from "./actions" ; 
+import { init } from "./initialState";
 
-
-
-const init = {
-} ;
 export default function itemsReducer(
     state :Items =init, 
     action:{type :string, payload:any}){
         let newState :Items = Object.assign({},state);
 
-        if(action.type === actionTypes.items.add){
+        if(action.type === actionTypes.add){
             const newItem = action.payload ;
             // console.log("add !",action.payload);
             const idx = "Item-"+Object.keys(newState).length+"-"+Math.floor(Math.random()*1000) ;
             newState[idx] = newItem ;
-        }else if(action.type === actionTypes.items.set){
+        }else if(action.type === actionTypes.set){
             const id = action.payload.id ;
             const item = action.payload.item ;
             newState[id] = item ;
-        }else if(action.type === actionTypes.items.remove){
+        }else if(action.type === actionTypes.remove){
             const id = action.payload ;
             newState = Object.keys(newState).reduce((p,v)=>{
                 if(v !== id){
@@ -31,7 +25,7 @@ export default function itemsReducer(
                 }
                 return p ;
             },{} as Items);
-        }else if(action.type === actionTypes.items.option.set){
+        }else if(action.type === actionTypes.option.set){
             const id = action.payload.id ;
             const name = action.payload.name ;
             const value = action.payload.value ;
@@ -45,7 +39,7 @@ export default function itemsReducer(
                 return ans ;
             });
             newState[id] = newItem ;
-        }else if(action.type === actionTypes.items.sym.add){
+        }else if(action.type === actionTypes.sym.add){
             const parentId = action.payload.parentId ;
             const childId = action.payload.childId ;
             const idx = action.payload.idx ;
@@ -58,7 +52,7 @@ export default function itemsReducer(
                 return p ;
             },[] as string[]);
             newState[parentId] = newParentItem ;
-        }else if(action.type === actionTypes.items.sym.remove){
+        }else if(action.type === actionTypes.sym.remove){
             const parentId = action.payload.parentId ;
             const childId = action.payload.childId ;
             const newParentItem = Object.assign({},newState[parentId]) ;
@@ -66,10 +60,10 @@ export default function itemsReducer(
                 ele !== childId 
             ));
             newState[parentId] = newParentItem ;
-        }else if(action.type === actionTypes.items.load){
+        }else if(action.type === actionTypes.load){
             const items = action.payload ;
             newState = {...init,...items} ;
-        }else if(action.type === actionTypes.items.exchange){
+        }else if(action.type === actionTypes.exchange){
             const itemId1 = action.payload.itemId1 ;
             const itemId2 = action.payload.itemId2 ;
             const item1 = newState[itemId1];
@@ -104,79 +98,3 @@ export default function itemsReducer(
         }
         return newState ;
 }
-
-//hooks
-export function useItems(){
-    const items = useSelector((state:{items:Items}) => state.items);
-    return items ;
-}
-export function useGetItem(){
-    const items = useItems() ;
-    return function getItem(id :string){
-        return items[id] ;
-    };
-}
-export function useGetItemOption() :(id :string, name :string)=>Option<string>|null{
-    const getItem = useGetItem() ;
-    return function getItemOption(id :string, name :string) :Option<string>|null{
-        const item = getItem(id) ;
-        let ans = null ;
-        item.options.forEach(ele=>{
-            if(ele.name === name){
-                ans = ele ;
-            }
-        });
-        return ans ;
-    }
-}
-
-//actionCreators
-export function addItem(item :Item) :Action{
-    return {
-        type:actionTypes.items.add,
-        payload:item,
-    } ;
-}
-export function setItem(id :string, item :Item) :Action{
-    return {
-        type:actionTypes.items.set,
-        payload:{
-            id,
-            item,
-        },
-    } ;
-}
-export function removeItem(id :string) :Action{
-    return {
-        type:actionTypes.items.remove ,
-        payload:id ,
-    } ;
-}
-export function setOption(id :string, name :string, value: string|number|boolean){
-    return {
-        type:actionTypes.items.option.set ,
-        payload:{
-            id,
-            name,
-            value
-        },
-    } ;
-}
-export function loadItems(items :Items){
-    return {
-        type:actionTypes.items.load,
-        payload:items,
-    } ;
-}
-export function exchangeItem(itemId1:string, itemId2:string){
-    return {
-        type:actionTypes.items.exchange,
-        payload:{
-            itemId1,
-            itemId2
-        }
-    } ;
-}
-
-
-

@@ -8,7 +8,7 @@ import ListItem from "@material-ui/core/ListItem" ;
 
 import Button from "components/util/Button" ;
 import { SideBarMenu } from "./types";
-import { useMode } from "redux/reducers/mode";
+import { useMode } from "redux/app/hooks";
 
 export interface MenuDialogProps{
     open:boolean;

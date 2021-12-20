@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRuntime } from "redux/reducers/exes";
+import { useRuntime } from "redux/app/hooks";
 import Runtime from "./Runtime" ;
 import { Variable, } from "./types";
 // import { TabData } from "components/App/types";

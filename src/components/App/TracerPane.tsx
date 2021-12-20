@@ -1,7 +1,8 @@
 // import { Grid } from "@material-ui/core";
 import { sp } from "css/media";
-import { useRuntime } from "redux/reducers/exes";
+import { useRuntime } from "redux/app/hooks";
 import styled from "styled-components" ;
+import { nullable } from "util/nullable";
 import VariableTracer from "./VariableTracer";
 
 
@@ -26,7 +27,7 @@ const TracerCon = styled.div`
 
 export default function TracerPane(){
     const runtime = useRuntime() ;
-    const vars = runtime.variables ;
+    const vars = nullable(runtime).variables ;
     return (
         <ScCon>
             <TracerCon>

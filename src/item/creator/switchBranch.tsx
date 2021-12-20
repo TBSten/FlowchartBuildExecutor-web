@@ -1,8 +1,6 @@
-import { Button } from "@material-ui/core";
 import SwitchBranchSym from "components/sym/SwitchBranchSym";
 import { useDispatch } from "react-redux";
-import { useGetItem, setItem } from "redux/reducers/items";
-import { useSelectItemId } from "redux/reducers/selectItem";
+import { setItem } from "redux/items/actions";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
 import { flowCreator } from "item/creator/flow";
@@ -44,8 +42,8 @@ export function switchBranchSymCreator(syms? :string[]) :Item{
         [
             // {name:"条件", value:"変数", type:optionTypes["text"] } , 
             // {name:"記号外に表示する", value:false, type:optionTypes["check"] } , 
-            optionCreator("条件",　"変数",　optionTypes["text"]),
-            optionCreator("記号外に表示する", false ,　optionTypes["check"]),
+            optionCreator("条件", "変数", optionTypes["text"]),
+            optionCreator("記号外に表示する", false , optionTypes["check"]),
 
         ]
     );

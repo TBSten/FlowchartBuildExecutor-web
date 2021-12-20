@@ -1,16 +1,17 @@
 import { useDispatch } from "react-redux";
-import { useTopFlows } from "redux/reducers/top";
-import { useGetItem } from "redux/reducers/items";
+import { useTopFlows } from "redux/top/hooks";
+import { useGetItem } from "redux/items/hooks";
 // import { useGetItem, useTopFlows } from "atom/syms";
 import styled from "styled-components";
 import { sp } from "./css/media";
-import { useZoom } from "redux/reducers/edits";
-import { selectItemById, toggleMulti, useMultiSelect, useSelectItemIds } from "redux/reducers/selectItem";
+import { useZoom } from "redux/app/hooks";
+import { useSelectItemIds } from "redux/app/hooks";
+import { selectItemById } from "redux/app/actions";
 import SelectAllIcon from "@material-ui/icons/SelectAll";
 import { assignLoopCnt } from "components/sym/WhileSym";
 import AppDialog from "components/App/AppDialog";
-import { useEffect, useRef } from "react";
-import { saveBrowserSaveData } from "util/io";
+import { useRef } from "react";
+
 
 const FlowContainer = styled.div`
     display: inline-grid;

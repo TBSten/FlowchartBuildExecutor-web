@@ -1,13 +1,14 @@
 
 import { useDispatch } from "react-redux";
-import {selectItemById, useSelectItemIds, } from "redux/reducers/selectItem" ;
+import { selectItemById, } from "redux/app/actions" ;
+import { useSelectItemIds, } from "redux/app/hooks" ;
 import { useRef,  ReactNode, useEffect, useCallback, useMemo, useState,  } from "react";
 import styled, { css } from "styled-components" ;
-import { useExecutingId, useRuntime } from "redux/reducers/exes";
+import { useExecutingId, useRuntime } from "redux/app/hooks";
 import MenuDialog from "components/App/MenuDialog";
-import { exchangeItem, useGetItem } from "redux/reducers/items";
-import { useMode } from "redux/reducers/mode";
-import { useDragAndDrop } from "redux/reducers/edits";
+import { useGetItem } from "redux/items/hooks";
+import { exchangeItem } from "redux/items/actions";
+import { useDragAndDrop } from "redux/app/hooks";
 
 
 export const conf = {

@@ -1,4 +1,4 @@
-import { useGetItem, useGetItemOption } from "redux/reducers/items";
+import { useGetItem, useGetItemOption } from "redux/items/hooks";
 import { Item } from "redux/types/item";
 import Sym, { SymRender } from "./Sym";
 import styled from "styled-components" ;

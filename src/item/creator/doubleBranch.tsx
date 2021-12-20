@@ -1,6 +1,6 @@
 import DoubleBranchSym from "components/sym/DoubleBranchSym";
 import { useDispatch } from "react-redux";
-import { setItem } from "redux/reducers/items";
+import { setItem } from "redux/items/actions";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
 import { flowCreator } from "item/creator/flow";

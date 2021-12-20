@@ -1,7 +1,7 @@
 import { useState, } from "react" ;
 
 import { downloadTextFile, getSaveState, inputTextFile, loadBrowserSaveData, loadSaveState, saveBrowserSaveData, } from "util/io" ;
-import { useAppDialog } from "redux/reducers/app" ;
+import { useAppDialog } from "redux/app/hooks" ;
 // import { declutterItems } from "util/io" ;
 import { test } from "util/html2Image" ;
 

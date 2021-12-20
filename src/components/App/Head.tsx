@@ -25,17 +25,17 @@ import {
     CloudUpload,
 } from "@material-ui/icons";
 import { useDispatch } from "react-redux";
-// import { setZoom, incZoom } from "redux/reducers/edits";
-import styled from "styled-components" ;
-import {sp} from "css/media" ;
+// import styled from "styled-components" ;
+// import {sp} from "css/media" ;
 import {
     clearBrowserSave,
     saveBrowserSaveData,
     downloadSaveState,
     loadSaveStateFromLocalFile,
  } from "util/io" ;
-import { loadItems } from "redux/reducers/items";
-import { loadTop, useTitle } from "redux/reducers/top";
+import { loadItems } from "redux/items/actions";
+import { loadTop } from "redux/top/actions";
+import { useTitle } from "redux/top/hooks";
 import { downloadBp } from "util/html2Image" ;
 import InputableText from "components/util/InputableText";
 

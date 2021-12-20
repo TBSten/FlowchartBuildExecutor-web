@@ -5,13 +5,9 @@ import {
     applyMiddleware,
     compose,
 } from "redux";
-import items from "./reducers/items" ;
-import top from "./reducers/top" ;
-import selectItem from "./reducers/selectItem" ;
-import mode from "./reducers/mode" ;
-import edits from "./reducers/edits" ;
-import exes from "./reducers/exes" ;
-import app from "./reducers/app" ;
+import app from "./app/reducer" ;
+import items from "./items/reducer" ;
+import top from "./top/reducer" ;
 
 interface ExtendedWindow extends Window {
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -20,13 +16,9 @@ declare var window: ExtendedWindow;
 const composeReduxDevToolsEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const reducer = combineReducers({
+    app,
     items,
     top,
-    selectItem,
-    mode,
-    edits,
-    exes,
-    app,
 });
 
 // TODO: 適宜ミドルウェア定義

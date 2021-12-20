@@ -1,6 +1,6 @@
 import { Item } from "redux/types/item" ;
 import Sym,{SymRender} from "components/sym/Sym" ;
-import {useGetItem} from "redux/reducers/items" ;
+import {useGetItem} from "redux/items/hooks" ;
 import { useLoopCnt } from "./WhileSym";
 import styled from "styled-components" ;
 

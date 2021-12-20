@@ -1,5 +1,5 @@
 import Dialog from "@material-ui/core/Dialog" ;
-import {useAppDialog} from "redux/reducers/app" ;
+import {useAppDialog} from "redux/app/hooks" ;
 
 export default function AppDialog(){
     const dialog = useAppDialog() ;

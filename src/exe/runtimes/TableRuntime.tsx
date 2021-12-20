@@ -1,6 +1,7 @@
 import { useState } from "react" ;
 import { Table,TableBody,TableCell,TableHead,TableRow, } from "@material-ui/core";
-import { setRuntime, useRuntime } from "redux/reducers/exes";
+import { setRuntime } from "redux/app/actions";
+import { useRuntime } from "redux/app/hooks";
 import Runtime from "./Runtime";
 import { Variable, } from "./types";
 import MultiText from "components/util/MultiText" ; 

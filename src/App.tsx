@@ -16,11 +16,11 @@ import AppSnackBar from "components/App/AppSnackBar" ;
 
 // import {test} from "util/formulaEval" ;
 import { loadBrowserSaveData, saveBrowserSaveData } from "util/io";
-import { useIsLoading } from "redux/reducers/app";
+import { useIsLoading } from "redux/app/hooks";
 import { Backdrop, CircularProgress } from "@material-ui/core";
-import { setMode } from "redux/reducers/mode";
-import { useDispatch } from "react-redux";
-import { toggleMulti, useMultiSelect } from "redux/reducers/selectItem" ;
+// import { setMode } from "redux/reducers/mode";
+// import { useDispatch } from "react-redux";
+// import { toggleMulti, useMultiSelect } from "redux/reducers/selectItem" ;
 
 const AppContainer = styled.div`
   width: 100%;

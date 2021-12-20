@@ -1,5 +1,5 @@
 import {Item} from "redux/types/item" ;
-import {useGetItem} from "redux/reducers/items" ;
+import {useGetItem} from "redux/items/hooks" ;
 import { ReactNode, } from "react";
 import Sym, { SymRender } from "./Sym" ;
 import styled from "styled-components";

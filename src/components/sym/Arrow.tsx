@@ -14,17 +14,14 @@ import { makeStyles } from "@material-ui/styles";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { itemCreators } from "item/creator";
 import { useDispatch } from "react-redux";
-import { setItem, } from "redux/reducers/items";
-import { useGetItem } from "redux/reducers/items";
+import { setItem, } from "redux/items/actions";
+import { useGetItem } from "redux/items/hooks";
 import { Item } from "redux/types/item";
 import { randomStr } from "util/functions";
 import { Card, CardContent, CardActionArea, Typography, Grid, Button, DialogContent } from "@material-ui/core";
 import { breakpoint } from "css/media";
-import { useMode } from "redux/reducers/mode";
-import { selectItemById } from "redux/reducers/selectItem";
-// import { unsetClipboard } from "redux/reducers/edits";
-
-
+import { useMode } from "redux/app/hooks";
+import { selectItemById } from "redux/app/actions";
 
 const ArrowContainer = styled.div`
     width: ${conf.width}px;

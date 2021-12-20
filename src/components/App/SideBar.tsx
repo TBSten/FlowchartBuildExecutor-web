@@ -19,15 +19,13 @@ import MuiPaper from "@material-ui/core/Paper";
 
 import styled from "styled-components";
 import { sp } from "../../css/media";
-import { useGetItem, setOption, setItem } from "redux/reducers/items";
-import {
-    toggleMulti,
-    useSelectItemId,
-    useMultiSelect,
-} from "redux/reducers/selectItem";
+import { setOption, setItem } from "redux/items/actions";
+import { useGetItem } from "redux/items/hooks";
+import { toggleMulti, } from "redux/app/actions";
+import { useSelectItemId, useMultiSelect } from "redux/app/hooks";
 import React, { ReactNode, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setZoom, incZoom } from "redux/reducers/edits";
+import { setZoom, incZoom } from "redux/app/actions";
 import {
     Done,
     DoneAll,
@@ -42,14 +40,16 @@ import {
 import { flowCreator } from "item/creator/flow";
 import { terminalSymCreator } from "item/creator/terminal";
 import { randomStr } from "util/functions";
-import { addTopFlow } from "redux/reducers/top";
-import { useMode } from "redux/reducers/mode";
-import { useRuntime, setRuntime } from "redux/reducers/exes";
+import { addTopFlow } from "redux/top/actions";
+import { useMode } from "redux/app/hooks";
+import { useRuntime } from "redux/app/hooks";
+import { setRuntime } from "redux/app/actions";
 import { Option } from "redux/types/item";
 import TracerPane from "./TracerPane";
 import Runtime from "exe/runtimes/Runtime";
 import { SideBarMenu, TabData } from "./types";
 import MenuDialog from "components/App/MenuDialog" ;
+import { nullable } from "util/nullable";
 
 
 const SideContainer = styled(MuiPaper)`
@@ -164,7 +164,7 @@ interface SideBarProps {
 }
 
 interface ControllPaneProps {
-    runtime: Runtime;
+    runtime?: Runtime|null;
 }
 function ControllPane({ runtime }: ControllPaneProps) {
     const dispatch = useDispatch();
@@ -179,30 +179,37 @@ function ControllPane({ runtime }: ControllPaneProps) {
         e: React.ChangeEvent<{}>,
         newValue: number | number[]
     ) => {
-        runtime.setSpeed(speed);
-        dispatch(setRuntime(runtime));
+        if(runtime){
+            runtime.setSpeed(speed);
+            dispatch(setRuntime(runtime));
+        }
     };
     useEffect(() => {
-        setSpeed(runtime.getSpeed());
-        // runtime.setSpeed(speed);
-        // dispatch(setRuntime(runtime));
+        if(runtime){
+            setSpeed(runtime.getSpeed());
+        }
     }, []);
 
     async function execute() {
-        // console.log("runtime !!",runtime);
-        await runtime.next();
-        dispatch(setRuntime(runtime));
+        if(runtime){
+            await runtime.next();
+            dispatch(setRuntime(runtime));
+        }
     }
     async function executeAll() {
         // console.log("runtime !!",runtime);
         setTimeout(async () => {
-            await runtime.exeAll();
-            dispatch(setRuntime(runtime));
+            if(runtime){
+                await runtime.exeAll();
+                dispatch(setRuntime(runtime));
+            }
         }, 100);
     }
     async function stop() {
-        runtime.stop();
-        dispatch(setRuntime(runtime));
+        if(runtime){
+            runtime.stop();
+            dispatch(setRuntime(runtime));
+        }
     }
     const marks = [
         { value: 1, label: "遅い" },
@@ -210,8 +217,8 @@ function ControllPane({ runtime }: ControllPaneProps) {
     ];
     return (
         <>
-            <h6>「{runtime.name}」で実行</h6>
-            <div>{runtime.description}</div>
+            <h6>「{runtime?.name}」で実行</h6>
+            <div>{runtime?.description}</div>
             <h6>制御</h6>
             <ButtonGroup>
                 <Button
@@ -221,7 +228,7 @@ function ControllPane({ runtime }: ControllPaneProps) {
                     startIcon={<PlayArrow />}
                     variant="outlined"
                     color="primary"
-                    disabled={runtime.status === "done"}
+                    disabled={runtime?.status === "done"}
                 >
                     実行
                 </Button>
@@ -232,7 +239,7 @@ function ControllPane({ runtime }: ControllPaneProps) {
                     startIcon={<PlayArrow />}
                     variant="outlined"
                     color="primary"
-                    disabled={runtime.status === "done"}
+                    disabled={runtime?.status === "done"}
                 >
                     すべて実行
                 </Button>
@@ -243,7 +250,7 @@ function ControllPane({ runtime }: ControllPaneProps) {
                     startIcon={<Stop />}
                     variant="outlined"
                     color="primary"
-                    disabled={runtime.status === "done"}
+                    disabled={runtime?.status === "done"}
                 >
                     終了
                 </Button>

@@ -1,5 +1,5 @@
-import {useGetItem} from "redux/reducers/items" ;
-import {selectItemById} from "redux/reducers/selectItem" ;
+import {useGetItem} from "redux/items/hooks" ;
+import {selectItemById} from "redux/app/actions" ;
 import {Item} from "redux/types/item" ;
 // import { Item, useGetItem } from "atom/syms";
 import { ForwardedRef, ReactNode, useEffect, } from "react";
