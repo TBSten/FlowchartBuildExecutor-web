@@ -169,6 +169,9 @@ export function saveBrowserSaveData() {
   store.dispatch(openAppSnackbar(
     <>保存中</>
   ));
+  store.dispatch(setOnCloseAppSnackbar(()=>{
+    store.dispatch(hideAppSnackbar());
+  }));
   const saveData = getSaveState() ;
   StoreJs.set(BROWSER_SAVEDATA_KEY, saveData);
   setTimeout(()=>{

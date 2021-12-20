@@ -13,11 +13,6 @@ export default function appReducer(
     } else if (action.type === actionTypes.dialog.hide) {
         newState.dialog.open = false;
         newState.dialog.content = "";
-        //onCloseの発火
-        if (state.dialog.open === true) {
-            newState.dialog.onClose();
-        }
-        console.log("--- hide ", newState.dialog);
     } else if (action.type === actionTypes.dialog.setOnClose) {
         newState.dialog.onClose = action.payload;
     } else if (action.type === actionTypes.snackbar.show) {
@@ -26,12 +21,7 @@ export default function appReducer(
     } else if (action.type === actionTypes.snackbar.hide) {
         newState.snackbar.open = false;
         newState.snackbar.content = "";
-        //onCloseの発火
-        if (state.snackbar.open === true) {
-            newState.snackbar.onClose();
-        }
     } else if (action.type === actionTypes.snackbar.setOnClose) {
-        console.log("snackbar set onClose !");
         newState.snackbar.onClose = action.payload;
     } else if (action.type === actionTypes.isLoading.set) {
         newState.isLoading = action.payload;
