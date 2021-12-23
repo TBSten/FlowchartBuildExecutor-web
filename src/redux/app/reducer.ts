@@ -6,7 +6,8 @@ export default function appReducer(
     state = init,
     action: { type: string; payload: any }
 ) {
-    let newState = deepCopy(state);
+    // let newState = deepCopy(state);
+    let newState = {...state} ;
     if (action.type === actionTypes.dialog.show) {
         newState.dialog.open = true;
         newState.dialog.content = action.payload;

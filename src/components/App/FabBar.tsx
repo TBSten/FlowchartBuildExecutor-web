@@ -20,6 +20,7 @@ import { runtimes } from "exe/runtimes" ;
 import Runtime from "exe/runtimes/Runtime";
 import { useTopFlows } from "redux/top/hooks";
 import { incZoom } from "redux/app/actions";
+import { useSp } from "css/media";
 
 
 const useStyles = makeStyles({
@@ -29,12 +30,18 @@ const useStyles = makeStyles({
         bottom: "10px",
         zIndex: 10,
         padding: 0,
-        display:"grid",
-        gridTemplateRows:"1fr",
-        gridAutoFlow:"column",
-        gap:"10px",
-        width:"auto",
+        // display:"grid",
+        // gridTemplateRows:"1fr",
+        // gridAutoFlow:"column",
+        // gap:"10px",
+        // alignItems:"center",
+        display:"flex",
+        flexDirection:"row",
+        justifyContent:"flex-end",
         alignItems:"center",
+        flexWrap:"wrap",
+        width:"auto",
+        gap:"10px",
     },
     maxWidthMd:{
         gridTemplateRows:"auto",
@@ -50,6 +57,7 @@ export default function ExeButton(){
     const mode = useMode();
     const runtime = useRuntime();
     const topFlows = useTopFlows();
+    const isSp = useSp();
 
     function handleExeMode(){
         // console.log("exe mode");
@@ -80,18 +88,28 @@ export default function ExeButton(){
     return (
         <Container classes={classes} >
 
-            <Fab color="primary" size="small" onClick={()=>dispatch(incZoom(+0.1))}>
+            <Fab 
+                color="primary" 
+                size="small" 
+                onClick={()=>dispatch(incZoom(+0.1))}>
                 <ZoomIn />
             </Fab>
 
-            <Fab color="primary" size="small" onClick={()=>dispatch(incZoom(-0.1))}>
+            <Fab 
+                color="primary" 
+                size="small" 
+                onClick={()=>dispatch(incZoom(-0.1))}>
                 <ZoomOut />
             </Fab>
 
             {mode==="exe"?
                 <>
 
-                <Fab color="primary" onClick={handleExeNext} disabled={runtime?.isExited()}>
+                <Fab 
+                    color="primary" 
+                    onClick={handleExeNext} 
+                    disabled={runtime?.isExited()}
+                    size={isSp?"small":"medium"}>
                     <PlayArrow />
                 </Fab>
 
@@ -101,7 +119,8 @@ export default function ExeButton(){
             <Fab 
                 variant="extended" 
                 color="primary" 
-                onClick={handleExeMode}>
+                onClick={handleExeMode}
+                size={isSp?"small":"large"}>
                 {
                 mode==="edit"?
                     <>

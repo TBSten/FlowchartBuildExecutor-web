@@ -6,7 +6,7 @@ import { useRef,  ReactNode, useEffect, useCallback, useMemo, useState,  } from 
 import styled, { css } from "styled-components" ;
 import { useExecutingId, useRuntime } from "redux/app/hooks";
 import MenuDialog from "components/App/MenuDialog";
-import { useGetItem } from "redux/items/hooks";
+import { useItem } from "redux/items/hooks";
 import { exchangeItem } from "redux/items/actions";
 import { useDragAndDrop } from "redux/app/hooks";
 
@@ -110,7 +110,8 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
     const selectItemIds = useSelectItemIds();
     const executingId = useExecutingId();
     const runtime = useRuntime();
-    const getItem = useGetItem();
+    // const getItem = useGetItem();
+    const item = useItem(id) ;
     // const mode = useMode();
     const {to,from,setTo,setFrom} = useDragAndDrop();
 
@@ -215,7 +216,7 @@ export default function Sym({children, render, autoSize=true, id }: SymProps){
                 <MenuDialog 
                     open={openMenuDialog} 
                     onClose={()=>setOpenMenuDialog(false)} 
-                    menus={getItem(id).menus}
+                    menus={item.menus}
                     itemId={id}/>
             </SymContainer>
             ,

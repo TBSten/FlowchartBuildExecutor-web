@@ -166,16 +166,16 @@ export function inputTextFile() {
 //ブラウザ
 const BROWSER_SAVEDATA_KEY = "fbe-save-temp";
 export function saveBrowserSaveData() {
-  store.dispatch(openAppSnackbar(
-    <>保存中</>
-  ));
-  store.dispatch(setOnCloseAppSnackbar(()=>{
-    store.dispatch(hideAppSnackbar());
-  }));
+  // store.dispatch(openAppSnackbar(
+  //   <>保存中</>
+  // ));
+  // store.dispatch(setOnCloseAppSnackbar(()=>{
+  //   store.dispatch(hideAppSnackbar());
+  // }));
   const saveData = getSaveState() ;
   StoreJs.set(BROWSER_SAVEDATA_KEY, saveData);
   setTimeout(()=>{
-    store.dispatch(hideAppSnackbar());
+    // store.dispatch(hideAppSnackbar());
   },3000);
 }
 export function loadBrowserSaveData() {

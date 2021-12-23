@@ -1,3 +1,4 @@
+import { FormatStrikethroughTwoTone } from "@material-ui/icons";
 
 export type Token = string ;
 export type Lt = 
@@ -14,33 +15,35 @@ export type Variable = {
     value:Lt,
 } ;
 
+export type FuncArgs = Lt[];
+export type Func = {
+    name:string,
+    call:(args:FuncArgs)=>(void|Lt|Promise<Lt|void>)
+} ;
+
 function esc(str:string){
     return str.replace(/[-\/\\^$*+?.()|\[\]{}]/g, '\\$&');
 }
-function isValidLt(lt:Lt|null|undefined) :boolean{
-    return lt || lt === 0 || lt === false || lt === "" 
-        ? true :false;
-}
 function tokenToLt(token:Token):Lt{
     // console.log("tokenToLt",token)
-    if(new RegExp(`^(${ltPatterns[0]()})$`,"g").test(token)){
+    if(new RegExp(`^(${ltPatterns[0]()})$`,"g").test(token)){   //number
         // console.log(new RegExp(ltPatterns[0](),"g"))
         return parseFloat(token);
     }
     const isDoubleQuateStr = token.match(/^("(.*)")$/) ;
-    if(isDoubleQuateStr){
+    if(isDoubleQuateStr){   //"" string
         const ans = isDoubleQuateStr[2];
         return ans
     }
     const isSingleQuateStr = token.match(/^('(.*)')$/) ;
-    if(isSingleQuateStr){
+    if(isSingleQuateStr){       //'' string
         const ans = isSingleQuateStr[2];
         return ans ;
     }
-    if(token === "true" || token === "false"){
+    if(token === "true" || token === "false"){  //boolean
         return token === "true" ? true : false ;
     }
-    if(new RegExp(ltPatterns[3](),"g").test(token)){
+    if(new RegExp(ltPatterns[3](),"g").test(token)){    //variable
         console.log(" use var : ",getVar(token))
         const v = getVar(token) ;
         if(v){
@@ -49,6 +52,28 @@ function tokenToLt(token:Token):Lt{
         // return v ? v.value : null ;
     }
     throw new Error("unvalid token :"+token) ;
+}
+function callFunction(token:Token,args:Lt[]){
+    if(new RegExp(ltPatterns[4](),"g").test(token)){    //function
+        const func = getFunction(token);
+        if(func){
+            console.log(token,"called with",args);
+            const returnedValue = func.call(args);
+            if(returnedValue instanceof Promise){
+                throw new Error(token+" is not callable function") ;
+            }else{
+                if(returnedValue){
+                    console.log("  returned",returnedValue);
+                    return returnedValue ;
+                }else{
+                    throw new Error(returnedValue+" is returned from "+token+" but unvalid") ;
+                }
+            }
+        }else{
+            throw new Error (func+" is not function") ;
+        }
+    }
+
 }
 function ltToToken(lt:Lt):Token{
     // console.log(lt,lt.toString())
@@ -84,6 +109,10 @@ function getVar(name:string){
         return p ;
     },null as null | Variable);
     return ans ;
+}
+function getFunction(name:string){
+    const ans = funcs.find((func)=>func.name === name);
+    return ans ? ans : null ;
 }
 
 /*
@@ -327,32 +356,79 @@ const opes :Ope[] = [
 
 ] ;
 const ltPatterns = [
-    ()=>`[0-9]+`,
+    ()=>`(?:[0-9]+(?:\\.[0-9]*)?)`,
     ()=>`".*"`,
     ()=>`'.*'`,
     ()=>{
         const varPattern = variables.map(v=>v.name).join("|") ;
-        return varPattern?varPattern:"<<>>" ;
-    }
+        return varPattern?varPattern:"[[[[]]]]<<<<>>>>" ;
+    },
+    ()=>{
+        const funcPattern = funcs.map(f=>f.name).filter(f=>f !== "").join("|") ;
+        return funcPattern?funcPattern:"[[[[]]]]<<<<>>>>";
+    },
+    ()=>"\\,",
 ] ;
 function isOpe(token:Token){
     return new RegExp(`^(${opes.map(o=>o.pattern).join("|")})$`).test(token);
 }
 let variables :Variable[] = [] ;
+function initVariables(vars:Variable[]){
+    variables = [
+        ...vars,
+    ] ;
+}
+let funcs :Func[] = [] ;
+function initFuncs(definedFuncs:Func[]){
+    funcs = [
+        //ビルドイン関数
+        {
+            name:"random",
+            call:(args)=>{
+                const [
+                    _min=0,
+                    _max=1,
+                ] = args ;
+                const min = Math.min(_min as number,_max as number);
+                const max = Math.max(_min as number,_max as number);
+                return Math.random()*(max-min) +min ;
+            }
+        },
+        {
+            name:"round",
+            call:(args)=>{
+                const [
+                    _value,
+                    _digit=0,
+                ] = args ;
+                if(typeof _value === "number" && typeof _digit === "number"){
+                    const d = Math.pow(10,_digit) ;
+                    console.log("round",_value,d);
+                    return Math.round(_value*d)/d;
+                }
+                throw new Error(_value+" or "+_digit+" is not number") ;
+            },
+        },
+        //ユーザ定義関数
+        ...definedFuncs,
+    ] ;
+}
+
 function isLt(token:Token){
-    // return (
-    //     /[0-9]/.test(token) || 
-    //     /"(.*)"/.test(token) ||
-    //     /'(.*)'/.test(token)
-    // ) ;
     const ans = ltPatterns.reduce((p,ltp)=>{
-        // console.log("-------",token,ltp,new RegExp(ltp()).test(token))
+        // console.log("ltPatterns.forEach",ltp())
         const match = new RegExp(`^(${ltp()})$`,"g").test(token) ;
-        // console.log(token,"is lt check",ltp(),match);
         return p || match ;
     },false);
-    // console.log(ans);
+    // console.log("isLt",token,"is",ans);
     return ans ;
+}
+function isFunction(name:string){
+    const idx = funcs.findIndex(func=>func.name === name) ;
+    return idx >= 0 ;
+}
+function isFunctionSpliter(token:string){
+    return token === "," ;
 }
 function priority(opeToken:Token){
     const ope = getOpe(opeToken) ;
@@ -376,6 +452,7 @@ function toTokens(formula:string){
     )).map(t=>t.replace(" ","")).filter(t=>t && t !== " ");
 }
 
+const argStartFlg = "__<<__function__arg__start__>>__" ;
 function toRpn(tokens:Token[]):Token[]{
     const ans :Token[] = [] ;
     const _st:any = [] ;
@@ -383,7 +460,20 @@ function toRpn(tokens:Token[]):Token[]{
     const stack :Array<Token> & {top:Function} = _st ;
     for(let i = 0 ;i < tokens.length;i++){
         const t = tokens[i] ;
-        if(isLt(t)){//数字などのリテラル
+        if(isFunction(t)){//関数
+            stack.push(t);
+            ans.push(argStartFlg);
+        }else if(isFunctionSpliter(t)){
+            while(stack.top() !== "(" ){
+                const top = stack.pop() ;
+                if(top){
+                    ans.push(top);
+                }else{
+                    console.error("top",top) ;
+                    throw new Error("unknown error") ;
+                }
+            }
+        }else if(isLt(t)){//数字などのリテラル
             ans.push(t);
         }else if(isOpe(t)){//演算子
             while(true){
@@ -413,6 +503,14 @@ function toRpn(tokens:Token[]):Token[]{
             }else{
                 throw new Error(" ### カッコの数が正しくありません") ;
             }
+            if(isFunction(stack.top())){
+                const fToken = stack.pop();
+                if(fToken){
+                    ans.push(fToken);
+                }else{
+                    throw new Error("unknown fToken:"+fToken) ;
+                }
+            }
         }else{
             console.error(" ?????????????????????????????")
             throw new Error("unvalid token :"+t) ;
@@ -426,7 +524,10 @@ function toRpn(tokens:Token[]):Token[]{
         if(isOpe(t)){
             ans.push(t)
         }else{
-            console.error(ans,stack,t,i)
+            console.error("ans",ans);
+            console.error("stack",stack);
+            console.error("t",t);
+            console.error("i",i);
             throw new Error(" 不正な式です") ;
         }
     }
@@ -435,8 +536,27 @@ function toRpn(tokens:Token[]):Token[]{
 function evalRpn(rpn:Token[]){
     const ans :Lt[] = [] ;
     rpn.forEach(token=>{
-        // console.log("evalRpn loop",token,isLt(token),isOpe(token));
-        if(isLt(token)){
+        if(token === argStartFlg){
+            ans.push(token);
+        }else if(isFunction(token)){
+            const args = [] as any[] ;
+            while(ans[ans.length-1] !== argStartFlg){
+                // console.log("ans",ans)
+                const top = ans.pop();
+                if(top || top === 0 || top === false || top === ""){
+                    args.unshift(top);
+                }else{
+                    throw new Error("unknown error") ;
+                }
+            }
+            if(ans.pop() !== argStartFlg){throw new Error("unknown error") ;}
+            const returnedValue = callFunction(token,args);
+            if(returnedValue){
+                ans.push(returnedValue);
+            }else{
+                throw new Error("returned value is unvalid :"+returnedValue) ;
+            }
+        }else if(isLt(token)){
             const lt = tokenToLt(token) ;
             if(lt || lt === 0 || lt === "" || lt === false){
                 ans.push(lt);
@@ -469,22 +589,29 @@ function evalRpn(rpn:Token[]){
         // return tokenToLt(ans[0]) ;
         return ans[0] ;
     }else {
-        console.error(rpn)
+        console.error("rpn",rpn);
+        console.error(ans);
         throw new Error("unvalid formula ") ;
     }
 }
-function evalFormula(formula:string,vars:Variable[]=[]){
-    // console.log("= evalFormula ",formula, vars,"=========")
+function evalFormula(
+    formula:string,
+    vars:Variable[]=[],
+    funcs:Func[]=[],
+){
+
     const _start = new Date();
-    variables=vars ;
+
+    initVariables(vars);
+    initFuncs(funcs);
+
     const ts = toTokens(formula);
     console.log("tokens",ts)
     const rpn = toRpn(ts);
     console.log("rpn",rpn)
     const ans = evalRpn(rpn);
-    // console.log("ans",ans);
-    // console.log("==========================")
-    console.log("eval ",new Date().getTime()-_start.getTime());
+    console.log("ans",ans);
+    console.log("eval ",new Date().getTime()-_start.getTime(),"ms");
     return ans ;
 }
 

@@ -6,7 +6,7 @@ import { init } from "./initialState";
 export default function itemsReducer(
     state :Items =init, 
     action:{type :string, payload:any}){
-        let newState :Items = Object.assign({},state);
+        let newState :Items = {...state};
 
         if(action.type === actionTypes.add){
             const newItem = action.payload ;

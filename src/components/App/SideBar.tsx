@@ -23,7 +23,7 @@ import { setOption, setItem } from "redux/items/actions";
 import { useGetItem } from "redux/items/hooks";
 import { toggleMulti, } from "redux/app/actions";
 import { useSelectItemId, useMultiSelect } from "redux/app/hooks";
-import React, { ReactNode, useState, useEffect } from "react";
+import React, { ReactNode, useState, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { setZoom, incZoom } from "redux/app/actions";
 import {
@@ -272,7 +272,6 @@ function ControllPane({ runtime }: ControllPaneProps) {
     );
 }
 
-
 export default function SideBar(props: SideBarProps) {
     const mode = useMode();
     const selectItemId = useSelectItemId();
@@ -290,12 +289,15 @@ export default function SideBar(props: SideBarProps) {
 
     let child: string | ReactNode = <div>none selected</div>;
 
+    const item = useMemo(()=>{
+        console.log("changed selectItemId")
+        return getItem(selectItemId);
+    },[selectItemId]);
     if (mode === "edit") {
         const menus: (SideBarMenu|"hr")[] = [];
         const handleToggleMultiSelect = () => {
             dispatch(toggleMulti(!multiSelect));
         };
-        const item = getItem(selectItemId);
         const handleAddFlow = () => {
             const sid = randomStr(30);
             const eid = randomStr(30);
@@ -372,29 +374,6 @@ export default function SideBar(props: SideBarProps) {
             menus.push(...item.menus);
             menus.push("hr");
         }
-        // このあたりもメニューダイアログに移したい
-        // menus.push([
-        //     <Button
-        //         startIcon={multiSelect ? <Done /> : <DoneAll />}
-        //         onClick={handleToggleMultiSelect}
-        //         color="primary"
-        //         variant="outlined"
-        //         key={"multiSelect"}
-        //     >
-        //         {!multiSelect ? "複数選択モード" : "複数選択モード解除"}
-        //     </Button>,
-        // ]);
-        // menus.push([
-        //     <Button
-        //         onClick={handleAddFlow}
-        //         startIcon={<Add />}
-        //         variant="outlined"
-        //         color="primary"
-        //         key={"newFlow"}
-        //     >
-        //         フローを追加
-        //     </Button>,
-        // ]);
         if(multiSelect){
             menus.push(
                 {
@@ -424,11 +403,6 @@ export default function SideBar(props: SideBarProps) {
                 {child}
                 <hr />
                 <h6>メニュー</h6>
-                {/* <Menus>
-                    {menus.map((el, idx) => (
-                        <div key={idx}>{el}</div>
-                    ))}
-                </Menus> */}
                 <Button 
                     variant="outlined" 
                     color="primary" 
@@ -545,7 +519,7 @@ export default function SideBar(props: SideBarProps) {
             </>
         );
     }
-    return (
+    return useMemo(()=>
         <>
             {show ? (
                 <>
@@ -603,5 +577,13 @@ export default function SideBar(props: SideBarProps) {
                 </ToggleSideShowCon>
             )}
         </>
-    );
+    ,[
+        selectItemId,
+        mode,
+        multiSelect,
+        runtime,
+        tabIdx,
+        menuDialogOpen,
+        show,
+    ]);
 }

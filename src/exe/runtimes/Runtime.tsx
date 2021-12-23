@@ -1,8 +1,8 @@
 import { Item } from "redux/types/item";
 import { Variable, VariableValue } from "./types";
 import { store } from "redux/store";
-import { setExecutingId } from "redux/app/actions";
-import { evalFormula } from "util/formulaEval";
+import { setExecutingId, setRuntime } from "redux/app/actions";
+import { evalFormula, Func, FuncArgs } from "util/formulaEval";
 import {
     hideAppDialog,
     hideAppSnackbar,
@@ -345,6 +345,17 @@ export default class Runtime {
     // async inputBox(msg: string = "入力"){
     //   return window.prompt(msg);
     // }
+
+    /**
+     * ```
+     * const pros = getProcesses();
+     * //pros
+     * //{
+     * //   "":"item-4faf4a5f1a12fd3",
+     * //   "並べ替え処理":"item-f4af6dasqjdfjfd3",
+     * //}
+     * ```
+    */
     getProcesses() {
         const ans: { [key: string]: string } = {};
         this.flowIds.forEach((el) => {
@@ -369,10 +380,27 @@ export default class Runtime {
     }
 
     eval(formula: string) {
-        // const evaler = new Evaler(this.variables);
-        // const ans = evaler.eval(formula);
-        // return ans;
-        return evalFormula(formula, this.variables);
+        const vars:Variable[] = this.variables ;
+        const procs = this.getProcesses() ;
+        const funcs:Func[] = Object.keys(procs).map(procName=>{
+            const ans:Func = {
+                name:procName,
+                call:async (args)=>{
+                    //argsの行方は？？？？？？？？？？？？？？？？？？？？？？？？？
+                    const runtime = store.getState().app.runtime ;
+                    runtime?.addExeItemId(0,procs[procName]);
+                    store.dispatch(setRuntime(runtime));
+                },
+            } ;
+            console.log(ans);
+            return ans ;
+        }) ;
+        console.log("evalFormula",vars,funcs)
+        return evalFormula(
+            formula, 
+            vars,
+            funcs
+        );
     }
 
     getTabs(): TabData[] {

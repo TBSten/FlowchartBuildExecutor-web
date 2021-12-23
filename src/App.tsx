@@ -18,6 +18,8 @@ import AppSnackBar from "components/App/AppSnackBar" ;
 import { loadBrowserSaveData, saveBrowserSaveData } from "util/io";
 import { useIsLoading } from "redux/app/hooks";
 import { Backdrop, CircularProgress } from "@material-ui/core";
+import { hideAppSnackbar, openAppSnackbar, setOnCloseAppSnackbar } from "redux/app/actions";
+import { useDispatch } from "react-redux";
 // import { setMode } from "redux/reducers/mode";
 // import { useDispatch } from "react-redux";
 // import { toggleMulti, useMultiSelect } from "redux/reducers/selectItem" ;
@@ -30,7 +32,7 @@ const AppContainer = styled.div`
   grid-template-rows: auto 1fr ;
   gap:5px;
   overflow: auto;
-  ${ sp`
+  ${sp`
     grid-template-columns: 1fr;
     grid-template-rows: auto 5fr 5fr;
   `}
@@ -60,7 +62,7 @@ function App() {
     isLoading,
     startLoad,
     finishLoad } = useIsLoading();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // const multiSelect = useMultiSelect();
 
   useEffect(()=>{
@@ -85,7 +87,16 @@ function App() {
     const tid = setInterval(()=>{
       //save
       console.log("auto save start");
+      dispatch(openAppSnackbar(
+        <>保存中</>
+      ));
+      dispatch(setOnCloseAppSnackbar(()=>{
+        dispatch(hideAppSnackbar());
+      }));
       saveBrowserSaveData();
+      setTimeout(()=>{
+        dispatch(hideAppSnackbar());
+      },3*1000);
       // console.log("auto save end");
     },30*1000);
 

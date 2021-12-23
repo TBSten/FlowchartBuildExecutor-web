@@ -1,4 +1,5 @@
 
+import { useEffect, useState } from 'react';
 import {
     css,
     CSSObject,
@@ -8,6 +9,18 @@ import {
 
 export let breakpointByNumber = 560 ;
 export let breakpoint = breakpointByNumber+"px" ;
+export function useSp(){
+    const [isSp,setIsSp] = useState(breakpointByNumber >= window.innerWidth) ;
+    useEffect(()=>{
+        window.addEventListener("resize",()=>{
+            const is = breakpointByNumber >= window.innerWidth ;
+            if(isSp !== is){
+                setIsSp(is);
+            }
+        });
+    },[setIsSp,isSp]);
+    return isSp ;
+}
 
 export const sp = (
     first: CSSObject | TemplateStringsArray,
