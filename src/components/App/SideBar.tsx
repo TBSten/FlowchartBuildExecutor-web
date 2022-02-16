@@ -268,6 +268,20 @@ function ControllPane({ runtime }: ControllPaneProps) {
                     onChangeCommitted={handleChangeCommitted}
                 />
             </SliderCon>
+            <h6>ステータス</h6>
+            <div>
+                <Chip
+                    label={
+                        runtime?.status==="waiting"?
+                        "まだ実行していません":
+                        runtime?.status==="doing"?
+                        "実行中":
+                        runtime?.status==="done"?
+                        "実行終了":
+                        "! エラー"
+                    }
+                    color="secondary" />
+            </div>
         </>
     );
 }
@@ -332,43 +346,15 @@ export default function SideBar(props: SideBarProps) {
                         />
                     );
                 } else {
-                    // return "unvisible option";
-                    // return <tr>unvisible : {ele.name} {ele.isVisible(item).toString()} </tr> ;
                     return <tr key={idx}></tr>;
                 }
             });
             child = (
                 <>
-                    {/* オプション */}
                     <h6>オプション</h6>
                     <table>
                         <tbody>{child}</tbody>
                     </table>
-                    {/* メニュー表示 */}
-                    {/* {
-                        item.menus.map(el=>(
-                            <React.Fragment key={el.name}>
-                                <h6>{el.name}</h6>
-                                {
-                                    el.component.map((Ele,idx)=>(
-                                        <Ele key={idx}/>
-                                    ))
-                                }
-                            </React.Fragment>
-                        ))
-                    } */}
-
-                    {/* <h6> メニュー </h6>
-                    <List>
-                        {item.menus.map((menu) => {
-                            return (
-                                <ListItem button onClick={menu.onClick}>
-                                    {menu.icon} 
-                                    {menu.label}
-                                </ListItem>
-                            );
-                        })}
-                    </List> */}
                 </>
             );
             menus.push(...item.menus);
@@ -578,12 +564,14 @@ export default function SideBar(props: SideBarProps) {
             )}
         </>
     ,[
-        selectItemId,
-        mode,
-        multiSelect,
-        runtime,
-        tabIdx,
-        menuDialogOpen,
-        show,
+        child, dispatch, props, show,
+        // selectItemId,
+        // mode,
+        // multiSelect,
+        // runtime,
+        // tabIdx,
+        // menuDialogOpen,
+        // show,
+
     ]);
 }

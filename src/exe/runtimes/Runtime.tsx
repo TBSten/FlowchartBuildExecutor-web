@@ -11,7 +11,7 @@ import {
     setOnCloseAppDialog,
     setOnCloseAppSnackbar,
 } from "redux/app/actions";
-import { DialogActions, DialogContent, DialogTitle } from "@material-ui/core";
+import { DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import { TabData } from "components/App/types";
 import ExecuteError from "error/ExecuteError";
 import Button from "components/util/Button";
@@ -261,41 +261,35 @@ export default class Runtime {
     }
     msgBox(msg: string) {
         return new Promise<void>((resolve, reject) => {
-            // const onCloseAction = setOnCloseAppDialog(()=>{
-            //   console.log("close");
-            //   resolve();
-            // });
-            // const hideAction = hideAppDialog() ;
-            // const openAction = openAppDialog(
-            //   <>
-            //     <DialogTitle>{title}</DialogTitle>
-            //     <DialogContent>
-            //       <div>{msg}</div>
-            //     </DialogContent>
-            //     <DialogActions>
-            //       <Button onClick={()=>{store.dispatch(hideAction );console.log("hide app dialog")}}>
-            //         閉じる
-            //       </Button>
-            //     </DialogActions>
-            //   </>
-            // ) ;
-            // store.dispatch(onCloseAction);
-            // store.dispatch(openAction);
-
             //専用のメッセージボックスで表示
-            store.dispatch(
-                setOnCloseAppSnackbar(() => {
-                    hideAppSnackbar();
-                })
-            );
-            store.dispatch(openAppSnackbar(msg));
-            setTimeout(() => {
-                const state = store.getState();
-                if (state.app.snackbar.content === msg) {
-                    store.dispatch(hideAppSnackbar());
-                }
-            }, Math.min(msg.length * 900, 8 * 1000));
-            resolve();
+            // store.dispatch(
+            //     setOnCloseAppSnackbar(() => {
+            //         hideAppSnackbar();
+            //     })
+            // );
+            // store.dispatch(openAppSnackbar(msg));
+            // setTimeout(() => {
+            //     const state = store.getState();
+            //     if (state.app.snackbar.content === msg) {
+            //         store.dispatch(hideAppSnackbar());
+            //     }
+            // }, Math.min(msg.length * 900, 8 * 1000));
+            // resolve();
+            console.log("msgBox !!!!!!!",msg);
+            store.dispatch(setOnCloseAppDialog(()=>{
+                store.dispatch(hideAppDialog());
+                resolve();
+            }));
+            store.dispatch(openAppDialog(
+                <>
+                    <DialogTitle>
+                        表示
+                    </DialogTitle>
+                    <DialogContent>
+                        {msg}
+                    </DialogContent>
+                </>
+            ));
         });
     }
     async dialog({ title, msg }: { title?: string; msg: string }) {

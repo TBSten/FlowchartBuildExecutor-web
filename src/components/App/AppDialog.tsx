@@ -9,6 +9,7 @@ export default function AppDialog(){
     function handleClose(){
         console.log("handle close",dialog.onClose);
         dialog.hide();
+        dialog.onClose();
         // dialog.onClose();
     }
     return (

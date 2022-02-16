@@ -355,10 +355,10 @@ const opes :Ope[] = [
     },
 
 ] ;
-const ltPatterns = [
+const ltPatterns :(()=>string)[] = [
     ()=>`(?:[0-9]+(?:\\.[0-9]*)?)`,
-    ()=>`".*"`,
-    ()=>`'.*'`,
+    ()=>`".*?"`,
+    ()=>`'.*?'`,
     ()=>{
         const varPattern = variables.map(v=>v.name).join("|") ;
         return varPattern?varPattern:"[[[[]]]]<<<<>>>>" ;
@@ -417,7 +417,7 @@ function initFuncs(definedFuncs:Func[]){
 function isLt(token:Token){
     const ans = ltPatterns.reduce((p,ltp)=>{
         // console.log("ltPatterns.forEach",ltp())
-        const match = new RegExp(`^(${ltp()})$`,"g").test(token) ;
+        const match = new RegExp(`^(${ltp()})??$`,"g").test(token) ;
         return p || match ;
     },false);
     // console.log("isLt",token,"is",ans);
