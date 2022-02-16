@@ -2,7 +2,7 @@
   "name": "fbe-on-web-react",
   "version": "1.0.0",
   "private": false,
-  "description": "フローチャートを作成・実行できるWebツールです。",
+  "description": "フローチャートを作成・実行できるWebツールです。近日v2をリリース予定です",
   "license": "MIT",
   "dependencies": {
     "-": "^0.0.1",
