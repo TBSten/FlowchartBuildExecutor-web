@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 
 import BuildPane from "./components/App/BuildPane";
-import Sidebar from "./components/App/Sidebar";
+import Sidebar from "./components/App/SideBar";
 import Header from "./components/App/Header";
 import TitleAccordion from "./components/util/TitleAccordion";
 import { useSp } from "./style/media";
