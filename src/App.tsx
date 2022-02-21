@@ -1,146 +1,127 @@
+import Box from "@mui/material/Box";
+import makeStyles from "@mui/styles/makeStyles";
 
-import "./css/global.min.css" ;
-import MuiPaper from "@material-ui/core/Paper" ;
-import {sp, } from "./css/media" ;
-import { useEffect, useRef, useState } from "react";
-// import {useDispatch} from "react-redux";
-import BuildPane from "./BuildPane";
+import BuildPane from "./components/App/BuildPane";
+import Sidebar from "./components/App/Sidebar";
+import Header from "./components/App/Header";
+import TitleAccordion from "./components/util/TitleAccordion";
+import { useSp } from "./style/media";
+// import { useTheme } from "@mui/material/styles";
+import Fabs from "./components/App/Fabs";
+// import Guide from "./components/App/Guide";
+import { useRef, useEffect } from "react";
+import { loadFromBrowser } from "src/format";
+import ConfirmOnUnload from "./components/App/ConfirmOnUnload";
+import KeyboardHotkeys from "./components/App/KeyboardHotkeys";
 
-import Head from "components/App/Head";
-import SideBar from "components/App/SideBar";
-import styled from "styled-components" ;
-import FabBar from "components/App/FabBar" ;
-import AppDialog from "components/App/AppDialog" ;
-import AppSnackBar from "components/App/AppSnackBar" ;
-// import TestZone from "components/App/TestZone";
-
-// import {test} from "util/formulaEval" ;
-import { loadBrowserSaveData, saveBrowserSaveData } from "util/io";
-import { useIsLoading } from "redux/app/hooks";
-import { Backdrop, CircularProgress } from "@material-ui/core";
-import { hideAppSnackbar, openAppSnackbar, setOnCloseAppSnackbar } from "redux/app/actions";
-import { useDispatch } from "react-redux";
-// import { setMode } from "redux/reducers/mode";
-// import { useDispatch } from "react-redux";
-// import { toggleMulti, useMultiSelect } from "redux/reducers/selectItem" ;
-
-const AppContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr ;
-  gap:5px;
-  overflow: auto;
-  ${sp`
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 5fr 5fr;
-  `}
-`;
-const TopContainer = styled.div`
-  grid-column: 1 / 3;
-  grid-row : 1 / 2;
-`;
-const MainContainer = styled(MuiPaper)`
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-  width: 100%;
-  height: 100%;
-  overflow:auto;
-  background: #f5f5f5;
-  ${sp`
-    grid-column: 1 / 3;
-  `}
-`;
-
+const useAppStyles = makeStyles({
+    root: {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+    },
+});
 
 function App() {
-  console.log("########## App render ##########");
+    const appClasses = useAppStyles();
+    const isSp = useSp();
+    const ref = useRef<HTMLElement>(null);
+    useEffect(() => {
+        const wid = window.innerWidth;
+        const hei = window.innerHeight;
+        if (ref.current) {
+            ref.current.scrollLeft = wid * 0.6;
+            ref.current.scrollTop = hei * 0.6;
+            console.log(ref.current.scrollLeft, ref.current.scrollTop);
+        }
+    }, []);
+    useEffect(() => {
+        loadFromBrowser();
+    }, []);
+    const headerHeight = (isSp ? 56 : 64) * 2;
+    return (
+        <Box className={appClasses.root}>
 
-  const ref = useRef<HTMLDivElement>(null!);
-  const {
-    isLoading,
-    startLoad,
-    finishLoad } = useIsLoading();
-  const dispatch = useDispatch();
-  // const multiSelect = useMultiSelect();
+            <Header />
 
-  useEffect(()=>{
-      console.log(ref);
-      if(ref.current){
-          ref.current.scrollTop = 90 ;
-          ref.current.scrollLeft = 90 ;
-      }
-  },[]);
+            {/* <Box sx={{ pt: theme=>{console.log(theme);return `${theme.mixins.toolbar.minHeight}px` ;} }}></Box> */}
 
-  useEffect(()=>{
-    //セーブデータのロード
-    const start = new Date() ;
-    startLoad();
-    loadBrowserSaveData();
-    //ロード中オフ
-    console.log("loaded save data from browser in "+
-      (new Date().getTime()-start.getTime())+"ms")
-    finishLoad();
+            <Box
+                sx={{
+                    width: "100%",
+                    flexGrow: 1,
+                    overflow: "scroll",
+                    position: "relative",
+                    height: `calc(100% - ${headerHeight}px)`,
+                }}
+                ref={ref}
+            >
+                <Box
+                    sx={{
+                        width: "fit-content",
+                        height: "fit-content",
+                    }}
+                >
+                    <BuildPane />
+                </Box>
 
-    //オートセーブ
-    const tid = setInterval(()=>{
-      //save
-      console.log("auto save start");
-      dispatch(openAppSnackbar(
-        <>保存中</>
-      ));
-      dispatch(setOnCloseAppSnackbar(()=>{
-        dispatch(hideAppSnackbar());
-      }));
-      saveBrowserSaveData();
-      setTimeout(()=>{
-        dispatch(hideAppSnackbar());
-      },3*1000);
-      // console.log("auto save end");
-    },30*1000);
+                {/* <Box
+                    sx={{
+                        position: "fixed",
+                        left: isSp ? 0 : 20,
+                        top: `calc(${headerHeight}px + 10px)`,
+                        maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
+                        maxHeight: isSp ? "40vh" : "80vh",
+                        overflow: "auto",
+                    }}
+                >
+                    <TitleAccordion title="GUIDES">
+                        <Guide />
+                    </TitleAccordion>
+                </Box> */}
 
-    return ()=>{
-      clearInterval(tid);
-    } ;
-  },[]);
-  
-  const [showSideBar,setShowSideBar] = useState(true) ;
+                <Box
+                    sx={{
+                        position: "fixed",
+                        right: isSp ? 16 : 20,
+                        top: `calc(${headerHeight}px + 10px)`,
+                    }}
+                >
+                    <Fabs />
+                </Box>
 
-  return (
-    isLoading?
-    <Backdrop open={isLoading}>
-      <CircularProgress/>
-    </Backdrop>
-    :
-    <AppContainer>
-      <TopContainer>
-        {/* <button onClick={()=>{dispatch(actionCreators.addItem(calcSymCreator()))}}>BUTTON</button> */}
-        <Head 
-          isShowSideBar={showSideBar}
-          toggleSideBar={()=>setShowSideBar(prev=>!prev)}/>
-      </TopContainer>
-      <MainContainer ref={ref}>
-        <BuildPane />
-      </MainContainer>
-      <SideBar 
-        show={showSideBar} 
-        showSideBar={()=>{setShowSideBar(true)}} 
-        hideSideBar={()=>setShowSideBar(false)}/>
+                <Box
+                    sx={{
+                        position: "fixed",
+                        right: isSp ? 0 : 20,
+                        bottom: isSp ? 0 : 20,
+                        maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
+                        maxHeight: isSp ? "40vh" : "80vh",
+                        overflow: "auto",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            overflow: isSp ? "auto" : "visible",
+                            p: isSp ? 0 : 0.25,
+                        }}
+                    >
+                        <TitleAccordion title="サイドバー" defaultExpanded>
+                            <Sidebar />
+                        </TitleAccordion>
+                    </Box>
+                </Box>
+            </Box>
 
-      <FabBar />
+            <ConfirmOnUnload />
+            <KeyboardHotkeys />
 
-      {/* <TestZone/> */}
-      
-      <AppDialog/>
-
-      <AppSnackBar />
-
-    </AppContainer>
-    
-  );
+        </Box>
+    );
 }
 
-
 export default App;
+
 
