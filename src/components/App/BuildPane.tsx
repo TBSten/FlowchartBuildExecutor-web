@@ -38,6 +38,7 @@ const BuildPane: FC<BuildPaneProps> = () => {
                 px: "75vw",
                 py: "75vh",
             }}
+            id="fbe-build-pane"
         >
             <Stack
                 direction="row"

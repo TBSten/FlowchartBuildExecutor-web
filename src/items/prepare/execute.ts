@@ -32,7 +32,8 @@ export const prepareExecute: ItemExecute = async ({
         const cnts = cntOp?.toString().split("*");
         const first = await runtime.eval(firstOp as string);
         mustString(firstOp);
-        if (!cnts) throw notImplementError();
+        logger.log(cnts)
+        if (!cnts || cnts.length !== 2) throw notImplementError();
         const row = parseInt(cnts[0]);
         const col = parseInt(cnts[1]);
         logger.log(row, col);

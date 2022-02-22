@@ -1,4 +1,4 @@
-import { ItemType } from "src/items/itemTypes";
+import { SymType } from "src/items/symTypes";
 import actionCreatorFactory from "typescript-fsa";
 import { Item, ItemId, OptionValue } from "./types";
 
@@ -16,11 +16,11 @@ export const setOption = actionCreator<{
     value: OptionValue;
 }>("items/options/set");
 export const setItemType = actionCreator<{
-    itemId:ItemId;
-    newItemType:ItemType;
+    itemId: ItemId;
+    newItemType: SymType;
 }>("items/itemType/set");
 
 export const loadItems = actionCreator<{
-    items :Item[],
+    items: Item[],
 }>("items/load");
 export const resetItems = actionCreator("items/reset")

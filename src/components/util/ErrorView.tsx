@@ -10,6 +10,7 @@ const ErrorView: FC<ErrorViewProps> = ({ children, log = [] }) => {
     logger.error(...log)
     return <Box sx={{ color: "red" }}>
         # ERROR !
+        {" "}
         {children}
     </Box>
 };

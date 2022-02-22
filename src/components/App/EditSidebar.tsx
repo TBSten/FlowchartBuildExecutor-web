@@ -23,10 +23,12 @@ import { ItemId, Option, isSym, isFlow, Flow, Sym } from "src/redux/items/types"
 import { optionInputs, UpdateOption } from "src/items/option";
 import { terminalStartSymCreator } from "src/items/terminalStart/creator";
 import { terminalEndSymCreator } from "src/items/terminalEnd/creator";
-import { addableItemTypes, ItemType, itemTypes } from "src/items/itemTypes";
+import { addableItemTypes, isSymType, SymType, symTypes } from "src/items/symTypes";
 import { getItem } from "src/redux/items/selectors";
 import { mustString } from "src/lib/typechecker";
 import Stack from "@mui/material/Stack";
+import { logger } from "src/lib/logger";
+import ErrorView from "../util/ErrorView";
 
 export interface EditSidebarProps { }
 
@@ -60,7 +62,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
 
     const [selectItemIds] = useSelectItemIds();
     const [selectItem, { set: setSelectItem }] = useItem(selectItemIds[0]);
-    const [flows, { removeFlow }] = useFlows();
+    const [, { removeFlow }] = useFlows();
 
     const [openTCDialog, setOpenTCDialog] = useState(false);
     const handleOpenDialog = () => {
@@ -71,9 +73,13 @@ const EditSidebar: FC<EditSidebarProps> = () => {
     const handleCloseDialog = () => {
         setOpenTCDialog(false);
     };
-    const handleCT = (itemType: ItemType) => {
+    const handleCT = (itemType: SymType) => {
         //selectItemのitemTypeをを変更
-        const _itemType = itemTypes[itemType];
+        if (!isSymType(itemType)) {
+            logger.error(itemType, "is not symType")
+            return;
+        }
+        const _itemType = symTypes[itemType];
         if (_itemType && selectItem) {
             const newItem = _itemType.creator(
                 selectItem.itemId,
@@ -163,13 +169,14 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                         {changeTargetTypes.length <= 0
                             ? "変更できません"
                             : changeTargetTypes.map((itemType) => {
+                                if (!isSymType(itemType)) return <ErrorView>{itemType} is not symType</ErrorView>
                                 return (
                                     <ListItem
                                         key={itemType}
                                         button
                                         onClick={() => handleCT(itemType)}
                                     >
-                                        {itemTypes[itemType].label}
+                                        {symTypes[itemType].label}
                                     </ListItem>
                                 );
                             })}

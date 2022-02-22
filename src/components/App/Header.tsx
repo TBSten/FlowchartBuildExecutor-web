@@ -29,10 +29,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import ZoomIn from "@mui/icons-material/ZoomIn";
 import ZoomOut from "@mui/icons-material/ZoomOut";
+import ImageIcon from "@mui/icons-material/Image";
 import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
 import { useChange, useMode, useZoom } from "src/redux/app/operations";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Tooltip from "@mui/material/Tooltip";
+import { donwloadImage } from "src/lib/image";
 // import { StoreState } from "src/redux/store";
 
 export interface HeaderProps { }
@@ -50,10 +54,13 @@ const Header: FC<HeaderProps> = () => {
                 <HeaderMenu />
                 <Title />
             </Toolbar>
-            <Toolbar>
+            <Toolbar sx={{
+                width: "100%",
+                overflow: "auto",
+            }}>
                 <Tools />
             </Toolbar>
-        </AppBar>
+        </AppBar >
     );
 };
 export default React.memo(Header);
@@ -100,6 +107,9 @@ const HeaderMenu: FC<{}> = () => {
         dispatch(resetItems());
         resetChangeCount();
     };
+    const handleDownloadImage = () => {
+        donwloadImage(title);
+    };
     return (
         <>
             <IconButton color="inherit" onClick={() => setOpen(true)}>
@@ -139,6 +149,20 @@ const HeaderMenu: FC<{}> = () => {
                         </ListItemIcon>
                         インポート
                     </ListItem>
+
+                    <Divider />
+
+                    <ListItem>
+                        エクスポート
+                    </ListItem>
+
+                    <ListItem button onClick={handleDownloadImage}>
+                        <ListItemIcon>
+                            <ImageIcon />
+                        </ListItemIcon>
+                        画像としてエクスポート
+                    </ListItem>
+
                 </List>
             </Drawer>
 
@@ -169,28 +193,36 @@ const Tools: FC<{}> = () => {
     const handleZoomOut = () => incZoom(-0.05);
     return (
         <Toolbar >
-            <IconButton onClick={handleSave}>
-                <Badge
-                    variant={isExistsChange ? "dot" : "standard"}
-                    color="primary"
-                >
-                    <SaveIcon color="action" />
-                </Badge>
-            </IconButton>
+            <Tooltip title="保存する">
+                <IconButton onClick={handleSave}>
+                    <Badge
+                        variant={isExistsChange ? "dot" : "standard"}
+                        color="primary"
+                    >
+                        <SaveIcon color="action" />
+                    </Badge>
+                </IconButton>
+            </Tooltip>
             <Box sx={{ flexGrow: 1 }}></Box>
-            <IconButton onClick={handleExecute}>
-                {mode === "execute" ?
-                    <EditIcon />
-                    :
-                    <PlayArrowIcon />
-                }
-            </IconButton>
-            <IconButton onClick={handleZoomIn}>
-                <ZoomIn />
-            </IconButton>
-            <IconButton onClick={handleZoomOut}>
-                <ZoomOut />
-            </IconButton>
+            <Tooltip title={mode === "execute" ? "編集する" : "実行する"}>
+                <IconButton onClick={handleExecute}>
+                    {mode === "execute" ?
+                        <EditIcon />
+                        :
+                        <PlayArrowIcon />
+                    }
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="拡大">
+                <IconButton onClick={handleZoomIn}>
+                    <ZoomIn />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="縮小">
+                <IconButton onClick={handleZoomOut}>
+                    <ZoomOut />
+                </IconButton>
+            </Tooltip>
         </Toolbar>
     );
 };

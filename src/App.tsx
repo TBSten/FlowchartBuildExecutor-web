@@ -67,21 +67,6 @@ function App() {
                     <BuildPane />
                 </Box>
 
-                {/* <Box
-                    sx={{
-                        position: "fixed",
-                        left: isSp ? 0 : 20,
-                        top: `calc(${headerHeight}px + 10px)`,
-                        maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
-                        maxHeight: isSp ? "40vh" : "80vh",
-                        overflow: "auto",
-                    }}
-                >
-                    <TitleAccordion title="GUIDES">
-                        <Guide />
-                    </TitleAccordion>
-                </Box> */}
-
                 <Box
                     sx={{
                         position: "fixed",

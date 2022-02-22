@@ -16,13 +16,12 @@ import Typography from "@mui/material/Typography";
 import Dialog from "@mui/material/Dialog";
 import Divider from "@mui/material/Divider";
 import Slider from "@mui/material/Slider";
-import { useDialog } from "src/lib/useDialog";
-import VariablePane from "./VariablePane";
 import Stack from "@mui/material/Stack";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import { TextField } from "@mui/material";
 import { mustNumber } from "src/lib/typechecker";
+import VariableDialog from "./VariableDialog";
 
 const runtimeFactories = getRuntimeFactories();
 const runtimeNames = getRuntimeKeys();
@@ -109,11 +108,7 @@ const ExeButtons: FC<{}> = () => {
     const items = useSelector(getAllItems());
     const topFlowIds = useSelector(getFlowIds());
     useSelector((state: StoreState) => state.app.runtime?.status);
-    const [
-        TraceDialog,
-        traceDialogProps,
-        { open: openTraceDialog, close: closeTraceDialog },
-    ] = useDialog();
+    const [openVariableDialog, setOpenVariableDialog] = useState(false);
 
     if (!runtime) return <div>Please select runtime</div>;
     const handleInit = () => {
@@ -132,6 +127,8 @@ const ExeButtons: FC<{}> = () => {
         runtime.stop();
         runtime.flush();
     };
+    const handleOpenVariableDialog = () => setOpenVariableDialog(true);
+    const handleCloseVariableDialog = () => setOpenVariableDialog(false);
     return (
         <>
             {/* <ExeButtonGroup>
@@ -167,15 +164,10 @@ const ExeButtons: FC<{}> = () => {
                 </Button>
             </ExeButtonGroup>
             <ExeButtonGroup>
-                <Button onClick={openTraceDialog}>変数を確認</Button>
+                <Button onClick={handleOpenVariableDialog}>変数を確認</Button>
             </ExeButtonGroup>
 
-            <TraceDialog {...traceDialogProps}>
-                <VariablePane />
-                <Stack direction="row" justifyContent="flex-end">
-                    <Button onClick={closeTraceDialog}>閉じる</Button>
-                </Stack>
-            </TraceDialog>
+            <VariableDialog open={openVariableDialog} onOpen={handleOpenVariableDialog} onClose={handleCloseVariableDialog} />
         </>
     );
 };

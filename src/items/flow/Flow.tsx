@@ -8,14 +8,14 @@ import ChildSym from "./ChildSym";
 import { StoreState } from "src/redux/store";
 import { useSelector } from "react-redux";
 
-export interface CompFlowProps {
+export interface FlowComponentProps {
     flowId: ItemId;
     round?: boolean;
     bottomArrow?: boolean;
     selectable?: boolean;
 }
 
-const CompFlow: FC<CompFlowProps> = ({
+const FlowComponent: FC<FlowComponentProps> = ({
     flowId,
     round = false,
     bottomArrow = true,
@@ -50,7 +50,7 @@ const CompFlow: FC<CompFlowProps> = ({
         </Stack>
     );
 };
-export default React.memo(CompFlow);
+export default React.memo(FlowComponent);
 
 
 

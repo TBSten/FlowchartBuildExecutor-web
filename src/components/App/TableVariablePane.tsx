@@ -8,7 +8,9 @@ import { useSelector } from "react-redux";
 import { StoreState } from "src/redux/store";
 import NoneVariable from "./NoneVariablePane";
 
-const TableVariablePane: FC<{}> = () => {
+const TableVariablePane: FC<{
+    scale: number,
+}> = () => {
     const history = useSelector(
         (state: StoreState) => state.app.runtime?.variableHistory
     );
@@ -41,9 +43,9 @@ const TableVariablePane: FC<{}> = () => {
                                 sx={{
                                     ...(variable.name === variables.changedName
                                         ? {
-                                              color: "primary.main",
-                                              fontWeight:"bold"
-                                          }
+                                            color: "primary.main",
+                                            fontWeight: "bold"
+                                        }
                                         : {}),
                                 }}
                             >
