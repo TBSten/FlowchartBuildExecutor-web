@@ -29,6 +29,7 @@ import { mustString } from "src/lib/typechecker";
 import Stack from "@mui/material/Stack";
 import { logger } from "src/lib/logger";
 import ErrorView from "../util/ErrorView";
+import { ButtonGroup } from "@mui/material";
 
 export interface EditSidebarProps { }
 
@@ -112,8 +113,6 @@ const EditSidebar: FC<EditSidebarProps> = () => {
     );
     return (
         <Box>
-            {/* <Typography color="text.secondary">編集モード</Typography> */}
-
             <Button variant="outlined" onClick={handleAddFlow}>
                 フローを追加
             </Button>
@@ -123,13 +122,16 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                     {isSym(selectItem) ? (
                         <>
                             <Typography color="text.secondary">選択中の記号</Typography>
-                            <Button variant="outlined" onClick={handleOpenDialog}>
-                                {" "}
-                                記号の種類を変更{" "}
-                            </Button>
-                            <Button variant="outlined" onClick={handleRemove}>
-                                記号を削除
-                            </Button>
+                            <ButtonGroup variant="outlined">
+                                <Button onClick={handleOpenDialog}>
+                                    {" "}
+                                    記号の種類を変更{" "}
+                                </Button>
+                                <Button onClick={handleRemove}>
+                                    記号を削除
+                                </Button>
+
+                            </ButtonGroup>
 
                             <Typography color="text.secondary">
                                 オプション

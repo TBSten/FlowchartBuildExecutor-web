@@ -38,25 +38,26 @@ const BuildPane: FC<BuildPaneProps> = () => {
                 px: "75vw",
                 py: "75vh",
             }}
-            id="fbe-build-pane"
         >
-            <Stack
-                direction="row"
-                spacing={2}
-                sx={{
-                    overflow: "visible",
-                    width: "fit-content%",
-                    height: "fit-content",
-                    transform: `scale(${zoom})`,
-                    transition: "0.3s"
-                }}
-            >
-                {flowIds.map((flowId) => {
-                    return (
-                        <FlowContainer flowId={flowId} />
-                    )
-                })}
-            </Stack>
+            <Box id="fbe-build-pane">
+                <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{
+                        overflow: "visible",
+                        width: "fit-content%",
+                        height: "fit-content",
+                        transform: `scale(${zoom})`,
+                        transition: "0.3s"
+                    }}
+                >
+                    {flowIds.map((flowId) => {
+                        return (
+                            <FlowContainer flowId={flowId} />
+                        )
+                    })}
+                </Stack>
+            </Box>
         </Box>
     );
 };

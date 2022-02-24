@@ -46,8 +46,6 @@ function App() {
 
             <Header />
 
-            {/* <Box sx={{ pt: theme=>{console.log(theme);return `${theme.mixins.toolbar.minHeight}px` ;} }}></Box> */}
-
             <Box
                 sx={{
                     width: "100%",

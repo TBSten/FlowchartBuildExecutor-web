@@ -4,7 +4,7 @@ import { loadItems } from "src/redux/items/actions";
 import { Item, ItemId } from "src/redux/items/types";
 import { loadMeta } from "src/redux/meta/actions";
 import { store } from "src/redux/store";
-import storeJs from "storejs" ;
+import storeJs from "storejs";
 
 export interface SaveFormat {
     version: string;
@@ -14,16 +14,16 @@ export interface SaveFormat {
         title: string;
     };
 }
-export function isSaveFormat(arg :any) :arg is SaveFormat {
+export function isSaveFormat(arg: any): arg is SaveFormat {
     return (
         arg &&
         typeof arg === "object" &&
         typeof arg.version === "string" &&
         arg.items instanceof Array &&
-        typeof arg.meta === "object" && 
+        typeof arg.meta === "object" &&
         arg.meta.flowIds instanceof Array &&
         typeof arg.meta.title === "string"
-    ) ;
+    );
 }
 
 export function toSaveFormat({
@@ -63,38 +63,44 @@ export function saveFormatToJson(saveFormat: SaveFormat) {
 export function storeStateToJson() {
     return saveFormatToJson(storeStateToSaveFormat());
 }
-const SAVE_KEY = "FBE_TEMP_SAVE_DATA_KEY" ;
+const SAVE_KEY = "FBE_TEMP_SAVE_DATA_KEY";
 export function saveToBrowser() {
-    const saveFormat = storeStateToJson() ;
-    storeJs(SAVE_KEY,saveFormat) ;
+    const saveFormat = storeStateToJson();
+    storeJs(SAVE_KEY, saveFormat);
 }
-export function resetBrowserSave(){
+export function resetBrowserSave() {
     storeJs.remove(SAVE_KEY)
 }
 
-export function loadSaveFormatToStoreState(saveFormat :SaveFormat){
-    logger.log("load",saveFormat)
-    store.dispatch(loadItems({
-        items : saveFormat.items ,
-    })) ;
+export function loadSaveFormatToStoreState(saveFormat: SaveFormat) {
+    logger.log("load", saveFormat)
     store.dispatch(loadMeta({
-        meta : saveFormat.meta ,
-    })) ;
+        meta: {
+            ...saveFormat.meta,
+            flowIds: [],
+        }
+    }))
+    store.dispatch(loadItems({
+        items: saveFormat.items,
+    }));
+    store.dispatch(loadMeta({
+        meta: saveFormat.meta,
+    }));
 }
 
-export function loadJson(obj :any){
-    if(isSaveFormat(obj)){
-        loadSaveFormatToStoreState(obj) ;
-    }else{
-        logger.error("invalid",obj)
-        throw new Error(`invalid argument of loadJson`) ;
+export function loadJson(obj: any) {
+    if (isSaveFormat(obj)) {
+        loadSaveFormatToStoreState(obj);
+    } else {
+        logger.error("invalid", obj)
+        throw new Error(`invalid argument of loadJson`);
     }
 }
 
 export function loadFromBrowser() {
-    const saveFormat = storeJs(SAVE_KEY) ;
-    if(saveFormat){
-        loadJson(JSON.parse(saveFormat)) ;
+    const saveFormat = storeJs(SAVE_KEY);
+    if (saveFormat) {
+        loadJson(JSON.parse(saveFormat));
     }
 }
 

@@ -103,6 +103,7 @@ const SymBase = (
                     maxWidth: "fit-content",
                     maxHeight: "fit-content",
                     position: "relative",
+                    userSelect: "none",
                 }}
                 onClick={handleSelect}
             >
