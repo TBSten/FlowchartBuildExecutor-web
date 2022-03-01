@@ -1,14 +1,14 @@
-import React, { FC, useEffect } from "react";
+import SelectAllIcon from "@mui/icons-material/SelectAll";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import SelectAllIcon from "@mui/icons-material/SelectAll";
-import CompFlow from "src/items/flow/Flow";
-import { useFlows } from "src/redux/meta/operations";
-import { useSelectItemIds, useZoom } from "src/redux/app/operations";
-import { useSp } from "src/style/media";
-import { ItemId } from "src/redux/items/types";
+import React, { FC, useEffect } from "react";
 import { useSelector } from "react-redux";
+import CompFlow from "src/items/flow/Flow";
+import { useSelectItemIds, useZoom } from "src/redux/app/operations";
 import { isSelecting } from "src/redux/app/selectors";
+import { ItemId } from "src/redux/items/types";
+import { useFlows } from "src/redux/meta/operations";
+import { useSp } from "src/style/media";
 
 export interface BuildPaneProps { }
 
@@ -53,7 +53,7 @@ const BuildPane: FC<BuildPaneProps> = () => {
                 >
                     {flowIds.map((flowId) => {
                         return (
-                            <FlowContainer flowId={flowId} />
+                            <FlowContainer key={flowId} flowId={flowId} />
                         )
                     })}
                 </Stack>

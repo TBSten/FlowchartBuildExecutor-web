@@ -1,14 +1,12 @@
-import React, { FC } from "react";
+import Edit from "@mui/icons-material/Edit";
+import PlayArrow from "@mui/icons-material/PlayArrow";
 import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import PlayArrow from "@mui/icons-material/PlayArrow";
-import Edit from "@mui/icons-material/Edit";
-import ZoomIn from "@mui/icons-material/ZoomIn";
-import ZoomOut from "@mui/icons-material/ZoomOut";
+import React, { FC } from "react";
 import { useMode, useZoom } from "src/redux/app/operations";
 
-export interface FabsProps {}
+export interface FabsProps { }
 
 const Fabs: FC<FabsProps> = () => {
     const [mode, setMode] = useMode();
@@ -19,12 +17,12 @@ const Fabs: FC<FabsProps> = () => {
     const handleToExeMode = () => {
         setMode("execute");
     };
-    const handleZoomIn = () => {
-        incZoom(+0.05);
-    };
-    const handleZoomOut = () => {
-        incZoom(-0.05);
-    };
+    // const handleZoomIn = () => {
+    //     incZoom(+0.05);
+    // };
+    // const handleZoomOut = () => {
+    //     incZoom(-0.05);
+    // };
     return (
         <>
             <SpeedDial ariaLabel="" icon={<SpeedDialIcon />} direction="down">
@@ -48,7 +46,7 @@ const Fabs: FC<FabsProps> = () => {
                     ""
                 )}
 
-                <SpeedDialAction
+                {/* <SpeedDialAction
                     icon={<ZoomIn />}
                     tooltipTitle="拡大"
                     onClick={handleZoomIn}
@@ -58,7 +56,7 @@ const Fabs: FC<FabsProps> = () => {
                     icon={<ZoomOut />}
                     tooltipTitle="縮小"
                     onClick={handleZoomOut}
-                />
+                /> */}
             </SpeedDial>
         </>
     );

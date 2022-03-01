@@ -1,102 +1,114 @@
 
 import Checkbox from "@mui/material/Checkbox";
-import Select,{SelectChangeEvent} from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { FC } from "react";
-import { isSym, Item, Option, OptionValue } from "src/redux/items/types" ;
+import { isSym, Item, Option, OptionValue } from "src/redux/items/types";
 
 
-export type UpdateOption = (value:OptionValue)=>any ;
+export type UpdateOption = (value: OptionValue) => any;
 export type OptionInputComponent = FC<{
-    option:Option,
-    updateOption:UpdateOption,
-}> ;
-export interface OptionInput{
-    component:OptionInputComponent,
-} ;
+    option: Option,
+    updateOption: UpdateOption,
+}>;
+export interface OptionInput {
+    component: OptionInputComponent,
+};
 
 
 
-const TextOptionInput :OptionInputComponent = ({option,updateOption})=>{
-    const handleChange:React.ChangeEventHandler<HTMLInputElement> = (e)=>{
+const TextOptionInput: OptionInputComponent = ({ option, updateOption }) => {
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         updateOption(e.target.value);
-    } ;
+    };
     return (
         <div>
-            <TextField value={option.value} onChange={handleChange}/>
+            <TextField value={option.value} onChange={handleChange} />
         </div>
-    ) ;
-} ;
+    );
+};
 
-const CheckOptionInput :OptionInputComponent = ({option,updateOption})=>{
-    const handleChange :React.ChangeEventHandler<HTMLInputElement> = (e)=>{
+const CheckOptionInput: OptionInputComponent = ({ option, updateOption }) => {
+    const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         updateOption(e.target.checked);
         console.log(e.target.checked);
-    } ;
-    console.log("checkbox option input",option)
-    if(typeof option.value !== "boolean"){ return <># ERROR</> }
+    };
+    console.log("checkbox option input", option)
+    if (typeof option.value !== "boolean") { return <># ERROR</> }
     return (
         <div>
-            <Checkbox 
-                value={option.value} 
+            <Checkbox
+                value={option.value}
                 checked={option.value}
                 onChange={handleChange}
             />
         </div>
-    ) ;
-} ;
+    );
+};
 
-const SelectOptionInput :OptionInputComponent = ({option,updateOption})=>{
-    const value = option.value ;
-    const args = option.inputArgs ;
-    const handleChange = (e:SelectChangeEvent)=>{
+const SelectOptionInput: OptionInputComponent = ({ option, updateOption }) => {
+    const value = option.value;
+    const args = option.inputArgs;
+    const handleChange = (e: SelectChangeEvent) => {
         updateOption(e.target.value);
-    } ;
-    if(!(args instanceof Array && typeof value === "string") )return <># ERROR </>
+    };
+    if (!(args instanceof Array && typeof value === "string")) return <># ERROR </>
     return (
         <div>
             <Select value={value} onChange={handleChange}>
-                {args.map(arg=>typeof arg === "string" ? (
+                {args.map(arg => typeof arg === "string" ? (
                     <MenuItem key={arg} value={arg}>
                         {arg}
                     </MenuItem>
-                ):"ERROR!")}
+                ) : "ERROR!")}
             </Select>
             {/* select from {args.map(arg=><li key={arg.toString()}>{arg}</li>)} */}
         </div>
-    ) ;
-} ;
+    );
+};
 
-export const optionInputs:{
-    [key:string]:OptionInput
+export const optionInputs: {
+    [key: string]: OptionInput
 } = {
-    "text":{
-        component:TextOptionInput,
+    // 実装済み
+    "text": {
+        component: TextOptionInput,
     },
-    "multiText":{
-        component:TextOptionInput,
+    "checkbox": {
+        component: CheckOptionInput,
     },
-    "checkbox":{
-        component:CheckOptionInput,
-    },
-    "select":{
-        component:SelectOptionInput,
-    },
-    "multiSelect":{
-        component:TextOptionInput,
+    "select": {
+        component: SelectOptionInput,
     },
 
-} ;
+    // 未実装
+    "multiText": {
+        component: TextOptionInput,
+    },
+    "multiSelect": {
+        component: TextOptionInput,
+    },
+    "variable": {
+        component: TextOptionInput,
+    },
+    "formula": {
+        component: TextOptionInput,
+    },
+    "conditionFormula": {
+        component: TextOptionInput,
+    },
+
+};
 
 
 // export function useOptionInputs(option:Option){
 // }
 
-export function getOption(item :Item,name :string){
-    if(isSym(item)){
-        const option = item.options.find(o=>o.name === name) ;
-        if(option) return option ;
+export function getOption(item: Item, name: string) {
+    if (isSym(item)) {
+        const option = item.options.find(o => o.name === name);
+        if (option) return option;
     }
-    return null ;
+    return null;
 }

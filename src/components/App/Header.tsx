@@ -1,42 +1,50 @@
-import React, { FC, useState } from "react";
-import { useDispatch } from "react-redux";
-import { resetItems } from "src/redux/items/actions";
-import { resetMeta } from "src/redux/meta/actions";
-
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useTitle } from "src/redux/meta/operations";
-import InputBase from "@mui/material/InputBase";
-import Drawer from "@mui/material/Drawer";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
-import {
-    loadJson,
-    storeStateToJson,
-    saveToBrowser,
-    resetBrowserSave,
-} from "src/format";
-import { downloadTextFile, getFileText } from "src/lib/file";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import SaveIcon from "@mui/icons-material/Save";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import EditIcon from "@mui/icons-material/Edit";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
+import HomeIcon from "@mui/icons-material/Home";
+import ImageIcon from "@mui/icons-material/Image";
+import MenuIcon from "@mui/icons-material/Menu";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import SaveIcon from "@mui/icons-material/Save";
 import ZoomIn from "@mui/icons-material/ZoomIn";
 import ZoomOut from "@mui/icons-material/ZoomOut";
-import ImageIcon from "@mui/icons-material/Image";
-import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
-import { useChange, useMode, useZoom } from "src/redux/app/operations";
+import { Grow, MenuItem, Stack } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import React, { FC, useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+    loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
+} from "src/format";
+import { FBE_DOC_URL } from "src/lib/constants";
+import { EnableTarget, enableTargets, fbeToProgram } from "src/lib/fbeToProgram";
+import { downloadTextFile, getFileText } from "src/lib/file";
 import { donwloadImage } from "src/lib/image";
+import { useChange, useMode, useZoom } from "src/redux/app/operations";
+import { resetItems } from "src/redux/items/actions";
+import { resetMeta } from "src/redux/meta/actions";
+import { useTitle } from "src/redux/meta/operations";
+import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
+import ProgramConvertView from "./ProgramConvertView";
+import UtilDialog, { useUtilDialog, UtilDialogProps } from "./UtilDialog";
+
 // import { StoreState } from "src/redux/store";
 
 export interface HeaderProps { }
@@ -84,6 +92,13 @@ const HeaderMenu: FC<{}> = () => {
     );
     const dispatch = useDispatch();
     const { resetChangeCount } = useChange();
+    const [
+        ,
+        selectTargetDialogProps, {
+            open: openTargetSelectDialog,
+        }] = useUtilDialog({});
+    const [target, setTarget] = useState<(EnableTarget)>("javascript");
+
     const handleSave = () => {
         setOpen(false);
         saveToBrowser();
@@ -117,11 +132,13 @@ const HeaderMenu: FC<{}> = () => {
             </IconButton>
 
             <Drawer open={open} onClose={() => setOpen(false)}>
-                <Typography variant="h4" sx={{ px: 1, py: 2 }}>
-                    Flowchart <br />
-                    Build <br />
-                    Executor
-                </Typography>
+                <Grow in={open} timeout={1300}>
+                    <Typography variant="h4" sx={{ px: 1, py: 2 }}>
+                        Flowchart <br />
+                        Build <br />
+                        Executor
+                    </Typography>
+                </Grow>
                 <List>
                     <ListItem button onClick={confirm}>
                         <ListItemIcon>
@@ -163,10 +180,36 @@ const HeaderMenu: FC<{}> = () => {
                         画像としてエクスポート
                     </ListItem>
 
+                    <ListItem button onClick={openTargetSelectDialog}>
+                        <ListItemIcon>
+                            <ImageIcon />
+                        </ListItemIcon>
+                        プログラムに変換
+                    </ListItem>
+
+                    <Divider />
+
+                    <ListItem>
+                        ドキュメント
+                    </ListItem>
+
+                    <ListItem button component="a" href={FBE_DOC_URL} target="_blank">
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        ホームページへ
+                    </ListItem>
+
                 </List>
             </Drawer>
 
             <ConfirmDialog {...dialogProps} onOk={handleNew} />
+
+            <SelectTarget
+                selectTargetDialogProps={selectTargetDialogProps}
+                target={target}
+                onChangeTarget={target => setTarget(target)}
+            />
         </>
     );
 };
@@ -226,3 +269,62 @@ const Tools: FC<{}> = () => {
         </Toolbar>
     );
 };
+
+interface SelectTargetProps {
+    selectTargetDialogProps: UtilDialogProps,
+    target: EnableTarget,
+    onChangeTarget: (target: EnableTarget) => any,
+}
+const SelectTarget: FC<SelectTargetProps> = ({
+    selectTargetDialogProps,
+    target,
+    onChangeTarget,
+}) => {
+    const [program, setProgram] = useState<null | string>(null);
+    const handleFBEToProgram = async () => {
+        try {
+            const start = new Date();
+            const program = await fbeToProgram(target);
+            const end = new Date();
+            console.log(program);
+            console.log("took", end.valueOf() - start.valueOf());
+            setProgram(program);
+        } catch (e) {
+            console.error(e);
+            alert("エラーが発生しました");
+        }
+    };
+    const handleChangeTarget = (e: SelectChangeEvent) => {
+        onChangeTarget(e.target.value as EnableTarget)
+        setProgram(null)
+    }
+    return (
+        <UtilDialog {...selectTargetDialogProps}>
+            <DialogTitle>
+                フローチャートをプログラムに変換する
+            </DialogTitle>
+            <DialogContent>
+                プログラミング言語：
+                <Select value={target} onChange={handleChangeTarget}>
+                    {enableTargets.map(target => (
+                        <MenuItem key={target} value={target}>{target}</MenuItem>
+                    ))}
+                </Select>
+                <Stack sx={{ py: 2 }} spacing={1}>
+                    <Button variant={program === null ? "contained" : "text"} onClick={handleFBEToProgram}>
+                        {program === null ? "" : "もう一度"}
+                        変換する
+                    </Button>
+                    {typeof program === "string" ?
+                        <ProgramConvertView target={target}>{program}</ProgramConvertView>
+                        : ""}
+                </Stack>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={selectTargetDialogProps.onClose}>キャンセル</Button>
+            </DialogActions>
+        </UtilDialog>
+    )
+};
+
+

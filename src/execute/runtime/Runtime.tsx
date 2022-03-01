@@ -1,19 +1,19 @@
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
 import { ReactNode } from "react";
+import { evalFormula, Variable, VariableValue } from "src/execute/eval";
 // import _ from "lodash" ;
 import executes from "src/items/execute";
+import { getOption } from "src/items/option";
+import { logger } from "src/lib/logger";
 import { notImplement } from "src/lib/notImplement";
+import { sleep } from "src/lib/sleep";
 import { setRuntime } from "src/redux/app/actions";
 import { isFlow, isSym, Item, ItemId } from "src/redux/items/types";
 import { store } from "src/redux/store";
 import { RuntimeTab } from "./types";
-import { logger } from "src/lib/logger";
-import { Variable, VariableValue, evalFormula } from "src/execute/eval";
 
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import { sleep } from "src/lib/sleep";
-import { getOption } from "src/items/option";
 
 
 type VariableHistoryLine = (Variable[] & { changedName: string });
@@ -314,6 +314,7 @@ export class Runtime {
     }
     _handleEnd() {
         this.onEnd();
+        this.showMsgBox("実行終了しました");
     }
     _handleExecute() {
         this.onExecute();

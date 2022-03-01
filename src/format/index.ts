@@ -6,6 +6,7 @@ import { loadMeta } from "src/redux/meta/actions";
 import { store } from "src/redux/store";
 import storeJs from "storejs";
 
+
 export interface SaveFormat {
     version: string;
     items: Item[];
