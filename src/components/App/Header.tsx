@@ -10,7 +10,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SaveIcon from "@mui/icons-material/Save";
 import ZoomIn from "@mui/icons-material/ZoomIn";
 import ZoomOut from "@mui/icons-material/ZoomOut";
-import { Alert, Grow, MenuItem, Stack } from "@mui/material";
+import { Alert, CircularProgress, Grow, MenuItem, Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -282,11 +282,17 @@ const Tools: FC<{}> = () => {
                     <ZoomOut />
                 </IconButton>
             </Tooltip>
-            <Tooltip title="選択中のアイテムを削除">
-                <IconButton onClick={handleRemoveSelectItem}>
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>
+
+            {mode === "edit" ?
+                <>
+                    <Tooltip title="選択中のアイテムを削除">
+                        <IconButton onClick={handleRemoveSelectItem}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </> :
+                <></>
+            }
         </Toolbar>
     );
 };
@@ -358,16 +364,24 @@ const SelectTarget: FC<SelectTargetProps> = ({
                     ))}
                 </Select>
                 <Stack sx={{ py: 2 }} spacing={1}>
-                    {fetchState !== "before" ?
-                        <Alert severity={
-                            fetchState === "fetching" ? "info" :
+                    {fetchState === "before" ?
+                        "" :
+                        fetchState === "fetching" ?
+                            <Box py={1} sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
+                                <CircularProgress />
+                            </Box>
+                            :
+                            <Alert severity={
                                 fetchState === "success" ? "success" :
                                     fetchState === "error" ? "error" : undefined
-                        } sx={{
-                            transition: "1s"
-                        }}>
-                            {fetchState === "fetching" ? "変換中です" :
-                                fetchState === "success" ? "変換に成功しました" :
+                            } sx={{
+                                transition: "1s"
+                            }}>
+                                {fetchState === "success" ? "変換に成功しました" :
                                     fetchState === "error" ? <>
                                         <Box>
                                             エラーが発生しました
@@ -377,10 +391,8 @@ const SelectTarget: FC<SelectTargetProps> = ({
                                         </Box>
                                     </> :
                                         ""
-                            }
-                        </Alert>
-                        :
-                        ""
+                                }
+                            </Alert>
                     }
                     <Button
                         variant={program === null ? "contained" : "text"}
