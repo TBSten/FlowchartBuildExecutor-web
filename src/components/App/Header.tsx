@@ -9,7 +9,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SaveIcon from "@mui/icons-material/Save";
 import ZoomIn from "@mui/icons-material/ZoomIn";
 import ZoomOut from "@mui/icons-material/ZoomOut";
-import { Grow, MenuItem, Stack } from "@mui/material";
+import { Alert, Grow, MenuItem, Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -28,7 +28,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import React, { FC, useState } from "react";
+import React, { ChangeEventHandler, FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
     loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
@@ -75,10 +75,15 @@ export default React.memo(Header);
 
 const Title: FC<HeaderProps> = () => {
     const [title, setTitle] = useTitle();
+    const { notifyChange } = useChange();
+    const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+        setTitle(e.target.value)
+        notifyChange();
+    };
     return (
         <InputBase
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleChange}
             sx={{ color: "inherit", flexGrow: 1 }}
         />
     );
@@ -280,18 +285,36 @@ const SelectTarget: FC<SelectTargetProps> = ({
     target,
     onChangeTarget,
 }) => {
+    const { isExistsChange } = useChange();
     const [program, setProgram] = useState<null | string>(null);
+    const [fetchState, setFetchState] = useState<"before" | "fetching" | "success" | "error">("before");
+    useEffect(() => {
+        setProgram(null)
+        setFetchState("before")
+    }, [isExistsChange])
+    useEffect(() => {
+        setProgram(null)
+        setFetchState("before")
+    }, [target])
+
     const handleFBEToProgram = async () => {
         try {
             const start = new Date();
-            const program = await fbeToProgram(target);
+            setFetchState("fetching")
+            // const program = await fbeToProgram(target);
+            const [program] = await Promise.all([
+                fbeToProgram(target),
+                new Promise<void>((resolve) => setTimeout(resolve, 750))
+            ]);
             const end = new Date();
             console.log(program);
             console.log("took", end.valueOf() - start.valueOf());
             setProgram(program);
+            setFetchState("success")
         } catch (e) {
             console.error(e);
             alert("エラーが発生しました");
+            setFetchState("error")
         }
     };
     const handleChangeTarget = (e: SelectChangeEvent) => {
@@ -311,7 +334,28 @@ const SelectTarget: FC<SelectTargetProps> = ({
                     ))}
                 </Select>
                 <Stack sx={{ py: 2 }} spacing={1}>
-                    <Button variant={program === null ? "contained" : "text"} onClick={handleFBEToProgram}>
+                    {fetchState !== "before" ?
+                        <Alert severity={
+                            fetchState === "fetching" ? "info" :
+                                fetchState === "success" ? "success" :
+                                    fetchState === "error" ? "error" : undefined
+                        } sx={{
+                            transition: "1s"
+                        }}>
+                            {fetchState === "fetching" ? "変換中です" :
+                                fetchState === "success" ? "変換に成功しました" :
+                                    fetchState === "error" ? "エラーが発生しました" :
+                                        ""
+                            }
+                        </Alert>
+                        :
+                        ""
+                    }
+                    <Button
+                        variant={program === null ? "contained" : "text"}
+                        onClick={handleFBEToProgram}
+                        disabled={fetchState === "fetching"}
+                    >
                         {program === null ? "" : "もう一度"}
                         変換する
                     </Button>

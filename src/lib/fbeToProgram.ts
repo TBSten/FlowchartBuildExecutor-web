@@ -5,6 +5,7 @@ import { notImplementError } from "./notImplement";
 
 export const enableTargets = [
     "javascript",
+    "python",
 ] as const;
 export type EnableTarget = typeof enableTargets[number];
 export function fbeToProgram(target: typeof enableTargets[number]) {
