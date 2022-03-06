@@ -1,5 +1,6 @@
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import HomeIcon from "@mui/icons-material/Home";
@@ -34,13 +35,14 @@ import {
     loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
 } from "src/format";
 import { FBE_DOC_URL } from "src/lib/constants";
-import { EnableTarget, enableTargets, fbeToProgram } from "src/lib/fbeToProgram";
+import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
 import { donwloadImage } from "src/lib/image";
-import { useChange, useMode, useZoom } from "src/redux/app/operations";
+import { useChange, useMode, useSelectItemIds, useZoom } from "src/redux/app/operations";
 import { resetItems } from "src/redux/items/actions";
+import { useItemOperations } from "src/redux/items/operations";
 import { resetMeta } from "src/redux/meta/actions";
-import { useTitle } from "src/redux/meta/operations";
+import { useFlows, useTitle } from "src/redux/meta/operations";
 import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
 import ProgramConvertView from "./ProgramConvertView";
 import UtilDialog, { useUtilDialog, UtilDialogProps } from "./UtilDialog";
@@ -224,6 +226,9 @@ const Tools: FC<{}> = () => {
     const [mode, setMode] = useMode();
     // const runtime = useSelector((state:StoreState)=>state.app.runtime);
     const [, , incZoom] = useZoom();
+    const [selectItemIds] = useSelectItemIds();
+    const [, { removeFlow }] = useFlows();
+    const { removeItem } = useItemOperations();
     const handleSave = () => {
         saveToBrowser();
         resetChangeCount();
@@ -239,6 +244,12 @@ const Tools: FC<{}> = () => {
     };
     const handleZoomIn = () => incZoom(+0.05);
     const handleZoomOut = () => incZoom(-0.05);
+    const handleRemoveSelectItem = () => {
+        selectItemIds.forEach(id => {
+            removeFlow(id);
+            removeItem(id);
+        });
+    };
     return (
         <Toolbar >
             <Tooltip title="保存する">
@@ -271,6 +282,11 @@ const Tools: FC<{}> = () => {
                     <ZoomOut />
                 </IconButton>
             </Tooltip>
+            <Tooltip title="選択中のアイテムを削除">
+                <IconButton onClick={handleRemoveSelectItem}>
+                    <DeleteIcon />
+                </IconButton>
+            </Tooltip>
         </Toolbar>
     );
 };
@@ -287,6 +303,7 @@ const SelectTarget: FC<SelectTargetProps> = ({
 }) => {
     const { isExistsChange } = useChange();
     const [program, setProgram] = useState<null | string>(null);
+    const [errMsg, setErrMsg] = useState<null | string>(null);
     const [fetchState, setFetchState] = useState<"before" | "fetching" | "success" | "error">("before");
     useEffect(() => {
         setProgram(null)
@@ -296,6 +313,7 @@ const SelectTarget: FC<SelectTargetProps> = ({
         setProgram(null)
         setFetchState("before")
     }, [target])
+    const fbeToProgram = useFbeToProgram();
 
     const handleFBEToProgram = async () => {
         try {
@@ -313,8 +331,14 @@ const SelectTarget: FC<SelectTargetProps> = ({
             setFetchState("success")
         } catch (e) {
             console.error(e);
-            alert("エラーが発生しました");
+            // alert("エラーが発生しました");
             setFetchState("error")
+            const error = e as any;
+            setErrMsg(
+                error?.details ??
+                error?.error ??
+                "不明なエラー"
+            );
         }
     };
     const handleChangeTarget = (e: SelectChangeEvent) => {
@@ -344,7 +368,14 @@ const SelectTarget: FC<SelectTargetProps> = ({
                         }}>
                             {fetchState === "fetching" ? "変換中です" :
                                 fetchState === "success" ? "変換に成功しました" :
-                                    fetchState === "error" ? "エラーが発生しました" :
+                                    fetchState === "error" ? <>
+                                        <Box>
+                                            エラーが発生しました
+                                        </Box>
+                                        <Box sx={{ fontSize: "0.7em" }}>
+                                            詳細:{errMsg}
+                                        </Box>
+                                    </> :
                                         ""
                             }
                         </Alert>

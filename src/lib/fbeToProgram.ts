@@ -20,7 +20,9 @@ export function fbeToProgram(target: typeof enableTargets[number]) {
                 target,
                 fbe: saveFormat,
             }),
-        }).then(r => r.json()).then(json => json?.result).catch(e => { throw Error("invalid fetch result") })
+        }).then(r => r.json()).then(json => {
+            return json?.result;
+        }).catch(e => { throw Error("invalid fetch result") })
             .catch(e => {
                 console.error(e);
                 reject(e);
@@ -29,4 +31,30 @@ export function fbeToProgram(target: typeof enableTargets[number]) {
         resolve(result)
     })
 }
-
+export function useFbeToProgram() {
+    const fbeToProgram = (target: typeof enableTargets[number]) => {
+        return new Promise<string>(async (resolve, reject) => {
+            const saveFormat = storeStateToSaveFormat();
+            const result = await fetch(FBE_TO_PROGRAM_URL, {
+                method: "POST",
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                }),
+                body: JSON.stringify({
+                    target,
+                    fbe: saveFormat,
+                }),
+            }).then(r => r.json()).then(json => {
+                if (json?.error) throw json
+                return json?.result;
+            }).catch(e => { throw e })
+                .catch(e => {
+                    console.error(e);
+                    reject(e);
+                });
+            if (typeof result !== "string") reject(notImplementError(`invalid result ${result}`));
+            resolve(result)
+        })
+    };
+    return fbeToProgram;
+}

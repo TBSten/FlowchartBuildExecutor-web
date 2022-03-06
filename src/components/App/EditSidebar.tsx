@@ -1,41 +1,41 @@
-import React, { ChangeEvent, ChangeEventHandler, FC, useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+import { ButtonGroup } from "@mui/material";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import EditIcon from "@mui/icons-material/Edit";
-
-import { useSelector } from "react-redux";
-import { makeItemId } from "src/items/util";
-import { useFlow, useItem, useItemOperations } from "src/redux/items/operations";
-import { StoreState } from "src/redux/store";
-import { useFlows } from "src/redux/meta/operations";
-import { flowCreatorWithChildren } from "src/items/flow/creator";
-import { useChange, useSelectItemIds } from "src/redux/app/operations";
-import { ItemId, Option, isSym, isFlow, Flow, Sym } from "src/redux/items/types";
-import { optionInputs, UpdateOption } from "src/items/option";
-import { terminalStartSymCreator } from "src/items/terminalStart/creator";
-import { terminalEndSymCreator } from "src/items/terminalEnd/creator";
-import { addableItemTypes, isSymType, SymType, symTypes } from "src/items/symTypes";
-import { getItem } from "src/redux/items/selectors";
-import { mustString } from "src/lib/typechecker";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import React, { FC, useState } from "react";
+import { useSelector } from "react-redux";
+import { flowCreatorWithChildren } from "src/items/flow/creator";
+import { optionInputs, UpdateOption } from "src/items/option";
+import { addableItemTypes, isSymType, SymType, symTypes } from "src/items/symTypes";
+import { terminalEndSymCreator } from "src/items/terminalEnd/creator";
+import { terminalStartSymCreator } from "src/items/terminalStart/creator";
+import { makeItemId } from "src/items/util";
 import { logger } from "src/lib/logger";
+import { mustString } from "src/lib/typechecker";
+import { useChange, useSelectItemIds } from "src/redux/app/operations";
+import { useItem, useItemOperations } from "src/redux/items/operations";
+import { getItem } from "src/redux/items/selectors";
+import { Flow, isFlow, isSym, ItemId, Option } from "src/redux/items/types";
+import { useFlows } from "src/redux/meta/operations";
+import { StoreState } from "src/redux/store";
 import ErrorView from "../util/ErrorView";
-import { ButtonGroup } from "@mui/material";
+
 
 export interface EditSidebarProps { }
 
 const EditSidebar: FC<EditSidebarProps> = () => {
     const { setItem, removeItem } = useItemOperations();
-    const [, { addFlow }] = useFlows();
+    const [flows, { addFlow }] = useFlows();
     const { notifyChange } = useChange();
 
     const handleAddFlow = () => {
@@ -45,6 +45,10 @@ const EditSidebar: FC<EditSidebarProps> = () => {
         const childSym1 = terminalStartSymCreator(childSymId1, flowId);
         const childSymId2 = makeItemId();
         const childSym2 = terminalEndSymCreator(childSymId2, flowId);
+
+        if (flows.length > 0) {
+            childSym1.options[0].value = `処理${flows.length}`;
+        }
 
         const flow = flowCreatorWithChildren(
             flowId,
