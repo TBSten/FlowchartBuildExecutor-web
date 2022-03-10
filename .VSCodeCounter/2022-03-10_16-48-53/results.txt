@@ -1,0 +1,175 @@
+Date : 2022-03-10 16:48:53
+Directory : /Users/tsubasa/Desktop/dev/fbe/fbe-core/web
+Total : 115 files,  32446 codes, 392 comments, 727 blanks, all 33565 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          3 |     27,372 |          0 |          3 |     27,375 |
+| TypeScript React   |         50 |      3,173 |         86 |        383 |      3,642 |
+| TypeScript         |         57 |      1,748 |        283 |        311 |      2,342 |
+| Log                |          1 |         99 |          0 |         24 |        123 |
+| JSON with Comments |          1 |         24 |          0 |          0 |         24 |
+| HTML               |          1 |         20 |         23 |          1 |         44 |
+| CSS                |          1 |          6 |          0 |          2 |          8 |
+| Markdown           |          1 |          4 |          0 |          3 |          7 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |        115 |     32,446 |        392 |        727 |     33,565 |
+| public                                                                                   |          2 |         87 |         23 |          2 |        112 |
+| src                                                                                      |        108 |      4,927 |        369 |        696 |      5,992 |
+| src/components                                                                           |         22 |      1,714 |         44 |        178 |      1,936 |
+| src/components/App                                                                       |         16 |      1,547 |         28 |        151 |      1,726 |
+| src/components/util                                                                      |          6 |        167 |         16 |         27 |        210 |
+| src/execute                                                                              |          7 |        388 |        224 |         59 |        671 |
+| src/execute/runtime                                                                      |          5 |        334 |         22 |         49 |        405 |
+| src/format                                                                               |          1 |         98 |          0 |         10 |        108 |
+| src/items                                                                                |         46 |      1,698 |         63 |        243 |      2,004 |
+| src/items/base                                                                           |          3 |        233 |          0 |         19 |        252 |
+| src/items/calc                                                                           |          3 |         58 |          1 |         11 |         70 |
+| src/items/flow                                                                           |          5 |        200 |         15 |         26 |        241 |
+| src/items/for                                                                            |          3 |        161 |         28 |         18 |        207 |
+| src/items/if                                                                             |          3 |        209 |          3 |         20 |        232 |
+| src/items/input                                                                          |          3 |         53 |          0 |         14 |         67 |
+| src/items/output                                                                         |          3 |         47 |          0 |         15 |         62 |
+| src/items/prepare                                                                        |          3 |         91 |          0 |         15 |        106 |
+| src/items/process                                                                        |          3 |         53 |          0 |         14 |         67 |
+| src/items/switch                                                                         |          3 |         82 |          0 |         13 |         95 |
+| src/items/terminalEnd                                                                    |          3 |         23 |          1 |         11 |         35 |
+| src/items/terminalStart                                                                  |          3 |         36 |          2 |         10 |         48 |
+| src/items/while                                                                          |          3 |        155 |          1 |         11 |        167 |
+| src/lib                                                                                  |          9 |        259 |         12 |         42 |        313 |
+| src/redux                                                                                |         17 |        605 |         13 |        133 |        751 |
+| src/redux/app                                                                            |          5 |        261 |          8 |         61 |        330 |
+| src/redux/items                                                                          |          5 |        220 |          5 |         38 |        263 |
+| src/redux/meta                                                                           |          5 |         90 |          0 |         18 |        108 |
+| src/redux/root                                                                           |          1 |         14 |          0 |          7 |         21 |
+| src/style                                                                                |          4 |         49 |         11 |         15 |         75 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                 | language           | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/README.md                                    | Markdown           |          4 |          0 |          3 |          7 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/package-lock.json                            | JSON               |     27,243 |          0 |          1 |     27,244 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/package.json                                 | JSON               |         62 |          0 |          1 |         63 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/public/index.html                            | HTML               |         20 |         23 |          1 |         44 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/public/manifest.json                         | JSON               |         67 |          0 |          1 |         68 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/App.tsx                                  | TypeScript React   |         96 |          2 |         13 |        111 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/BuildPane.tsx             | TypeScript React   |         77 |          0 |          8 |         85 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/ConfirmOnUnload.tsx       | TypeScript React   |         20 |          0 |          4 |         24 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/EditSidebar.tsx           | TypeScript React   |        333 |          2 |         23 |        358 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/ExecuteSidebar.tsx        | TypeScript React   |        240 |          3 |         20 |        263 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/Fabs.tsx                  | TypeScript React   |         46 |         15 |          5 |         66 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/Guide.tsx                 | TypeScript React   |         21 |          0 |          6 |         27 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/Header.tsx                | TypeScript React   |        386 |          6 |         26 |        418 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/KeyboardHotkeys.tsx       | TypeScript React   |         21 |          0 |          9 |         30 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/MemoryVariablePane.tsx    | TypeScript React   |        103 |          0 |          7 |        110 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/NoneVariablePane.tsx      | TypeScript React   |          8 |          0 |          3 |         11 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/ProgramConvertView.tsx    | TypeScript React   |         55 |          0 |          5 |         60 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/SideBar.tsx               | TypeScript React   |         19 |          0 |          6 |         25 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/TableVariablePane.tsx     | TypeScript React   |         64 |          2 |          3 |         69 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/UtilDialog.tsx            | TypeScript React   |         37 |          0 |          6 |         43 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/VariableDialog.tsx        | TypeScript React   |         79 |          0 |         16 |         95 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/VariablePane.tsx          | TypeScript React   |         38 |          0 |          4 |         42 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/AppDialog.tsx            | TypeScript React   |         45 |          5 |          5 |         55 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/ConfirmDialog.tsx        | TypeScript React   |         62 |         11 |          5 |         78 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/ErrorView.tsx            | TypeScript React   |         15 |          0 |          6 |         21 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/OnlyEditMode.tsx         | TypeScript React   |         10 |          0 |          4 |         14 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/OnlyExeMode.tsx          | TypeScript React   |         10 |          0 |          4 |         14 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/TitleAccordion.tsx       | TypeScript React   |         25 |          0 |          3 |         28 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/eval.ts                          | TypeScript         |         53 |        202 |          9 |        264 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/runtime/MsgRuntime.tsx           | TypeScript React   |         10 |          0 |          4 |         14 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/runtime/Runtime.tsx              | TypeScript React   |        296 |         19 |         29 |        344 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/runtime/TestRuntime.tsx          | TypeScript React   |          4 |          0 |          4 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/runtime/index.tsx                | TypeScript React   |         19 |          3 |          9 |         31 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/runtime/types.tsx                | TypeScript React   |          5 |          0 |          3 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/variables.ts                     | TypeScript         |          1 |          0 |          1 |          2 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/format/index.ts                          | TypeScript         |         98 |          0 |         10 |        108 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/index.tsx                                | TypeScript React   |         20 |          0 |          3 |         23 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/base/SymBase.tsx                   | TypeScript React   |        192 |          0 |         12 |        204 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/base/itemBaseCreator.ts            | TypeScript         |         11 |          0 |          2 |         13 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/base/optionCreator.ts              | TypeScript         |         30 |          0 |          5 |         35 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/calc/CalcSym.tsx                   | TypeScript React   |         22 |          0 |          5 |         27 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/calc/creator.ts                    | TypeScript         |         10 |          0 |          2 |         12 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/calc/execute.ts                    | TypeScript         |         26 |          1 |          4 |         31 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/execute.ts                         | TypeScript         |         14 |          8 |          7 |         29 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/flow/Arrow.tsx                     | TypeScript React   |         88 |         13 |          7 |        108 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/flow/ChildSym.tsx                  | TypeScript React   |         26 |          0 |          3 |         29 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/flow/Flow.tsx                      | TypeScript React   |         47 |          0 |         10 |         57 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/flow/creator.ts                    | TypeScript         |         18 |          0 |          3 |         21 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/flow/execute.ts                    | TypeScript         |         21 |          2 |          3 |         26 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/for/ForSym.tsx                     | TypeScript React   |         66 |          0 |          7 |         73 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/for/creator.ts                     | TypeScript         |         22 |          0 |          2 |         24 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/for/execute.ts                     | TypeScript         |         73 |         28 |          9 |        110 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/if/IfSym.tsx                       | TypeScript React   |        151 |          0 |          9 |        160 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/if/creator.ts                      | TypeScript         |         23 |          0 |          7 |         30 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/if/execute.ts                      | TypeScript         |         35 |          3 |          4 |         42 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/input/InputSym.tsx                 | TypeScript React   |         20 |          0 |          6 |         26 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/input/creator.ts                   | TypeScript         |         10 |          0 |          3 |         13 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/input/execute.ts                   | TypeScript         |         23 |          0 |          5 |         28 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/option.tsx                         | TypeScript React   |         96 |          4 |         15 |        115 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/output/OutputSym.tsx               | TypeScript React   |         20 |          0 |          6 |         26 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/output/creator.ts                  | TypeScript         |          9 |          0 |          3 |         12 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/output/execute.ts                  | TypeScript         |         18 |          0 |          6 |         24 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/prepare/PrepareSym.tsx             | TypeScript React   |         31 |          0 |          5 |         36 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/prepare/creator.ts                 | TypeScript         |         13 |          0 |          3 |         16 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/prepare/execute.ts                 | TypeScript         |         47 |          0 |          7 |         54 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/process/ProcessSym.tsx             | TypeScript React   |         22 |          0 |          5 |         27 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/process/creator.ts                 | TypeScript         |          9 |          0 |          3 |         12 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/process/execute.ts                 | TypeScript         |         22 |          0 |          6 |         28 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/switch/SwitchSym.tsx               | TypeScript React   |         15 |          0 |          6 |         21 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/switch/creator.ts                  | TypeScript         |         28 |          0 |          3 |         31 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/switch/execute.ts                  | TypeScript         |         39 |          0 |          4 |         43 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/symTypes.ts                        | TypeScript         |        123 |          0 |          9 |        132 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalEnd/TerminalEndSym.tsx     | TypeScript React   |          8 |          0 |          6 |         14 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalEnd/creator.ts             | TypeScript         |         10 |          0 |          3 |         13 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalEnd/execute.ts             | TypeScript         |          5 |          1 |          2 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalStart/TerminalStartSym.tsx | TypeScript React   |         22 |          1 |          5 |         28 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalStart/creator.ts           | TypeScript         |          9 |          0 |          3 |         12 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalStart/execute.ts           | TypeScript         |          5 |          1 |          2 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/types.ts                           | TypeScript         |         17 |          0 |          5 |         22 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/util.tsx                           | TypeScript React   |         47 |          0 |         10 |         57 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/while/WhileSym.tsx                 | TypeScript React   |         86 |          0 |          6 |         92 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/while/creator.ts                   | TypeScript         |         20 |          0 |          2 |         22 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/while/execute.ts                   | TypeScript         |         49 |          1 |          3 |         53 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/constants.tsx                        | TypeScript React   |          4 |          0 |          4 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/fbeToProgram.ts                      | TypeScript         |         58 |          0 |          3 |         61 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/file.ts                              | TypeScript         |         34 |          0 |          3 |         37 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/image.tsx                            | TypeScript React   |         17 |          0 |          9 |         26 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/logger.ts                            | TypeScript         |         62 |         12 |          9 |         83 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/notImplement.tsx                     | TypeScript React   |          6 |          0 |          2 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/sleep.ts                             | TypeScript         |          7 |          0 |          3 |         10 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/typechecker.ts                       | TypeScript         |         48 |          0 |          7 |         55 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/useDialog.tsx                        | TypeScript React   |         23 |          0 |          2 |         25 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/app/actions.ts                     | TypeScript         |         23 |          0 |         10 |         33 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/app/operations.ts                  | TypeScript         |         94 |          0 |         11 |        105 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/app/reducers.ts                    | TypeScript         |        115 |          8 |         25 |        148 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/app/selectors.ts                   | TypeScript         |         22 |          0 |         11 |         33 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/app/types.ts                       | TypeScript         |          7 |          0 |          4 |         11 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/actions.ts                   | TypeScript         |         23 |          0 |          4 |         27 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/operations.ts                | TypeScript         |         71 |          0 |         14 |         85 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/reducers.ts                  | TypeScript         |         65 |          4 |          4 |         73 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/selectors.ts                 | TypeScript         |         18 |          0 |          7 |         25 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/types.ts                     | TypeScript         |         43 |          1 |          9 |         53 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/meta/actions.ts                    | TypeScript         |          9 |          0 |          5 |         14 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/meta/operations.ts                 | TypeScript         |         32 |          0 |          3 |         35 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/meta/reducers.ts                   | TypeScript         |         37 |          0 |          4 |         41 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/meta/selectors.ts                  | TypeScript         |          7 |          0 |          4 |         11 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/meta/types.ts                      | TypeScript         |          5 |          0 |          2 |          7 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/root/reducer.ts                    | TypeScript         |         14 |          0 |          7 |         21 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/store.ts                           | TypeScript         |         20 |          0 |          9 |         29 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/style/global.css                         | CSS                |          6 |          0 |          2 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/style/media.ts                           | TypeScript         |         18 |          8 |          7 |         33 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/style/useHeaderHeight.ts                 | TypeScript         |         17 |          3 |          3 |         23 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/style/util.ts                            | TypeScript         |          8 |          0 |          3 |         11 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/test.log                                     | Log                |         99 |          0 |         24 |        123 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/tsconfig.json                                | JSON with Comments |         24 |          0 |          0 |         24 |
+| Total                                                                                    |                    |     32,446 |        392 |        727 |     33,565 |
++------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
