@@ -205,59 +205,61 @@
 //     return value;
 // }
 
-import simpleEval from "simple-eval";
-import { isBoolean, isBooleanArray, isBooleanArray2D, isNumberArray, isNumberArray2D, isStringArray, isStringArray2D } from "src/lib/typechecker";
+// import simpleEval from "simple-eval";
+// import { isBoolean, isBooleanArray, isBooleanArray2D, isNumberArray, isNumberArray2D, isStringArray, isStringArray2D } from "src/lib/typechecker";
 
-export type VariableValue =
-    | string
-    | number
-    | boolean
-    | string[]
-    | number[]
-    | boolean[]
-    | string[][]
-    | number[][]
-    | boolean[][];
-export interface Variable {
-    name: string;
-    value: VariableValue;
-}
-export function isVariableValue(arg: any): arg is VariableValue {
-    return (
-        typeof arg === "string" ||
-        typeof arg === "number" ||
-        typeof arg === "boolean" ||
-        isNumberArray(arg) ||
-        isStringArray(arg) ||
-        isBooleanArray(arg) ||
-        isNumberArray2D(arg) ||
-        isStringArray2D(arg) ||
-        isBooleanArray2D(arg)
-    );
-}
-export function variableValueToDispValue(value: VariableValue) {
-    return String(value);
-}
+// export type VariableValue =
+//     | string
+//     | number
+//     | boolean
+//     | string[]
+//     | number[]
+//     | boolean[]
+//     | string[][]
+//     | number[][]
+//     | boolean[][];
+// export interface Variable {
+//     name: string;
+//     value: VariableValue;
+// }
+// export function isVariableValue(arg: any): arg is VariableValue {
+//     return (
+//         typeof arg === "string" ||
+//         typeof arg === "number" ||
+//         typeof arg === "boolean" ||
+//         isNumberArray(arg) ||
+//         isStringArray(arg) ||
+//         isBooleanArray(arg) ||
+//         isNumberArray2D(arg) ||
+//         isStringArray2D(arg) ||
+//         isBooleanArray2D(arg)
+//     );
+// }
+// export function variableValueToDispValue(value: VariableValue) {
+//     return String(value);
+// }
 
-export function evalFormula(
-    exp: string,
-    variables: Variable[],
-    funcs: { [k: string]: Function } = {}
-) {
-    const vars = variables.reduce(
-        (ans, v) => {
-            ans[v.name] = v.value;
-            return ans;
-        },
-        {} as {
-            [k: string]: VariableValue;
-        }
-    );
-    const ctx = {
-        ...vars,
-        ...funcs,
-    };
-    console.log(ctx);
+// export function evalFormula(
+//     exp: string,
+//     variables: Variable[],
+//     funcs: { [k: string]: Function } = {}
+// ) {
+//     const vars = variables.reduce(
+//         (ans, v) => {
+//             ans[v.name] = v.value;
+//             return ans;
+//         },
+//         {} as {
+//             [k: string]: VariableValue;
+//         }
+//     );
+//     const ctx = {
+//         ...vars,
+//         ...funcs,
+//     };
+//     console.log(ctx);
 
-    return simpleEval(exp, ctx);
-}
+//     return simpleEval(exp, ctx);
+// }
+
+
