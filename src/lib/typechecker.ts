@@ -17,13 +17,13 @@ export function isStringArray(arg: any): arg is string[] {
 export function isBooleanArray(arg: any): arg is boolean[] {
     return Array.isArray(arg) && isBoolean(arg[0]);
 }
-export function isNumberArray2D(arg: any): arg is number[] {
+export function isNumberArray2D(arg: any): arg is number[][] {
     return Array.isArray(arg) && Array.isArray(arg[0]) && isNumber(arg[0][0]);
 }
-export function isStringArray2D(arg: any): arg is string[] {
+export function isStringArray2D(arg: any): arg is string[][] {
     return Array.isArray(arg) && Array.isArray(arg[0]) && isString(arg[0][0]);
 }
-export function isBooleanArray2D(arg: any): arg is boolean[] {
+export function isBooleanArray2D(arg: any): arg is boolean[][] {
     return Array.isArray(arg) && Array.isArray(arg[0]) && isBoolean(arg[0][0]);
 }
 

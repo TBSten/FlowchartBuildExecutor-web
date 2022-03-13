@@ -1,10 +1,13 @@
 import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TableCell from "@mui/material/TableCell";
-import TableBody from "@mui/material/TableBody";
 import { FC } from "react";
 import { useSelector } from "react-redux";
+import { VariableValue } from "src/execute/eval";
+import { notImplementError } from "src/lib/notImplement";
+import { isBoolean, isBooleanArray, isBooleanArray2D, isNumber, isNumberArray, isNumberArray2D, isString, isStringArray, isStringArray2D } from "src/lib/typechecker";
 import { StoreState } from "src/redux/store";
 import NoneVariable from "./NoneVariablePane";
 
@@ -49,7 +52,7 @@ const TableVariablePane: FC<{
                                         : {}),
                                 }}
                             >
-                                {variable.value}
+                                {valueToString(variable.value)}
                             </TableCell>
                         ))}
                         {Array(headers.length - variables.length)
@@ -66,3 +69,16 @@ const TableVariablePane: FC<{
 };
 
 export default TableVariablePane;
+
+function valueToString(value: VariableValue): string {
+    if (isString(value) || isNumber(value) || isBoolean(value)) {
+        return ` ${value.toString()} `
+    } else if (isStringArray2D(value) || isNumberArray2D(value) || isBooleanArray2D(value)) {
+        const lines = value.map(v => ` [${v.map(v => valueToString(v)).join(",")}] `)
+        return `2次元配列[${lines.join("\n")}]`;
+    } else if (isStringArray(value) || isNumberArray(value) || isBooleanArray(value)) {
+        return `配列[${value.map(v => valueToString(v)).join(",")}]`;
+    }
+    throw notImplementError(`unknown value type / value:${value} value's type:${typeof value}`);
+}
+

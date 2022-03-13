@@ -1,6 +1,7 @@
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
+import produce from "immer";
 import { ReactNode } from "react";
 import { evalFormula, Variable, VariableValue } from "src/execute/eval";
 // import _ from "lodash" ;
@@ -73,6 +74,7 @@ export class Runtime {
         };
 
         this.closeDialog.bind(this);
+        this.getViewComponent.bind(this);
 
     }
 
@@ -263,32 +265,25 @@ export class Runtime {
     }
     setVariable(name: string, value: VariableValue) {
         console.log("setVariable", name, "to", value);
+        //通常の変数
         const v = this.getVariable(name);
-        if (v) {
-            //更新
-            this.variables = this.variables.map((variable) => {
-                return variable.name === name
-                    ? {
-                        ...variable,
-                        value,
-                    }
-                    : variable;
-            });
-        } else {
-            //新規
-            const v: Variable = {
+        this.variables = produce(this.variables, draft => {
+            let idx = draft.findIndex(v => v.name === name)
+            if (idx < 0) idx = draft.length;
+            draft[idx] = {
                 name,
                 value,
             };
-            this.variables = [...this.variables, v];
-        }
-        const newHistoryLine = Object.assign(this.variables, {
-            changedName: name,
-        })
-        this.variableHistory = [
-            ...this.variableHistory,
-            newHistoryLine,
-        ];
+        });
+        this.variableHistory = produce(this.variableHistory, draft => {
+            const newHistory = Object.assign(
+                Object.create(this.variables),
+                { changedName: name }
+            );
+            draft.push(newHistory)
+            console.log(draft)
+        });
+        console.log(this.variableHistory)
     }
     setTempData(key: string, value: unknown) {
         this.tempData[key] = value;
@@ -308,6 +303,9 @@ export class Runtime {
         return flowId;
     }
 
+    getViewComponent: React.FC<{}> = () => {
+        return <></>;
+    }
 
     _handleStart() {
         this.onStart();

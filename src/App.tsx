@@ -1,18 +1,18 @@
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
-
+// import Guide from "./components/App/Guide";
+import { useEffect, useRef } from "react";
+import { loadFromBrowser } from "src/format";
 import BuildPane from "./components/App/BuildPane";
-import Sidebar from "./components/App/SideBar";
-import Header from "./components/App/Header";
-import TitleAccordion from "./components/util/TitleAccordion";
-import { useSp } from "./style/media";
+import ConfirmOnUnload from "./components/App/ConfirmOnUnload";
 // import { useTheme } from "@mui/material/styles";
 import Fabs from "./components/App/Fabs";
-// import Guide from "./components/App/Guide";
-import { useRef, useEffect } from "react";
-import { loadFromBrowser } from "src/format";
-import ConfirmOnUnload from "./components/App/ConfirmOnUnload";
+import Header from "./components/App/Header";
 import KeyboardHotkeys from "./components/App/KeyboardHotkeys";
+import Sidebar from "./components/App/SideBar";
+import TitleAccordion from "./components/util/TitleAccordion";
+import { useSp } from "./style/media";
+
 
 const useAppStyles = makeStyles({
     root: {
@@ -79,8 +79,9 @@ function App() {
                     sx={{
                         position: "fixed",
                         right: isSp ? 0 : 20,
-                        bottom: isSp ? 0 : 20,
+                        bottom: isSp ? 0 : 10,
                         maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
+                        minWidth: isSp ? "100%" : null,
                         maxHeight: isSp ? "40vh" : "80vh",
                         overflow: "auto",
                     }}

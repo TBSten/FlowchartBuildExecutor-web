@@ -1,26 +1,24 @@
-import Box from "@mui/material/Box";
-import MenuItem from "@mui/material/MenuItem";
-import { ChangeEventHandler, FC, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { StoreState } from "src/redux/store";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { setRuntime } from "src/redux/app/actions";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Button from "@mui/material/Button";
-import { getAllItems } from "src/redux/items/selectors";
-import { getFlowIds } from "src/redux/meta/selectors";
-import { useSp } from "src/style/media";
-import { getRuntime, getRuntimeKeys, getRuntimeFactories } from "src/execute/runtime";
-import Chip from "@mui/material/Chip";
-import Typography from "@mui/material/Typography";
-import Dialog from "@mui/material/Dialog";
-import Divider from "@mui/material/Divider";
-import Slider from "@mui/material/Slider";
-import Stack from "@mui/material/Stack";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
-import { TextField } from "@mui/material";
-import { mustNumber } from "src/lib/typechecker";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Chip from "@mui/material/Chip";
+import Dialog from "@mui/material/Dialog";
+import Divider from "@mui/material/Divider";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Slider from "@mui/material/Slider";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { FC, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getRuntime, getRuntimeFactories, getRuntimeKeys } from "src/execute/runtime";
+import { setRuntime } from "src/redux/app/actions";
+import { getAllItems } from "src/redux/items/selectors";
+import { getFlowIds } from "src/redux/meta/selectors";
+import { StoreState } from "src/redux/store";
+import { useSp } from "src/style/media";
 import VariableDialog from "./VariableDialog";
 
 const runtimeFactories = getRuntimeFactories();
@@ -38,6 +36,7 @@ const ExecuteSidebar: FC<ExecuteSidebarProps> = () => {
         (state: StoreState) => state.app.runtime?.dialog.content
     );
     const runtime = useSelector((state: StoreState) => state.app.runtime);
+    const RuntimeContent = runtime?.getViewComponent;
     return (
         <Box>
             <SelectRuntime />
@@ -50,7 +49,12 @@ const ExecuteSidebar: FC<ExecuteSidebarProps> = () => {
 
             <Divider />
 
-            <DelayChange />
+            {RuntimeContent ?
+                <RuntimeContent />
+                : ""
+            }
+
+            {/* <DelayChange /> */}
 
             <Dialog
                 open={Boolean(dialogOpen)}
@@ -230,33 +234,33 @@ const SpeedChange: FC<{}> = () => {
         </Box>
     );
 };
-const DelayChange: FC<{}> = () => {
-    const runtime = useSelector((state: StoreState) => state.app.runtime);
-    useSelector((state: StoreState) => state.app.runtime?.delay)
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        let time = parseInt(e.target.value);
-        if (!runtime) return;
-        if (!time) time = 0;
-        runtime.delay = mustNumber(time);
-        runtime.flush();
-    };
-    console.log(runtime?.delay)
-    return (
-        <Box sx={{ px: 2, py: 1 }}>
-            <Typography>
-                すべて実行をクリックしてから
-            </Typography>
-            <Box sx={{ verticalAlign: "middle" }}>
-                <TextField
-                    type="number"
-                    value={runtime?.delay}
-                    onChange={handleChange}
-                    sx={{ width: "5em" }}
-                />
-                秒後に実行し始める
-            </Box>
-        </Box>
-    )
-};
+// const DelayChange: FC<{}> = () => {
+//     const runtime = useSelector((state: StoreState) => state.app.runtime);
+//     useSelector((state: StoreState) => state.app.runtime?.delay)
+//     const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+//         let time = parseInt(e.target.value);
+//         if (!runtime) return;
+//         if (!time) time = 0;
+//         runtime.delay = mustNumber(time);
+//         runtime.flush();
+//     };
+//     console.log(runtime?.delay)
+//     return (
+//         <Box sx={{ px: 2, py: 1 }}>
+//             <Typography>
+//                 すべて実行をクリックしてから
+//             </Typography>
+//             <Box sx={{ verticalAlign: "middle" }}>
+//                 <TextField
+//                     type="number"
+//                     value={runtime?.delay}
+//                     onChange={handleChange}
+//                     sx={{ width: "5em" }}
+//                 />
+//                 秒後に実行し始める
+//             </Box>
+//         </Box>
+//     )
+// };
 
 
