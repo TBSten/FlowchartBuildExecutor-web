@@ -4,18 +4,17 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { FC } from "react";
-import { useSelector } from "react-redux";
 import { VariableValue } from "src/execute/eval";
 import { notImplementError } from "src/lib/notImplement";
 import { isBoolean, isBooleanArray, isBooleanArray2D, isNumber, isNumberArray, isNumberArray2D, isString, isStringArray, isStringArray2D } from "src/lib/typechecker";
-import { StoreState } from "src/redux/store";
+import { useAppSelector } from "src/redux/root/operations";
 import NoneVariable from "./NoneVariablePane";
 
 const TableVariablePane: FC<{
     scale: number,
 }> = () => {
-    const history = useSelector(
-        (state: StoreState) => state.app.runtime?.variableHistory
+    const history = useAppSelector(
+        state => state.app.runtime?.variableHistory
     );
     if (!history) return <>ERROR !</>;
     if (history.length <= 0) return <NoneVariable />;

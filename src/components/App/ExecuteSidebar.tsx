@@ -10,18 +10,21 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Slider from "@mui/material/Slider";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import { FC, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getRuntime, getRuntimeFactories, getRuntimeKeys } from "src/execute/runtime";
+import { useDispatch } from "react-redux";
+import { getRuntime, getRuntimeKeys } from "src/execute/runtime";
+import { getRuntimeNameFromBrowser, saveRuntimeNameToBrowser } from "src/format";
+import { logger } from "src/lib/logger";
 import { setRuntime } from "src/redux/app/actions";
+import { useRuntime } from "src/redux/app/operations";
 import { getAllItems } from "src/redux/items/selectors";
 import { getFlowIds } from "src/redux/meta/selectors";
-import { StoreState } from "src/redux/store";
+import { useAppSelector } from "src/redux/root/operations";
 import { useSp } from "src/style/media";
+import SidebarContent from "./SidebarContent";
 import VariableDialog from "./VariableDialog";
 
-const runtimeFactories = getRuntimeFactories();
+// const runtimeFactories = getRuntimeFactories();
 const runtimeNames = getRuntimeKeys();
 
 
@@ -29,13 +32,13 @@ export interface ExecuteSidebarProps { }
 
 const ExecuteSidebar: FC<ExecuteSidebarProps> = () => {
 
-    const dialogOpen = useSelector(
-        (state: StoreState) => state.app.runtime?.dialog.open
+    const dialogOpen = useAppSelector(
+        state => state.app.runtime?.dialog.open
     );
-    const dialogContent = useSelector(
-        (state: StoreState) => state.app.runtime?.dialog.content
+    const dialogContent = useAppSelector(
+        state => state.app.runtime?.dialog.content
     );
-    const runtime = useSelector((state: StoreState) => state.app.runtime);
+    const runtime = useAppSelector(state => state.app.runtime);
     const RuntimeContent = runtime?.getViewComponent;
     return (
         <Box>
@@ -69,8 +72,8 @@ export default ExecuteSidebar;
 
 const SelectRuntime: FC<{}> = () => {
     const dispatch = useDispatch();
-    const items = useSelector(getAllItems());
-    const flowIds = useSelector(getFlowIds());
+    const items = useAppSelector(getAllItems());
+    const flowIds = useAppSelector(getFlowIds());
     const [selectedName, setSelectedName] = useState(runtimeNames[0]);
     const handleChangeRuntime = (e: SelectChangeEvent) => {
         const name = e.target.value;
@@ -79,20 +82,27 @@ const SelectRuntime: FC<{}> = () => {
         runtime.initialize(items, flowIds);
         dispatch(setRuntime({ runtime }));
         setSelectedName(name);
+        saveRuntimeNameToBrowser(name);
     };
     useEffect(() => {
-        const runtime = getRuntime();
-        runtime.initialize(items, flowIds);
-        dispatch(setRuntime({ runtime }));
+        const name = getRuntimeNameFromBrowser();
+        if (name) setSelectedName(name);
+    }, [])
+    useEffect(() => {
+        const runtime = getRuntime(selectedName);
+        if (runtime) {
+            runtime.initialize(items, flowIds);
+            dispatch(setRuntime({ runtime }));
+        } else {
+            logger.error(`unknown runtime name : ${selectedName}`)
+        }
         return () => {
-            dispatch(setRuntime({ runtime: null }));
-        };
-    }, [items, flowIds, dispatch]);
+            runtime?.stop();
+            dispatch(setRuntime({ runtime: null }))
+        }
+    }, [selectedName, items, flowIds])
     return (
-        <Box>
-            <Typography>
-                実行タイプ
-            </Typography>
+        <SidebarContent title="実行タイプ">
             <Select
                 value={selectedName}
                 onChange={handleChangeRuntime}
@@ -103,67 +113,65 @@ const SelectRuntime: FC<{}> = () => {
                     </MenuItem>
                 ))}
             </Select>
-        </Box>
+        </SidebarContent>
     );
 };
 
 const ExeButtons: FC<{}> = () => {
-    const runtime = useSelector((state: StoreState) => state.app.runtime);
-    const items = useSelector(getAllItems());
-    const topFlowIds = useSelector(getFlowIds());
-    useSelector((state: StoreState) => state.app.runtime?.status);
+    // const runtime = useAppSelector(state => state.app.runtime);
+    // const items = useAppSelector(getAllItems());
+    // const topFlowIds = useAppSelector(getFlowIds());
+    const {
+        runtime,
+        initialize,
+        executeNext,
+        executeAll,
+        canExecuteAll,
+        stop,
+        canStop,
+    } = useRuntime();
+    useAppSelector(state => state.app.runtime?.status);
     const [openVariableDialog, setOpenVariableDialog] = useState(false);
 
     if (!runtime) return <div>Please select runtime</div>;
-    const handleInit = () => {
-        runtime.initialize(items, topFlowIds);
-        runtime.flush();
-    };
-    const handleExe = () => {
-        runtime.executeNext();
-        runtime.flush();
-    };
-    const handleExeAll = () => {
-        runtime.executeAll();
-        runtime.flush();
-    };
-    const handleStop = () => {
-        runtime.stop();
-        runtime.flush();
-    };
     const handleOpenVariableDialog = () => setOpenVariableDialog(true);
     const handleCloseVariableDialog = () => setOpenVariableDialog(false);
     return (
         <>
-            {/* <ExeButtonGroup>
-                <Button variant={"contained"} onClick={handleInit}>
-                    初期化
-                </Button>
-            </ExeButtonGroup> */}
             <ExeButtonGroup>
                 <Button
                     variant={"contained"}
-                    onClick={handleExe}
+                    onClick={executeNext}
                     disabled={runtime.isFinished()}
                     startIcon={<PlayArrowIcon />}
+                    sx={{ minWidth: "max-content" }}
                 >
                     実行
                 </Button>
                 <Button
-                    onClick={handleExeAll}
-                    disabled={runtime.status !== "BEFORE_START"}
+                    onClick={executeAll}
+                    disabled={!canExecuteAll}
                     startIcon={<PlayArrowIcon />}
+                    variant="outlined"
+                    sx={{ minWidth: "max-content" }}
                 >
                     すべて実行
                 </Button>
                 <Button
                     disabled={runtime.isFinished()}
-                    onClick={handleStop}
+                    onClick={stop}
                     startIcon={<StopIcon />}
+                    variant="outlined"
+                    sx={{ minWidth: "max-content" }}
                 >
                     中止
                 </Button>
-                <Button disabled={!runtime.isFinished()} onClick={handleInit}>
+                <Button
+                    disabled={!runtime.isFinished()}
+                    onClick={initialize}
+                    variant="outlined"
+                    sx={{ minWidth: "max-content" }}
+                >
                     はじめから
                 </Button>
             </ExeButtonGroup>
@@ -179,14 +187,28 @@ const ExeButtons: FC<{}> = () => {
 const ExeButtonGroup: FC<{}> = ({ children }) => {
     const isSp = useSp();
     return (
-        <Box>
-            <ButtonGroup
-                orientation={isSp ? "vertical" : "horizontal"}
-                sx={{ py: 1 }}
-            >
-                {children}
-            </ButtonGroup>
-        </Box>
+        <SidebarContent>
+            {isSp ?
+                <Box
+                    sx={{
+                        display: "grid",
+                        gap: "10px",
+                        gridTemplateRows: "auto",
+                        gridAutoFlow: "column",
+                    }}
+                    p={1}
+                >
+                    {children}
+                </Box>
+                :
+                <ButtonGroup
+                    orientation="horizontal"
+                    sx={{ py: 1 }}
+                >
+                    {children}
+                </ButtonGroup>
+            }
+        </SidebarContent>
     );
 };
 
@@ -201,8 +223,9 @@ const marks = [
     },
 ];
 const SpeedChange: FC<{}> = () => {
-    useSelector((state: StoreState) => state.app.runtime?.speed);
-    const runtime = useSelector((state: StoreState) => state.app.runtime);
+    useAppSelector(state => state.app.runtime?.speed);
+    const runtime = useAppSelector(state => state.app.runtime);
+    const isSp = useSp();
     const handleChange = (event: unknown, value: number | number[]) => {
         if (runtime) {
             runtime.speed = value as number;
@@ -211,56 +234,25 @@ const SpeedChange: FC<{}> = () => {
     };
     if (!runtime) return <>{""}</>;
     return (
-        <Box sx={{ px: 2, py: 1 }}>
-            <Typography>
-                実行速度
-            </Typography>
-            <Box>
+        <SidebarContent title="実行速度">
+            <Box px={isSp ? 3 : 1.25}>
                 <Slider
                     value={runtime.speed}
                     min={0}
-                    step={0.125}
+                    step={1 / 4}
                     max={10}
                     marks={marks}
                     onChange={handleChange}
                 />
             </Box>
             <Stack direction="row" spacing={1} p={1} sx={{ width: "100%", overflow: "auto" }}>
-                <Chip label="とても速い" onClick={() => handleChange(null, 9)} />
-                <Chip label="速い" onClick={() => handleChange(null, 7)} />
-                <Chip label="遅い" onClick={() => handleChange(null, 3)} />
-                <Chip label="とても遅い" onClick={() => handleChange(null, 0)} />
+                <Chip label="とても速い" onClick={() => handleChange(null, 9.5)} />
+                <Chip label="速い" onClick={() => handleChange(null, 7.5)} />
+                <Chip label="普通" onClick={() => handleChange(null, 6.0)} />
+                <Chip label="ゆっくり" onClick={() => handleChange(null, 3.0)} />
+                <Chip label="とてもゆっくり" onClick={() => handleChange(null, 0)} />
             </Stack>
-        </Box>
+        </SidebarContent>
     );
 };
-// const DelayChange: FC<{}> = () => {
-//     const runtime = useSelector((state: StoreState) => state.app.runtime);
-//     useSelector((state: StoreState) => state.app.runtime?.delay)
-//     const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-//         let time = parseInt(e.target.value);
-//         if (!runtime) return;
-//         if (!time) time = 0;
-//         runtime.delay = mustNumber(time);
-//         runtime.flush();
-//     };
-//     console.log(runtime?.delay)
-//     return (
-//         <Box sx={{ px: 2, py: 1 }}>
-//             <Typography>
-//                 すべて実行をクリックしてから
-//             </Typography>
-//             <Box sx={{ verticalAlign: "middle" }}>
-//                 <TextField
-//                     type="number"
-//                     value={runtime?.delay}
-//                     onChange={handleChange}
-//                     sx={{ width: "5em" }}
-//                 />
-//                 秒後に実行し始める
-//             </Box>
-//         </Box>
-//     )
-// };
-
 

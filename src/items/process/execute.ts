@@ -13,13 +13,26 @@ export const processExecute: ItemExecute = async ({
     logger.log(flowName)
     if (!isString(flowName)) throw notImplementError();
     const flowId = runtime.getProcessFlowId(flowName);
-    logger.log(flowId);
-    if (!flowId) throw notImplementError();
-    runtime.executingItemIds = [
-        flowId,
-        ...runtime.executingItemIds,
-    ];
-    return;
+    logger.log("processExecute.flowId", flowId);
+    if (!flowId) {
+        // throw notImplementError();
+        // ビルドイン関数を実行
+        let result = runtime.dangerousEval(flowName);
+        if (result instanceof Function) {
+            result = result();
+        }
+        if (result instanceof Promise) {
+            result = await result;
+        }
+        console.log("build in process", result);
+    } else {
+        //flowIdを実行
+        runtime.executingItemIds = [
+            flowId,
+            ...runtime.executingItemIds,
+        ];
+        return;
+    }
 };
 
 

@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
     getMode,
     getSelectItemIds,
@@ -19,10 +19,12 @@ import {
 } from "./actions";
 import { ItemId } from "../items/types";
 import { useCallback } from "react";
-import { StoreState } from "../store";
+import { getAllItems } from "../items/selectors";
+import { getFlowIds } from "../meta/selectors";
+import { useAppSelector } from "src/redux/root/operations";
 
 export function useMode() {
-    const mode = useSelector(getMode());
+    const mode = useAppSelector(getMode());
     const dispatch = useDispatch();
     const set = (mode: Mode) => {
         dispatch(setMode({ mode }));
@@ -31,7 +33,7 @@ export function useMode() {
 }
 
 export function useSelectItemIds() {
-    const selectItemIds = useSelector(getSelectItemIds());
+    const selectItemIds = useAppSelector(getSelectItemIds());
     const dispatch = useDispatch();
     const add = (...itemIds: ItemId[]) => {
         dispatch(selectItemMulti({ itemIds: itemIds }));
@@ -53,7 +55,7 @@ export function useSelectItemIds() {
 }
 
 export function useSelectMode() {
-    const mode = useSelector((state: StoreState) => state.app.selectMode);
+    const mode = useAppSelector(state => state.app.selectMode);
     const dispatch = useDispatch();
     const set = (mode: "single" | "multi") => {
         dispatch(setSelectMode({ selectMode: mode }));
@@ -65,7 +67,7 @@ export function useSelectMode() {
 }
 
 export function useZoom() {
-    const zoom = useSelector(getZoom());
+    const zoom = useAppSelector(getZoom());
     const dispatch = useDispatch();
     const set = useCallback(
         (zoom: number) => {
@@ -83,7 +85,7 @@ export function useZoom() {
 }
 
 export function useChange() {
-    const isExistsChange = useSelector(isExistsChangeSelector());
+    const isExistsChange = useAppSelector(isExistsChangeSelector());
     const dispatch = useDispatch();
     const notifyChange = () => {
         dispatch(notifyChangeAction());
@@ -99,6 +101,53 @@ export function useChange() {
 }
 
 
-
-
+export function useRuntime() {
+    const runtime = useAppSelector(state => state.app.runtime);
+    const items = useAppSelector(getAllItems());
+    const topFlowIds = useAppSelector(getFlowIds());
+    useAppSelector(state => state.app.runtime?.status);
+    const executeUtilities = useExecute();
+    const initialize = useCallback(() => {
+        if (!runtime) return;
+        runtime.initialize(items, topFlowIds);
+        runtime.flush();
+    }, [runtime, items, topFlowIds,]);
+    return {
+        runtime,
+        initialize,
+        ...executeUtilities,
+    } as const;
+}
+export function useExecute() {
+    const runtime = useAppSelector((state) => state.app.runtime);
+    const status = useAppSelector(state => state.app.runtime?.status)
+    const isFinished = useAppSelector(state => (state.app.runtime?.isFinished()))
+    useAppSelector(state => state.app.runtime?.status)
+    const executeNext = useCallback(() => {
+        if (!runtime) return;
+        runtime.executeNext();
+        runtime.flush();
+    }, [runtime]);
+    const executeAll = useCallback(() => {
+        if (!runtime) return;
+        runtime.executeAll();
+        runtime.flush();
+    }, [runtime]);
+    const stop = useCallback(() => {
+        if (!runtime) return;
+        runtime.stop();
+        runtime.flush();
+    }, [runtime]);
+    const canExecuteAll = status === "BEFORE_START";
+    const canStop = !isFinished;
+    const canExecuteNext = !isFinished;
+    return {
+        executeNext,
+        canExecuteNext,
+        executeAll,
+        stop,
+        canExecuteAll,
+        canStop,
+    } as const;
+}
 

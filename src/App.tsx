@@ -5,8 +5,6 @@ import { useEffect, useRef } from "react";
 import { loadFromBrowser } from "src/format";
 import BuildPane from "./components/App/BuildPane";
 import ConfirmOnUnload from "./components/App/ConfirmOnUnload";
-// import { useTheme } from "@mui/material/styles";
-import Fabs from "./components/App/Fabs";
 import Header from "./components/App/Header";
 import KeyboardHotkeys from "./components/App/KeyboardHotkeys";
 import Sidebar from "./components/App/SideBar";
@@ -24,19 +22,11 @@ const useAppStyles = makeStyles({
     },
 });
 
+
 function App() {
     const appClasses = useAppStyles();
     const isSp = useSp();
-    const ref = useRef<HTMLElement>(null);
-    useEffect(() => {
-        const wid = window.innerWidth;
-        const hei = window.innerHeight;
-        if (ref.current) {
-            ref.current.scrollLeft = wid * 0.6;
-            ref.current.scrollTop = hei * 0.6;
-            console.log(ref.current.scrollLeft, ref.current.scrollTop);
-        }
-    }, []);
+    const ref = useScrollPos();
     useEffect(() => {
         loadFromBrowser();
     }, []);
@@ -65,7 +55,7 @@ function App() {
                     <BuildPane />
                 </Box>
 
-                <Box
+                {/* <Box
                     sx={{
                         position: "fixed",
                         right: isSp ? 16 : 20,
@@ -73,7 +63,7 @@ function App() {
                     }}
                 >
                     <Fabs />
-                </Box>
+                </Box> */}
 
                 <Box
                     sx={{
@@ -82,7 +72,7 @@ function App() {
                         bottom: isSp ? 0 : 10,
                         maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
                         minWidth: isSp ? "100%" : null,
-                        maxHeight: isSp ? "40vh" : "80vh",
+                        maxHeight: isSp ? "35vh" : "calc(100vh - 10px - 132px )",
                         overflow: "auto",
                     }}
                 >
@@ -90,6 +80,7 @@ function App() {
                         sx={{
                             overflow: isSp ? "auto" : "visible",
                             p: isSp ? 0 : 0.25,
+                            maxHeight: "100%"
                         }}
                     >
                         <TitleAccordion title="サイドバー" defaultExpanded>
@@ -108,4 +99,18 @@ function App() {
 
 export default App;
 
+
+function useScrollPos() {
+    const ref = useRef<HTMLElement>(null);
+    useEffect(() => {
+        const wid = window.innerWidth;
+        const hei = window.innerHeight;
+        //初期スクロール位置の初期化
+        if (ref.current) {
+            ref.current.scrollLeft = wid * 0.6;
+            ref.current.scrollTop = hei * 0.6;
+        }
+    }, []);
+    return ref;
+}
 

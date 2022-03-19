@@ -1,3 +1,4 @@
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,6 +9,8 @@ import ImageIcon from "@mui/icons-material/Image";
 import MenuIcon from "@mui/icons-material/Menu";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SaveIcon from "@mui/icons-material/Save";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
+import StopIcon from "@mui/icons-material/Stop";
 import ZoomIn from "@mui/icons-material/ZoomIn";
 import ZoomOut from "@mui/icons-material/ZoomOut";
 import { Alert, CircularProgress, Grow, MenuItem, Stack } from "@mui/material";
@@ -34,16 +37,18 @@ import { useDispatch } from "react-redux";
 import {
     loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
 } from "src/format";
-import { FBE_DOC_URL } from "src/lib/constants";
+import { FBE_DOC_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
 import { donwloadImage } from "src/lib/image";
-import { useChange, useMode, useSelectItemIds, useZoom } from "src/redux/app/operations";
+import { useChange, useExecute, useMode, useSelectItemIds, useZoom } from "src/redux/app/operations";
 import { resetItems } from "src/redux/items/actions";
 import { useItemOperations } from "src/redux/items/operations";
 import { resetMeta } from "src/redux/meta/actions";
 import { useFlows, useTitle } from "src/redux/meta/operations";
 import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
+import OnlyEditMode from "../util/OnlyEditMode";
+import OnlyExeMode from "../util/OnlyExeMode";
 import ProgramConvertView from "./ProgramConvertView";
 import UtilDialog, { useUtilDialog, UtilDialogProps } from "./UtilDialog";
 
@@ -147,6 +152,11 @@ const HeaderMenu: FC<{}> = () => {
                     </Typography>
                 </Grow>
                 <List>
+                    <ListItem sx={{ textAlign: "right" }}>
+                        <Box sx={{ width: "100%" }}>
+                            バージョン : {VERSION}
+                        </Box>
+                    </ListItem>
                     <ListItem button onClick={confirm}>
                         <ListItemIcon>
                             <FiberNewIcon />
@@ -189,7 +199,7 @@ const HeaderMenu: FC<{}> = () => {
 
                     <ListItem button onClick={openTargetSelectDialog}>
                         <ListItemIcon>
-                            <ImageIcon />
+                            <ChangeCircleIcon />
                         </ListItemIcon>
                         プログラムに変換
                     </ListItem>
@@ -197,7 +207,7 @@ const HeaderMenu: FC<{}> = () => {
                     <Divider />
 
                     <ListItem>
-                        ドキュメント
+                        ヘルプ・ドキュメント
                     </ListItem>
 
                     <ListItem button component="a" href={FBE_DOC_URL} target="_blank">
@@ -205,6 +215,20 @@ const HeaderMenu: FC<{}> = () => {
                             <HomeIcon />
                         </ListItemIcon>
                         ホームページへ
+                    </ListItem>
+
+                    <ListItem button component="a" href={FBE_DOC_URL + "/docs"} target="_blank">
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        詳細ドキュメント
+                    </ListItem>
+
+                    <ListItem button component="a" href={FBE_DOC_URL + "/credit"} target="_blank">
+                        <ListItemIcon>
+                            <HomeIcon />
+                        </ListItemIcon>
+                        クレジット
                     </ListItem>
 
                 </List>
@@ -224,16 +248,24 @@ const HeaderMenu: FC<{}> = () => {
 const Tools: FC<{}> = () => {
     const { resetChangeCount, isExistsChange } = useChange();
     const [mode, setMode] = useMode();
-    // const runtime = useSelector((state:StoreState)=>state.app.runtime);
+    // const runtime = useAppSelector((state:StoreState)=>state.app.runtime);
     const [, , incZoom] = useZoom();
     const [selectItemIds] = useSelectItemIds();
     const [, { removeFlow }] = useFlows();
     const { removeItem } = useItemOperations();
+    const {
+        executeNext,
+        canExecuteNext,
+        executeAll,
+        canExecuteAll,
+        stop,
+        canStop,
+    } = useExecute();
     const handleSave = () => {
         saveToBrowser();
         resetChangeCount();
     };
-    const handleExecute = () => {
+    const handleToggle = () => {
         if (mode === "edit") {
             setMode("execute");
         }
@@ -251,7 +283,7 @@ const Tools: FC<{}> = () => {
         });
     };
     return (
-        <Toolbar >
+        <Stack direction="row" width="100%">
             <Tooltip title="保存する">
                 <IconButton onClick={handleSave}>
                     <Badge
@@ -262,15 +294,12 @@ const Tools: FC<{}> = () => {
                     </Badge>
                 </IconButton>
             </Tooltip>
-            <Box sx={{ flexGrow: 1 }}></Box>
+            {/* <Box sx={{ flexGrow: 1 }}></Box> */}
             <Tooltip title={mode === "execute" ? "編集する" : "実行する"}>
-                <IconButton onClick={handleExecute}>
-                    {mode === "execute" ?
-                        <EditIcon />
-                        :
-                        <PlayArrowIcon />
-                    }
-                </IconButton>
+                <Button color="primary" variant="text" onClick={handleToggle} sx={{ minWidth: "fit-content" }}>
+                    {mode === "execute" ? <EditIcon /> : <PlayArrowIcon />}
+                    {mode === "execute" ? "編集する" : "実行する"}
+                </Button>
             </Tooltip>
             <Tooltip title="拡大">
                 <IconButton onClick={handleZoomIn}>
@@ -283,17 +312,53 @@ const Tools: FC<{}> = () => {
                 </IconButton>
             </Tooltip>
 
-            {mode === "edit" ?
-                <>
-                    <Tooltip title="選択中のアイテムを削除">
-                        <IconButton onClick={handleRemoveSelectItem}>
-                            <DeleteIcon />
-                        </IconButton>
-                    </Tooltip>
-                </> :
-                <></>
-            }
-        </Toolbar>
+            <ToolsDivider />
+
+            <OnlyEditMode>
+                <Tooltip title="選択中のアイテムを削除">
+                    <IconButton onClick={handleRemoveSelectItem}>
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+            </OnlyEditMode>
+
+            <OnlyExeMode>
+                <Tooltip title="実行">
+                    <Button
+                        startIcon={<PlayArrowIcon />}
+                        color="inherit"
+                        onClick={executeNext}
+                        disabled={!canExecuteNext}
+                        sx={{ minWidth: "fit-content" }}
+                    >
+                        実行
+                    </Button>
+                </Tooltip>
+                <Tooltip title="全て実行">
+                    <Button
+                        startIcon={<SkipNextIcon />}
+                        color="inherit"
+                        onClick={executeAll}
+                        disabled={!canExecuteAll}
+                        sx={{ minWidth: "fit-content" }}
+                    >
+                        全て実行
+                    </Button>
+                </Tooltip>
+                <Tooltip title="中止">
+                    <Button
+                        startIcon={<StopIcon />}
+                        color="inherit"
+                        onClick={stop}
+                        disabled={!canStop}
+                        sx={{ minWidth: "fit-content" }}
+                    >
+                        中止
+                    </Button>
+                </Tooltip>
+            </OnlyExeMode>
+
+        </Stack>
     );
 };
 
@@ -408,10 +473,25 @@ const SelectTarget: FC<SelectTargetProps> = ({
                 </Stack>
             </DialogContent>
             <DialogActions>
-                <Button onClick={selectTargetDialogProps.onClose}>キャンセル</Button>
+                <Button
+                    onClick={selectTargetDialogProps.onClose}
+                >
+                    キャンセル
+                </Button>
             </DialogActions>
         </UtilDialog>
     )
 };
 
+interface ToolsDividerProps {
+}
+const ToolsDivider: FC<ToolsDividerProps> = () => {
+    return (
+        <Divider
+            orientation="vertical"
+            variant="middle"
+            flexItem
+        />
+    );
+}
 

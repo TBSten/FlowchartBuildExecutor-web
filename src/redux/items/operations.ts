@@ -1,11 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useChange } from "../app/operations";
 import { removeItem, setItem, setOption } from "./actions";
 import { getItem, getItems, getOption, } from "./selectors";
 import { isFlow, isSym, Item, ItemId, OptionValue } from "./types";
+import { useAppSelector } from "src/redux/root/operations";
 
 export function useItem(itemId: ItemId) {
-    const item = useSelector(getItem(itemId));
+    const item = useAppSelector(getItem(itemId));
     const dispatch = useDispatch();
 
     const set = (item: Item) => {
@@ -44,7 +45,7 @@ export function useItemOperations() {
 }
 
 export function useItems(...itemIds: ItemId[]) {
-    const items = useSelector(getItems(...itemIds));
+    const items = useAppSelector(getItems(...itemIds));
     return items;
 }
 
@@ -67,7 +68,7 @@ export function useFlow(itemId: ItemId) {
 
 
 export function useOption(itemId: ItemId, name: string) {
-    const option = useSelector(getOption(itemId, name));
+    const option = useAppSelector(getOption(itemId, name));
     const dispatch = useDispatch();
     const set = (value: OptionValue) => {
         dispatch(setOption({

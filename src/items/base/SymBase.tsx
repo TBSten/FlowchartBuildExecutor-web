@@ -1,14 +1,13 @@
-import React, { useRef, useEffect } from "react";
-import { FC } from "react";
-import { ItemId, Sym } from "src/redux/items/types";
-
 import Box from "@mui/material/Box";
-import { useSym } from "src/redux/items/operations";
+import React, { FC, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { selectItemOne } from "src/redux/app/actions";
 import { useMode } from "src/redux/app/operations";
 import { Mode } from "src/redux/app/types";
-import { useSelector, useDispatch } from "react-redux";
-import { StoreState } from "src/redux/store";
-import { selectItemOne } from "src/redux/app/actions";
+import { useSym } from "src/redux/items/operations";
+import { ItemId, Sym } from "src/redux/items/types";
+import { useAppSelector } from "src/redux/root/operations";
+
 
 export const config = {
     size: {
@@ -150,11 +149,11 @@ export function useSymRender({
     itemId,
 }: UseSymRenderArg) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const isSelect = useSelector((state: StoreState) =>
+    const isSelect = useAppSelector(state =>
         state.app.selectItemIds.includes(itemId)
     );
     const [mode] = useMode();
-    const isExecuting = useSelector((state: StoreState) => {
+    const isExecuting = useAppSelector(state => {
         return state.app.runtime?.executingItemId === itemId;
     });
 

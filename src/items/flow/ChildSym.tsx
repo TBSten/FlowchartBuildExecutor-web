@@ -1,15 +1,14 @@
 import { FC } from "react";
-import { useSelector } from "react-redux";
 import ErrorView from "src/components/util/ErrorView";
 import { ItemId } from "src/redux/items/types";
-import { StoreState } from "src/redux/store";
+import { useAppSelector } from "src/redux/root/operations";
 import { isSymType, symTypes } from "../symTypes";
 
 export type ChildSymProps = {
     itemId: ItemId;
 };
 const ChildSym: FC<ChildSymProps> = ({ itemId }) => {
-    const itemType = useSelector((state: StoreState) => {
+    const itemType = useAppSelector(state => {
         const item = state.items.find(item => item.itemId === itemId);
         if (item) {
             return item.itemType;

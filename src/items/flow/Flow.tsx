@@ -1,12 +1,10 @@
 import Stack from "@mui/material/Stack";
-import { FC, } from "react";
-import { useFlow, } from "src/redux/items/operations";
+import React, { FC } from "react";
+import { useFlow } from "src/redux/items/operations";
 import { ItemId } from "src/redux/items/types";
+import { useAppSelector } from "src/redux/root/operations";
 import Arrow from "./Arrow";
-import React from "react";
 import ChildSym from "./ChildSym";
-import { StoreState } from "src/redux/store";
-import { useSelector } from "react-redux";
 
 export interface FlowComponentProps {
     flowId: ItemId;
@@ -22,7 +20,7 @@ const FlowComponent: FC<FlowComponentProps> = ({
     selectable = true,
 }) => {
     const [flow] = useFlow(flowId);
-    const isSelect = useSelector((state: StoreState) => state.app.selectItemIds.includes(flowId))
+    const isSelect = useAppSelector(state => state.app.selectItemIds.includes(flowId))
     let children = <>
         {round ? <Arrow flowId={flow.itemId} selectable={selectable} index={0} /> : ""}
         {flow.childrenItemIds.map((itemId, i) => {

@@ -1,29 +1,29 @@
 import SelectAllIcon from "@mui/icons-material/SelectAll";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import React, { FC, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { FC } from "react";
+import { useSavedZoom } from "src/format";
 import CompFlow from "src/items/flow/Flow";
-import { useSelectItemIds, useZoom } from "src/redux/app/operations";
+import { useSelectItemIds } from "src/redux/app/operations";
 import { isSelecting } from "src/redux/app/selectors";
 import { ItemId } from "src/redux/items/types";
 import { useFlows } from "src/redux/meta/operations";
-import { useSp } from "src/style/media";
+import { useAppSelector } from "src/redux/root/operations";
 
 export interface BuildPaneProps { }
 
 const BuildPane: FC<BuildPaneProps> = () => {
     console.log("render build pane");
     const [flowIds] = useFlows();
-    const [zoom, setZoom] = useZoom();
-    const isSp = useSp();
-    useEffect(() => {
-        if (isSp) {
-            setZoom(0.55);
-        } else {
-            setZoom(1.0)
-        }
-    }, [isSp, setZoom]);
+    const [zoom, setZoom] = useSavedZoom();
+    // const isSp = useSp();
+    // useEffect(() => {
+    //     if (isSp) {
+    //         setZoom(0.55);
+    //     } else {
+    //         setZoom(1.0);
+    //     }
+    // }, [isSp, setZoom]);
     return (
         <Box
             sx={{
@@ -66,7 +66,7 @@ export default React.memo(BuildPane);
 
 const FlowContainer: FC<{ flowId: ItemId }> = ({ flowId }) => {
     const [, { selectOne }] = useSelectItemIds();
-    const isSelect = useSelector(isSelecting(flowId))
+    const isSelect = useAppSelector(isSelecting(flowId))
     const handleSelect = () => {
         selectOne(flowId);
     };

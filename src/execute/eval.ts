@@ -1,12 +1,15 @@
 import {
     isBooleanArray,
     isBooleanArray2D,
+    isNumber,
     isNumberArray,
     isNumberArray2D,
+    isString,
     isStringArray,
     isStringArray2D,
     mustBoolean,
     mustNumber,
+    mustString,
 } from "src/lib/typechecker";
 import jseEval from "jse-eval";
 import { notImplementError } from "src/lib/notImplement";
@@ -18,8 +21,8 @@ type unaryCallback = (a: operand) => operand;
 type binaryCallback = (a: operand, b: operand) => operand;
 
 const singleOperators: Record<string, unaryCallback> = {
-    "+": (operand) => operand * 1,
-    "-": (operand) => operand * -1,
+    "+": (operand) => mustNumber(operand) * 1,
+    "-": (operand) => mustNumber(operand) * -1,
 };
 const doubleOperators: Record<string, {
     priority: number,
@@ -97,8 +100,23 @@ const doubleOperators: Record<string, {
     },
     "+": {
         priority: 9,
+        callback: (left, right) => {
+            if (isNumber(left) && isNumber(right)) {
+                return left + right;
+            } else if (isNumber(left) && isString(right)) {
+                return left + right;
+            } else if (isString(left) && isNumber(right)) {
+                return left + right;
+            } else if (isString(left) && isString(right)) {
+                return left + right;
+            }
+            throw notImplementError(`invalid adding ${left} + ${right}`);
+        },
+    },
+    "&": {
+        priority: 9,
         callback: (left, right) =>
-            mustNumber(left) + mustNumber(right),
+            String(mustString(left) + mustString(right)),
     },
     "-": {
         priority: 9,
@@ -153,11 +171,20 @@ export function variableValueToDispValue(value: VariableValue) {
     return String(value);
 }
 
+export function evalFormulaAsVariableValue(
+    exp: string,
+    variables: Variable[],
+    funcs: { [k: string]: Function } = {},
+): VariableValue {
+    const ans = evalFormula(exp, variables, funcs);
+    if (!isVariableValue(ans)) throw notImplementError(`invalid value : ${ans}`);
+    return ans;
+}
 export function evalFormula(
     exp: string,
     variables: Variable[],
-    funcs: { [k: string]: Function } = {}
-): VariableValue {
+    funcs: { [k: string]: Function } = {},
+): unknown {
     const _variables = variables.reduce((vars, v) => {
         vars[v.name] = v.value;
         return vars;
@@ -166,10 +193,9 @@ export function evalFormula(
         parse(exp),
         {
             ..._variables,
-            funcs,
+            ...funcs,
         }
     );
-    if (!isVariableValue(ans)) throw notImplementError();
     return ans;
 }
 
@@ -183,5 +209,6 @@ export function evalFormula(
     Object.entries(doubleOperators).forEach(([op, { priority, callback }]) => {
         jseEval.addBinaryOp(op, priority, callback);
     })
+    // delete ExpressionEval.evaluators["ArrayExpression"];    //配列の無効化
 })();
 

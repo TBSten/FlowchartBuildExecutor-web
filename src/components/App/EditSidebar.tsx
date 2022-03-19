@@ -11,9 +11,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import React, { FC, useState } from "react";
-import { useSelector } from "react-redux";
 import { flowCreatorWithChildren } from "src/items/flow/creator";
 import { optionInputs, UpdateOption } from "src/items/option";
 import { addableItemTypes, isSymType, SymType, symTypes } from "src/items/symTypes";
@@ -27,8 +25,9 @@ import { useItem, useItemOperations } from "src/redux/items/operations";
 import { getItem } from "src/redux/items/selectors";
 import { Flow, isFlow, isSym, ItemId, Option } from "src/redux/items/types";
 import { useFlows } from "src/redux/meta/operations";
-import { StoreState } from "src/redux/store";
+import { useAppSelector } from "src/redux/root/operations";
 import ErrorView from "../util/ErrorView";
+import SidebarContent from "./SidebarContent";
 
 
 export interface EditSidebarProps { }
@@ -117,56 +116,54 @@ const EditSidebar: FC<EditSidebarProps> = () => {
     );
     return (
         <Box>
-            <Button variant="outlined" onClick={handleAddFlow}>
-                フローを追加
-            </Button>
+            <SidebarContent>
+                <Button variant="outlined" onClick={handleAddFlow}>
+                    フローを追加
+                </Button>
+            </SidebarContent>
 
             {selectItem && (
-                <List>
+                <>
                     {isSym(selectItem) ? (
                         <>
-                            <Typography color="text.secondary">選択中の記号</Typography>
-                            <ButtonGroup variant="outlined">
-                                <Button onClick={handleOpenDialog}>
-                                    {" "}
-                                    記号の種類を変更{" "}
-                                </Button>
-                                <Button onClick={handleRemove}>
-                                    記号を削除
-                                </Button>
+                            <SidebarContent title="選択中の記号">
+                                <ButtonGroup variant="outlined">
+                                    <Button onClick={handleOpenDialog}>
+                                        {" "}
+                                        記号の種類を変更{" "}
+                                    </Button>
+                                    <Button onClick={handleRemove}>
+                                        記号を削除
+                                    </Button>
+                                </ButtonGroup>
+                            </SidebarContent>
 
-                            </ButtonGroup>
-
-                            <Typography color="text.secondary">
-                                オプション
-                            </Typography>
-                            {selectItem.options.map((o) => (
-                                <>
-                                    <OptionRow
-                                        key={o.name}
-                                        itemId={selectItem.itemId}
-                                        name={o.name}
-                                    />
-                                </>
-                            ))}
+                            <SidebarContent title="オプション">
+                                {selectItem.options.map((o) => (
+                                    <>
+                                        <OptionRow
+                                            key={o.name}
+                                            itemId={selectItem.itemId}
+                                            name={o.name}
+                                        />
+                                    </>
+                                ))}
+                            </SidebarContent>
                         </>
                     ) : isFlow(selectItem) ? (
                         <>
-                            <Box>
+                            <SidebarContent title="選択中のフロー">
                                 {/* flow を編集する */}
-                                <Typography color="text.secondary">
-                                    選択中のフロー
-                                </Typography>
                                 <Button variant="outlined" onClick={handleRemove}>
                                     フローを削除
                                 </Button>
                                 <FlowEdit
                                     itemId={selectItem.itemId}
                                 />
-                            </Box>
+                            </SidebarContent>
                         </>
                     ) : ""}
-                </List>
+                </>
             )}
             <Dialog open={openTCDialog} onClose={handleCloseDialog}>
                 <DialogTitle> 記号の種類を変更 </DialogTitle>
@@ -200,7 +197,7 @@ export default React.memo(EditSidebar);
 const OptionRow = React.memo(
     ({ name, itemId }: { name: string; itemId: ItemId }) => {
         const [openDialog, setOpenDialog] = useState(false);
-        const option = useSelector((state: StoreState) => {
+        const option = useAppSelector(state => {
             const item = state.items.find((item) => item.itemId === itemId);
             if (!isSym(item)) return;
             return item.options.find((o) => o.name === name);
@@ -233,8 +230,8 @@ const FlowEdit = React.memo(
     ({ itemId }: { itemId: ItemId }) => {
         const [openDialog, setOpenDialog] = useState(false);
         const { setItem } = useItemOperations();
-        const flow = useSelector(getItem(itemId));
-        const tag = useSelector((state: StoreState) => {
+        const flow = useAppSelector(getItem(itemId));
+        const tag = useAppSelector(state => {
             const item = getItem(itemId)(state)
             if (!isFlow(item)) return null;
             return item.tag;

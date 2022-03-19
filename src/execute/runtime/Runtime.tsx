@@ -3,13 +3,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import produce from "immer";
 import { ReactNode } from "react";
-import { evalFormula, Variable, VariableValue } from "src/execute/eval";
+import { evalFormula, evalFormulaAsVariableValue, isVariableValue, Variable, VariableValue } from "src/execute/eval";
 // import _ from "lodash" ;
 import executes from "src/items/execute";
 import { getOption } from "src/items/option";
 import { logger } from "src/lib/logger";
-import { notImplement } from "src/lib/notImplement";
+import { notImplement, notImplementError } from "src/lib/notImplement";
 import { sleep } from "src/lib/sleep";
+import { mustNumber } from "src/lib/typechecker";
 import { setRuntime } from "src/redux/app/actions";
 import { isFlow, isSym, Item, ItemId } from "src/redux/items/types";
 import { store } from "src/redux/store";
@@ -23,7 +24,7 @@ type TempData = {
     [k: string]: unknown;
 }
 
-export class Runtime {
+export abstract class Runtime {
     items: Item[];
     flowIds: ItemId[];
     executingItemId: ItemId | null;
@@ -49,6 +50,9 @@ export class Runtime {
     buildInFunctions: {
         [k: string]: Function
     };
+    constantsVariables: {
+        [k: string]: unknown
+    };
 
     constructor() {
         this.items = [];
@@ -67,10 +71,52 @@ export class Runtime {
         this.variableHistory = [];
         this.tempData = {};
 
+        this.constantsVariables = {
+            "FBEバージョン": "2.1",
+            "E": Math.E,
+            "PI": Math.PI,
+            "円周率": Math.PI,
+        };
         this.buildInFunctions = {
+            // 計算関数
             "random": (min = 0, max = 1) => Math.random() * (max - min) + min,
+            "乱数": (min = 0, max = 1) => Math.random() * (max - min) + min,
+
             "floor": (num: number) => Math.floor(num),
+            "rounddown": (num: number) => Math.floor(num),
+            "切り捨て": (num: number) => Math.floor(num),
+
+            "ceil": (num: number) => Math.ceil(num),
+            "ceiling": (num: number) => Math.ceil(num),
+            "roundup": (num: number) => Math.ceil(num),
+            "切り上げ": (num: number) => Math.ceil(num),
+
+            "round": (num: number) => Math.round(num),
+            "四捨五入": (num: number) => Math.round(num),
+
             "pow": (a: number, b: number) => Math.pow(a, b),
+
+            "int": (num: any) => parseInt(num),
+            "整数": (num: any) => parseInt(num),
+
+            "sqrt": (num: number) => Math.sqrt(mustNumber(num)),
+            "平方根": (num: number) => Math.sqrt(mustNumber(num)),
+
+            "sin": (num: unknown) => Math.sin(mustNumber(num)),
+            "cos": (num: unknown) => Math.cos(mustNumber(num)),
+            "tan": (num: unknown) => Math.tan(mustNumber(num)),
+
+            "log2": (num: unknown) => Math.log2(mustNumber(num)),
+            "log10": (num: unknown) => Math.log2(mustNumber(num)),
+
+            "max": (...nums: number[]) => Math.max(...nums),
+            "min": (...nums: number[]) => Math.min(...nums),
+
+            "degToRad": (deg: unknown) => mustNumber(deg) * (Math.PI / 180),
+            "radToDeg": (rad: unknown) => mustNumber(rad) / (Math.PI / 180),
+
+            // 機能的関数
+            "sleep": async (millis: number) => this.sleep(millis),
         };
 
         this.closeDialog.bind(this);
@@ -181,13 +227,8 @@ export class Runtime {
     getItem(itemId: ItemId) {
         return this.items.find((item) => item.itemId === itemId);
     }
-    async output(...data: string[]): Promise<void> {
-        notImplement();
-    }
-    async input(): Promise<string> {
-        notImplement();
-        return "developing...";
-    }
+    abstract output(...data: string[]): Promise<void>;
+    abstract input(): Promise<string>;
 
     isFinished() {
         return (
@@ -249,6 +290,9 @@ export class Runtime {
         });
         return flg;
     }
+    async showInputBox(msg: string = "") {
+        return prompt(msg) ?? "";
+    }
     flush() {
         store.dispatch(
             setRuntime({
@@ -258,32 +302,52 @@ export class Runtime {
     }
 
     async eval(exp: string) {
-        return evalFormula(exp, this.variables, this.buildInFunctions);
+        return evalFormulaAsVariableValue(
+            exp,
+            this._getAllVariables(),     //constants variablesを追加したい
+            this.buildInFunctions,
+        );
+    }
+    async dangerousEval(exp: string) {
+        return evalFormula(
+            exp,
+            this._getAllVariables(),     //constants variablesを追加したい
+            this.buildInFunctions,
+        );
+    }
+    _getAllVariables(): Variable[] {
+        const constants = (Object.entries(this.constantsVariables).map(([name, value]) => {
+            if (!isVariableValue(value)) throw notImplementError(`invalid constant variable : ${name} = ${value}`);
+            return {
+                name, value
+            }
+        }))
+        const vars: Variable[] = [
+            ...this.variables,
+            ...constants,
+        ];
+        return vars;
     }
     getVariable(name: string) {
         return this.variables.find((v) => v.name === name);
     }
     setVariable(name: string, value: VariableValue) {
         console.log("setVariable", name, "to", value);
-        //通常の変数
-        const v = this.getVariable(name);
+        //現在の変数一覧の更新
+        // const v = this.getVariable(name);
         this.variables = produce(this.variables, draft => {
             let idx = draft.findIndex(v => v.name === name)
             if (idx < 0) idx = draft.length;
-            draft[idx] = {
-                name,
-                value,
-            };
+            draft[idx] = { name, value, };
         });
+        //履歴の更新
         this.variableHistory = produce(this.variableHistory, draft => {
             const newHistory = Object.assign(
                 Object.create(this.variables),
-                { changedName: name }
+                { changedName: name, }
             );
             draft.push(newHistory)
-            console.log(draft)
         });
-        console.log(this.variableHistory)
     }
     setTempData(key: string, value: unknown) {
         this.tempData[key] = value;
@@ -336,6 +400,6 @@ export class Runtime {
  * ms = -200*speed+2000
  */
 function speedToMillis(speed: number) {
-    return -200 * speed + 2000;
+    return Math.max(-200 * speed + 2000, 0);
 }
 

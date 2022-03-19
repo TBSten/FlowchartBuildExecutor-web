@@ -1,12 +1,12 @@
+import AppsIcon from "@mui/icons-material/Apps";
+import TocIcon from "@mui/icons-material/Toc";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import { Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import AppsIcon from "@mui/icons-material/Apps";
-import TocIcon from "@mui/icons-material/Toc";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack/Stack";
 import { FC, useState } from "react";
 import VariablePane from "./VariablePane";

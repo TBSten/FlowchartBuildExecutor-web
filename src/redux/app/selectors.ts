@@ -7,6 +7,7 @@ export const getSelectItemIds = () => (state: StoreState) => state.app.selectIte
 export const isSelecting = (itemId: ItemId) => (state: StoreState) => state.app.selectItemIds.includes(itemId);
 export const getSelectMode = () => (state: StoreState) => state.app.selectMode;
 
+
 export const getRuntimeTabs = () => (state: StoreState) => {
     if (!state.app.runtime) return null;
     return state.app.runtime.tabs;

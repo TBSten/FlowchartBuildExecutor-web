@@ -1,23 +1,22 @@
 
+import { Tooltip } from "@mui/material";
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
 import React, { FC } from "react";
-import { useSelector } from "react-redux";
-import { StoreState } from "src/redux/store";
-import { useSp } from "src/style/media";
-import NoneVariable from "./NoneVariablePane";
 import { VariableValue } from "src/execute/eval";
 import { notImplement } from "src/lib/notImplement";
-import { Tooltip } from "@mui/material";
+import { useAppSelector } from "src/redux/root/operations";
+import { useSp } from "src/style/media";
+import NoneVariable from "./NoneVariablePane";
 
 
 const MemoryVariablePane: FC<{
     scale: number,
 }> = ({ scale }) => {
-    const variables = useSelector(
-        (state: StoreState) => state.app.runtime?.variables
+    const variables = useAppSelector(
+        state => state.app.runtime?.variables
     );
     const isSp = useSp();
     if (!variables) return <>ERROR !</>;
@@ -29,12 +28,13 @@ const MemoryVariablePane: FC<{
             flexWrap="wrap"
             sx={{
                 width: "fit-content",
+                minWidth: "100%",
                 height: "fit-content",
                 transform: `scale(${scale})`,
                 transformOrigin: "left top",
                 backgroundColor: "#dbdbdb",
             }}
-            p={isSp ? 0.5 : 2}
+            p={isSp ? 1.5 : 2}
         >
             {variables.map((variable) => (
                 <Box>

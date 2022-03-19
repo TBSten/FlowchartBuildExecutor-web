@@ -1,28 +1,15 @@
-import { 
-    combineReducers, 
-    createStore, 
-    compose, 
-    applyMiddleware,
-    Middleware,
+import {
+    createStore,
 } from "redux";
+
 import { rootReducer } from "./root/reducer";
 
-interface ExtendedWindow extends Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-}
-declare var window: ExtendedWindow;
-const composeReduxDevToolsEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-
-
-const middlewares = [] as Middleware[] ;
 
 export const store = createStore(
     rootReducer,
-    undefined,
-    composeReduxDevToolsEnhancers(applyMiddleware(...middlewares))
-) ;
-export type StoreState = ReturnType<typeof store.getState> ;
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
+);
+export type StoreState = ReturnType<typeof store.getState>;
 
-
-
+if ((window as any).devToolsExtension) (window as any).devToolsExtension.updateStore(store);
