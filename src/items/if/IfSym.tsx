@@ -83,10 +83,6 @@ export const BranchBase = (
             ctx.closePath();
             ctx.stroke();
         });
-        // const handleSelectChild = (childFlowId: ItemId) => {
-        //     console.log(childFlowId)
-        //     selectOne(childFlowId);
-        // };
         return (
             <Box sx={{ position: "relative" }} ref={containerRef}>
                 <Diamond itemId={itemId} />

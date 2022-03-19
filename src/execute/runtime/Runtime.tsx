@@ -332,7 +332,7 @@ export abstract class Runtime {
         return this.variables.find((v) => v.name === name);
     }
     setVariable(name: string, value: VariableValue) {
-        console.log("setVariable", name, "to", value);
+        logger.log("setVariable", name, "to", value);
         //現在の変数一覧の更新
         // const v = this.getVariable(name);
         this.variables = produce(this.variables, draft => {

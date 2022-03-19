@@ -1,3 +1,4 @@
+import { logger } from "./logger";
 
 export function isNumber(arg: any): arg is number {
     return typeof arg === "number" || typeof arg === "bigint";
@@ -30,7 +31,7 @@ export function isBooleanArray2D(arg: any): arg is boolean[][] {
 
 export function mustNumber(arg: any): number {
     if (!isNumber(arg)) {
-        console.log(arg);
+        logger.log(arg);
 
         throw new TypeError(`${arg} must be number !`);
     }
@@ -38,7 +39,7 @@ export function mustNumber(arg: any): number {
 }
 export function mustString(arg: any): string {
     if (!isString(arg)) {
-        console.log(arg);
+        logger.log(arg);
 
         throw new TypeError(`${arg} must be string !`);
     }
@@ -46,7 +47,7 @@ export function mustString(arg: any): string {
 }
 export function mustBoolean(arg: any): boolean {
     if (!isBoolean(arg)) {
-        console.log(arg);
+        logger.log(arg);
 
         throw new TypeError(`${arg} must be boolean !`);
     }

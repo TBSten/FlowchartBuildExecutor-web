@@ -16,14 +16,6 @@ const BuildPane: FC<BuildPaneProps> = () => {
     console.log("render build pane");
     const [flowIds] = useFlows();
     const [zoom, setZoom] = useSavedZoom();
-    // const isSp = useSp();
-    // useEffect(() => {
-    //     if (isSp) {
-    //         setZoom(0.55);
-    //     } else {
-    //         setZoom(1.0);
-    //     }
-    // }, [isSp, setZoom]);
     return (
         <Box
             sx={{

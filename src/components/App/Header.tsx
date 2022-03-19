@@ -41,6 +41,7 @@ import { FBE_DOC_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
 import { donwloadImage } from "src/lib/image";
+import { logger } from "src/lib/logger";
 import { useChange, useExecute, useMode, useSelectItemIds, useZoom } from "src/redux/app/operations";
 import { resetItems } from "src/redux/items/actions";
 import { useItemOperations } from "src/redux/items/operations";
@@ -396,12 +397,12 @@ const SelectTarget: FC<SelectTargetProps> = ({
                 new Promise<void>((resolve) => setTimeout(resolve, 750))
             ]);
             const end = new Date();
-            console.log(program);
-            console.log("took", end.valueOf() - start.valueOf());
+            logger.log(program);
+            logger.log("took", end.valueOf() - start.valueOf());
             setProgram(program);
             setFetchState("success")
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             // alert("エラーが発生しました");
             setFetchState("error")
             const error = e as any;

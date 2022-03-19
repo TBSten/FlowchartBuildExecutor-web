@@ -103,7 +103,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
         }
         if (isFlow(selectItem)) {
             selectItemIds.forEach(itemId => {
-                console.log("remove flow", itemId)
+                logger.log("remove flow", itemId)
                 removeFlow(itemId);
                 removeItem(itemId);
             })

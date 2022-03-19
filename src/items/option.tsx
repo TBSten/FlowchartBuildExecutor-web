@@ -32,9 +32,7 @@ const TextOptionInput: OptionInputComponent = ({ option, updateOption }) => {
 const CheckOptionInput: OptionInputComponent = ({ option, updateOption }) => {
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         updateOption(e.target.checked);
-        console.log(e.target.checked);
     };
-    console.log("checkbox option input", option)
     if (typeof option.value !== "boolean") { return <># ERROR</> }
     return (
         <div>

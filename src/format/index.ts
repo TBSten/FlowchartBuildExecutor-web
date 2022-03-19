@@ -1,7 +1,7 @@
-import { isNumber, isString } from "lodash";
+import { isString } from "lodash";
 import { useEffect } from "react";
 import { getRuntimeKeys } from "src/execute/runtime";
-import { VERSION } from "src/lib/constants";
+import { FBE_VERSION } from "src/lib/constants";
 import { logger } from "src/lib/logger";
 import { useZoom } from "src/redux/app/operations";
 import { loadItems } from "src/redux/items/actions";
@@ -50,7 +50,7 @@ export function toSaveFormat({
     title: string;
 }): SaveFormat {
     return {
-        version: VERSION,
+        version: FBE_VERSION,
         items,
         meta: {
             flowIds,

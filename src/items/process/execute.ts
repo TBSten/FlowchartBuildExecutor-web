@@ -24,7 +24,7 @@ export const processExecute: ItemExecute = async ({
         if (result instanceof Promise) {
             result = await result;
         }
-        console.log("build in process", result);
+        logger.log("build in process", result);
     } else {
         //flowIdを実行
         runtime.executingItemIds = [

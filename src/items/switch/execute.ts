@@ -1,5 +1,6 @@
 
 import { VariableValue } from "src/execute/eval";
+import { logger } from "src/lib/logger";
 import { notImplement, notImplementError } from "src/lib/notImplement";
 import { mustString } from "src/lib/typechecker";
 import { isFlow, ItemId } from "src/redux/items/types";
@@ -26,7 +27,7 @@ export const switchExecute: ItemExecute = async ({
             tag = await runtime.eval(child.tag);
         }
         if (tag === con) {
-            console.log("branched", child.tag)
+            logger.log("branched", child.tag)
             runtime.executingItemIds = [
                 childId,
                 ...runtime.executingItemIds,

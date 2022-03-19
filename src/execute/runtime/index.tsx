@@ -1,3 +1,4 @@
+import { logger } from "src/lib/logger";
 import { MsgRuntime } from "./MsgRuntime";
 import { Runtime } from "./Runtime";
 import { TerminalRuntime } from "./TerminalRuntime";
@@ -17,7 +18,7 @@ const runtimeFactories: {
 
 
 export function getRuntime(name: string = "メッセージボックス") {
-    console.log("getRuntime", name)
+    logger.log("getRuntime", name)
     return runtimeFactories[name]();
 }
 
