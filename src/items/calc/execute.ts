@@ -1,6 +1,6 @@
-import { isVariableValue } from "src/execute/eval";
+import { isPureVariableValue, isVariableValue } from "src/execute/eval";
 import { logger } from "src/lib/logger";
-import { notImplement } from "src/lib/notImplement";
+import { notImplement } from "src/lib/error";
 import { getOption } from "../option";
 import { ItemExecute } from "../types";
 
@@ -19,8 +19,8 @@ export const calcExecute: ItemExecute = async ({
             "->",
             v
         );
-        if (isVariableValue(evaled)) {
-            runtime.setVariable(v, evaled)
+        if (isPureVariableValue(evaled)) {
+            await runtime.assignVariable(v, evaled)
             return;
         }
     }

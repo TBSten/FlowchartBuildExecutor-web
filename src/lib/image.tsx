@@ -1,6 +1,6 @@
 
 import { toPng } from "html-to-image";
-import { notImplementError } from "./notImplement";
+import { notImplementError } from "./error";
 
 
 export async function donwloadImage(title: string) {

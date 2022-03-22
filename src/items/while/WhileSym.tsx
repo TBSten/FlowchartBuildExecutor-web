@@ -1,4 +1,4 @@
-import { notImplement } from "src/lib/notImplement";
+import { notImplement } from "src/lib/error";
 import { useSym } from "src/redux/items/operations";
 import SymBase, { SymChild, SymComponent, SymRender } from "../base/SymBase";
 import Flow from "../flow/Flow";

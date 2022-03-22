@@ -1,5 +1,5 @@
 import { isVariableValue } from "src/execute/eval";
-import { notImplement } from "src/lib/notImplement";
+import { notImplement } from "src/lib/error";
 import { getOption } from "../option";
 import { ItemExecute } from "../types";
 
@@ -11,7 +11,7 @@ export const outputExecute: ItemExecute = async ({
     if (typeof f === "string") {
         const data = await runtime.eval(f);
         if (isVariableValue(data)) {
-            await runtime. output(String(data));
+            await runtime.output(String(data));
             return;
         }
     }

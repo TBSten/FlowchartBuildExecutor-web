@@ -12,7 +12,7 @@ import {
     mustString,
 } from "src/lib/typechecker";
 import jseEval from "jse-eval";
-import { notImplementError } from "src/lib/notImplement";
+import { notImplementError } from "src/lib/error";
 const parse = jseEval.parse;
 const evaluate = jseEval.evaluate;
 
@@ -140,19 +140,33 @@ const doubleOperators: Record<string, {
     },
 };
 
-export type VariableValue =
+export type PureVariableValue =
     | string
     | number
-    | boolean
-    | string[]
-    | number[]
-    | boolean[]
-    | string[][]
-    | number[][]
-    | boolean[][];
+    | boolean;
+export type VariableValue =
+    // | string
+    // | number
+    // | boolean
+    // | string[]
+    // | number[]
+    // | boolean[]
+    // | string[][]
+    // | number[][]
+    // | boolean[][];
+    | PureVariableValue
+    | PureVariableValue[]
+    | PureVariableValue[][];
 export interface Variable {
     name: string;
     value: VariableValue;
+}
+export function isPureVariableValue(arg: any): arg is PureVariableValue {
+    return (
+        typeof arg === "string" ||
+        typeof arg === "number" ||
+        typeof arg === "boolean"
+    );
 }
 export function isVariableValue(arg: any): arg is VariableValue {
     return (
@@ -165,6 +179,14 @@ export function isVariableValue(arg: any): arg is VariableValue {
         isNumberArray2D(arg) ||
         isStringArray2D(arg) ||
         isBooleanArray2D(arg)
+    );
+}
+export function isPureVariableValueArray(arg: any): arg is PureVariableValue[] {
+    return (
+        arg instanceof Array &&
+        arg.reduce((isPure, el) => {
+            return isPure && isPureVariableValue(el)
+        }, true)
     );
 }
 export function variableValueToDispValue(value: VariableValue) {

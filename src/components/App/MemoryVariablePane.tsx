@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import React, { FC } from "react";
 import { VariableValue } from "src/execute/eval";
-import { notImplement } from "src/lib/notImplement";
+import { notImplement } from "src/lib/error";
 import { useAppSelector } from "src/redux/root/operations";
 import { useSp } from "src/style/media";
 import NoneVariable from "./NoneVariablePane";

@@ -1,5 +1,5 @@
 import { logger } from "src/lib/logger";
-import { notImplement, notImplementError } from "src/lib/notImplement";
+import { notImplement, notImplementError } from "src/lib/error";
 import { getOption } from "../option";
 import { ItemExecute } from "../types";
 

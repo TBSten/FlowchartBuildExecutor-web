@@ -73,13 +73,13 @@ function App() {
                         maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
                         minWidth: isSp ? "100%" : null,
                         maxHeight: isSp ? "35vh" : "calc(100vh - 10px - 132px )",
+                        p: isSp ? 0.5 : undefined,
                         overflow: "auto",
                     }}
                 >
                     <Box
                         sx={{
                             overflow: isSp ? "auto" : "visible",
-                            p: isSp ? 0 : 0.25,
                             maxHeight: "100%"
                         }}
                     >

@@ -1,6 +1,6 @@
 import { } from "src/execute/eval";
 import { logger } from "src/lib/logger";
-import { notImplementError } from "src/lib/notImplement";
+import { notImplementError } from "src/lib/error";
 import { isString } from "src/lib/typechecker";
 import { getOption } from "../option";
 import { ItemExecute } from "../types";

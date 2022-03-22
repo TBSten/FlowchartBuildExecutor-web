@@ -1,6 +1,6 @@
 
 import { VariableValue } from "src/execute/eval";
-import { notImplement } from "src/lib/notImplement";
+import { notImplement } from "src/lib/error";
 import { getOption } from "../option";
 import { ItemExecute } from "../types";
 
@@ -18,7 +18,7 @@ export const inputExecute: ItemExecute = async ({
                 notImplement();
             }
         }
-        runtime.setVariable(v, inputValue);
+        await runtime.assignVariable(v, inputValue);
         return;
     }
     notImplement();

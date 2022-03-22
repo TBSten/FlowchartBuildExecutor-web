@@ -1,7 +1,7 @@
 import { storeStateToSaveFormat } from "src/format";
 import { FBE_TO_PROGRAM_URL } from "./constants";
 import { logger } from "./logger";
-import { notImplementError } from "./notImplement";
+import { notImplementError } from "./error";
 
 
 export const enableTargets = [

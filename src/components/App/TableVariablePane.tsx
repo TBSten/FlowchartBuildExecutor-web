@@ -5,7 +5,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { FC } from "react";
 import { VariableValue } from "src/execute/eval";
-import { notImplementError } from "src/lib/notImplement";
+import { notImplementError } from "src/lib/error";
 import { isBoolean, isBooleanArray, isBooleanArray2D, isNumber, isNumberArray, isNumberArray2D, isString, isStringArray, isStringArray2D } from "src/lib/typechecker";
 import { useAppSelector } from "src/redux/root/operations";
 import NoneVariable from "./NoneVariablePane";

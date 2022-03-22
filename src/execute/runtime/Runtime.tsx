@@ -2,13 +2,14 @@ import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import produce from "immer";
+import { clone, isNumber } from "lodash";
 import { ReactNode } from "react";
-import { evalFormula, evalFormulaAsVariableValue, isVariableValue, Variable, VariableValue } from "src/execute/eval";
+import { evalFormula, evalFormulaAsVariableValue, isVariableValue, PureVariableValue, Variable, VariableValue } from "src/execute/eval";
 // import _ from "lodash" ;
 import executes from "src/items/execute";
 import { getOption } from "src/items/option";
+import { notImplement, notImplementError } from "src/lib/error";
 import { logger } from "src/lib/logger";
-import { notImplement, notImplementError } from "src/lib/notImplement";
 import { sleep } from "src/lib/sleep";
 import { mustNumber } from "src/lib/typechecker";
 import { setRuntime } from "src/redux/app/actions";
@@ -328,18 +329,20 @@ export abstract class Runtime {
         ];
         return vars;
     }
-    getVariable(name: string) {
-        return this.variables.find((v) => v.name === name);
+    async getVariable(name: string): Promise<Variable | undefined> {
+        // const split = name.split(/\]\[|\]|\[/).filter(e => e !== "" && !e.match(/^(\s+)$/));
+        const variable = this.variables.find((v) => v.name === name);;
+        return variable;
     }
-    setVariable(name: string, value: VariableValue) {
+    async setVariable(name: string, value: VariableValue): Promise<void> {
         logger.log("setVariable", name, "to", value);
-        //現在の変数一覧の更新
-        // const v = this.getVariable(name);
-        this.variables = produce(this.variables, draft => {
-            let idx = draft.findIndex(v => v.name === name)
-            if (idx < 0) idx = draft.length;
-            draft[idx] = { name, value, };
-        });
+        this.variables = (() => {
+            const work = clone(this.variables);
+            let idx = work.findIndex(v => v.name === name)
+            if (idx < 0) idx = work.length;
+            work[idx] = { name, value, };
+            return work;
+        })();
         //履歴の更新
         this.variableHistory = produce(this.variableHistory, draft => {
             const newHistory = Object.assign(
@@ -348,6 +351,52 @@ export abstract class Runtime {
             );
             draft.push(newHistory)
         });
+    }
+    async assignVariable(target: string, value: PureVariableValue) {
+        let name = target;
+        let assignValue: VariableValue = value;
+        let indexes = this._splitNameAndIndex(target);
+        if (indexes.length >= 2) {
+            //添字ありの更新
+            name = indexes[0];
+            indexes = indexes.slice(1)
+            const v = await this.getVariable(name);
+            if (!v) { throw notImplementError(`invalid value ${name} : ${v}`); }
+            // console.log(name, ...(indexes.splice(1)), "<-", assignValue)
+            const arr = (await this.getVariable(name))?.value;
+            if (!(arr instanceof Array)) throw notImplementError(`invalid array ${arr}`);
+            let newValue: Exclude<VariableValue, PureVariableValue> = clone(arr);
+            Promise.all(
+                indexes.map(async (index, at) => {
+                    const i = await this.eval(index);
+                    if (!isNumber(i)) throw notImplementError(`invalid index : ${index} -> ${i}`);
+                    if (at === indexes.length - 1) {
+                        if (!(newValue instanceof Array)) throw notImplementError(`invalid index `);
+                        newValue[i] = value;
+                    }
+                    newValue = arr[i] as any;
+                })
+            );
+            console.log("assigned", newValue);
+            v.value = newValue;
+        } else {
+            const idx = this.variables.findIndex(v => v.name === name);
+            if (!this.variables[idx]) {
+                logger.log("new variable", name, value)
+                this.variables.push({
+                    name, value,
+                });
+            } else {
+                logger.log("update variable", name, value)
+                this.variables[idx].value = assignValue;
+            }
+        }
+    }
+    // async getVariableValue(target: string) {
+    // }
+    _splitNameAndIndex(target: string) {
+        const split = target.split(/\]\[|\]|\[/).filter(e => e !== "" && !e.match(/^(\s+)$/));
+        return split;
     }
     setTempData(key: string, value: unknown) {
         this.tempData[key] = value;

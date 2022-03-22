@@ -1,8 +1,8 @@
-import { CollectionsOutlined } from "@mui/icons-material";
-import { isVariableValue } from "src/execute/eval";
+
+import { isPureVariableValue, isVariableValue } from "src/execute/eval";
 import { Runtime } from "src/execute/runtime/Runtime";
 import { logger } from "src/lib/logger";
-import { notImplement, notImplementError } from "src/lib/notImplement";
+import { notImplement, notImplementError } from "src/lib/error";
 import { mustString } from "src/lib/typechecker";
 import { Item, ItemId } from "src/redux/items/types";
 import { getOption } from "../option";
@@ -76,7 +76,7 @@ async function first(item: Item, runtime: Runtime) {
     const initOp = getOption(item, "初期値")?.value;
     const init = await runtime.eval(mustString(initOp));
     if (!isVariableValue(init)) throw notImplementError();
-    runtime.setVariable(mustString(variable), init);
+    await runtime.setVariable(mustString(variable), init);
 }
 async function check(item: Item, runtime: Runtime): Promise<boolean> {
     const conOp = getOption(item, "条件")?.value;
@@ -101,7 +101,8 @@ async function plus(item: Item, runtime: Runtime) {
     const plus = getOption(item, "増分")?.value;
     const evaled = await runtime.eval(`${mustString(variable)}+(${mustString(plus)})`);
     if (!isVariableValue(evaled)) throw notImplementError(`invalid evaled value : ${evaled} `);
-    runtime.setVariable(
+    if (!isPureVariableValue(evaled)) throw notImplementError(`evaled value invalid : ${evaled}`);
+    await runtime.assignVariable(
         mustString(variable),
         evaled,
     );

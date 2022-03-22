@@ -1,7 +1,6 @@
-import { VariableValue } from "src/execute/eval";
 import { logger } from "src/lib/logger";
-import { notImplement, notImplementError } from "src/lib/notImplement";
-import { isBoolean, isBooleanArray, isNumberArray, isStringArray, mustNumber, mustString } from "src/lib/typechecker";
+import { notImplement, notImplementError } from "src/lib/error";
+import { isBooleanArray, isNumberArray, isStringArray, mustNumber, mustString } from "src/lib/typechecker";
 import { getOption } from "../option";
 import { ItemExecute } from "../types";
 
@@ -24,7 +23,7 @@ export const prepareExecute: ItemExecute = async ({
         if (!isNumberArray(arr) && !isStringArray(arr) && !isBooleanArray(arr)) {
             throw notImplementError();
         }
-        runtime.setVariable(name as string, Object.assign(arr, {}));
+        await runtime.setVariable(name as string, Object.assign(arr, {}));
         return;
     }
     if (type === "2次元配列") {
@@ -41,7 +40,7 @@ export const prepareExecute: ItemExecute = async ({
             const row = Array(col).fill(first);
             return row;
         });
-        runtime.setVariable(name as string, Object.assign(arr, {}));
+        await runtime.setVariable(name as string, Object.assign(arr, {}));
         return;
     }
 
