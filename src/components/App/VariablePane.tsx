@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import { FC } from "react";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 import MemoryVariablePane from "./MemoryVariablePane";
 import TableVariablePane from "./TableVariablePane";
 import { Mode } from "./VariableDialog";

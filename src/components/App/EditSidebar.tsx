@@ -20,12 +20,12 @@ import { terminalStartSymCreator } from "src/items/terminalStart/creator";
 import { makeItemId } from "src/items/util";
 import { logger } from "src/lib/logger";
 import { mustString } from "src/lib/typechecker";
-import { useChange, useSelectItemIds } from "src/redux/app/operations";
-import { useItem, useItemOperations } from "src/redux/items/operations";
+import { useChange, useSelectItemIds } from "src/redux/app/hooks";
+import { useItem, useItemOperations } from "src/redux/items/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { Flow, isFlow, isSym, ItemId, Option } from "src/redux/items/types";
-import { useFlows } from "src/redux/meta/operations";
-import { useAppSelector } from "src/redux/root/operations";
+import { useFlows } from "src/redux/meta/hooks";
+import { useAppSelector } from "src/redux/root/hooks";
 import ErrorView from "../util/ErrorView";
 import SidebarContent from "./SidebarContent";
 

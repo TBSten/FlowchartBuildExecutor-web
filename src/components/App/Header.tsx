@@ -7,13 +7,14 @@ import FiberNewIcon from "@mui/icons-material/FiberNew";
 import HomeIcon from "@mui/icons-material/Home";
 import ImageIcon from "@mui/icons-material/Image";
 import MenuIcon from "@mui/icons-material/Menu";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SaveIcon from "@mui/icons-material/Save";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import StopIcon from "@mui/icons-material/Stop";
 import ZoomIn from "@mui/icons-material/ZoomIn";
 import ZoomOut from "@mui/icons-material/ZoomOut";
-import { Alert, CircularProgress, Grow, MenuItem, Stack } from "@mui/material";
+import { Alert, CircularProgress, Grow, Menu, MenuItem, Stack } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -32,7 +33,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import React, { ChangeEventHandler, FC, useEffect, useState } from "react";
+import React, { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
     loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
@@ -42,11 +43,11 @@ import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgr
 import { downloadTextFile, getFileText } from "src/lib/file";
 import { donwloadImage } from "src/lib/image";
 import { logger } from "src/lib/logger";
-import { useChange, useExecute, useMode, useSelectItemIds, useZoom } from "src/redux/app/operations";
+import { useChange, useExecute, useMode, useSelectItemIds, useZoom } from "src/redux/app/hooks";
 import { resetItems } from "src/redux/items/actions";
-import { useItemOperations } from "src/redux/items/operations";
+import { useItemOperations } from "src/redux/items/hooks";
 import { resetMeta } from "src/redux/meta/actions";
-import { useFlows, useTitle } from "src/redux/meta/operations";
+import { useFlows, useTitle } from "src/redux/meta/hooks";
 import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
 import OnlyEditMode from "../util/OnlyEditMode";
 import OnlyExeMode from "../util/OnlyExeMode";
@@ -67,8 +68,10 @@ const Header: FC<HeaderProps> = () => {
             elevation={0}
         >
             <Toolbar>
-                <HeaderMenu />
+                <LeftTopMenu />
                 <Title />
+                <Expand />
+                <RightTopMenu />
             </Toolbar>
             <Toolbar sx={{
                 width: "100%",
@@ -83,10 +86,8 @@ export default React.memo(Header);
 
 const Title: FC<HeaderProps> = () => {
     const [title, setTitle] = useTitle();
-    const { notifyChange } = useChange();
     const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         setTitle(e.target.value)
-        notifyChange();
     };
     return (
         <InputBase
@@ -97,7 +98,63 @@ const Title: FC<HeaderProps> = () => {
     );
 };
 
-const HeaderMenu: FC<{}> = () => {
+interface RightTopMenuProps {
+}
+function useMenuItems(): ({ label: string, onSelect?: () => any } | "hr")[] {
+    const { } = use
+    const handleSendError = useCallback(() => {
+        logger.log("send error")
+    }, []);
+    return useMemo(() => [
+        { label: "全てのメニュー", },
+        "hr",
+        {
+            label: "エラーレポートを送信",
+            onSelect: handleSendError,
+        }
+    ], [handleSendError]);
+}
+const RightTopMenu: FC<RightTopMenuProps> = () => {
+    const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchor);
+    const handleOpen: MouseEventHandler<HTMLElement> = (e) => setAnchor(e.currentTarget);
+    const handleClose = () => setAnchor(null);
+    const handleSelectMenuItem = (cb: () => any) => {
+        return () => {
+            handleClose();
+            cb();
+        }
+    }
+    const menuItems = useMenuItems();
+    return (
+        <>
+            <IconButton onClick={handleOpen}>
+                <MoreVertIcon />
+            </IconButton>
+            <Menu
+                anchorEl={anchor}
+                open={open}
+                onClose={handleClose}
+            >
+                {menuItems.map(menuItem => (
+                    menuItem === "hr" ?
+                        <Divider orientation="horizontal" />
+                        :
+                        menuItem.onSelect ?
+                            <MenuItem onClick={handleSelectMenuItem(menuItem.onSelect)} key={menuItem.label}>
+                                {menuItem.label}
+                            </MenuItem>
+                            :
+                            <MenuItem disabled>
+                                {menuItem.label}
+                            </MenuItem>
+                ))}
+            </Menu>
+        </>
+    );
+}
+
+const LeftTopMenu: FC<{}> = () => {
     const [open, setOpen] = useState(false);
     const [title] = useTitle();
     const [confirm, dialogProps] = useConfirmDialog(
@@ -493,6 +550,15 @@ const ToolsDivider: FC<ToolsDividerProps> = () => {
             variant="middle"
             flexItem
         />
+    );
+}
+
+
+interface ExpandProps {
+}
+const Expand: FC<ExpandProps> = () => {
+    return (
+        <Box sx={{ flexGrow: 1, minHeight: "100%" }}></Box>
     );
 }
 

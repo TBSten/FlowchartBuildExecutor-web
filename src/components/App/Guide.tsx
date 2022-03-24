@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import { FC } from "react";
 import { getGuideContent } from "src/redux/app/selectors";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 
 
 export interface GuideProps { }

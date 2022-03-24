@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import React, { FC } from "react";
 import { VariableValue } from "src/execute/eval";
 import { notImplement } from "src/lib/error";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 import { useSp } from "src/style/media";
 import NoneVariable from "./NoneVariablePane";
 
@@ -22,33 +22,39 @@ const MemoryVariablePane: FC<{
     if (!variables) return <>ERROR !</>;
     if (variables.length <= 0) return <NoneVariable />;
     return (
-        <Stack
-            spacing={2}
-            direction="row"
-            flexWrap="wrap"
+        <Box
             sx={{
-                width: "fit-content",
-                minWidth: "100%",
-                height: "fit-content",
-                transform: `scale(${scale})`,
-                transformOrigin: "left top",
                 backgroundColor: "#dbdbdb",
             }}
-            p={isSp ? 1.5 : 2}
         >
-            {variables.map((variable) => (
-                <Box>
-                    <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
-                        {variable.name}
-                    </Typography>
-                    <Card variant="outlined" key={variable.name} sx={{ width: "min-content" }}>
-                        <Typography variant="h5" p={isSp ? 1 : 3}>
-                            {variableValueToNode(variable.name, variable.value)}
+            <Stack
+                spacing={2}
+                direction="row"
+                flexWrap="wrap"
+                sx={{
+                    width: "fit-content",
+                    minWidth: "max(100%,90vw)",
+                    height: "fit-content",
+                    backgroundColor: "#dbdbdb",
+                    transform: `scale(${scale})`,
+                    transformOrigin: "left top",
+                }}
+                p={isSp ? 1.5 : 2}
+            >
+                {variables.map((variable) => (
+                    <Box>
+                        <Typography variant="body1" sx={{ wordBreak: "break-all" }}>
+                            {variable.name}
                         </Typography>
-                    </Card>
-                </Box>
-            ))}
-        </Stack>
+                        <Card variant="outlined" key={variable.name} sx={{ width: "min-content" }}>
+                            <Typography variant="h5" p={isSp ? 1 : 3}>
+                                {variableValueToNode(variable.name, variable.value)}
+                            </Typography>
+                        </Card>
+                    </Box>
+                ))}
+            </Stack>
+        </Box>
     );
 };
 

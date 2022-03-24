@@ -1,7 +1,6 @@
-import { useChange, useSelectMode } from "src/redux/app/operations";
 import { useHotkeys } from "react-hotkeys-hook";
 import { saveToBrowser } from "src/format";
-import { KeyboardEventHandler, useEffect } from "react";
+import { useChange } from "src/redux/app/hooks";
 
 
 const KeyboardHotKeys = () => {

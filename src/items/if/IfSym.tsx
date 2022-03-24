@@ -4,12 +4,12 @@ import { FC, ReactNode, useEffect, useRef } from "react";
 import ErrorView from "src/components/util/ErrorView";
 import { config } from "src/items/base/SymBase";
 import { logger } from "src/lib/logger";
-import { useSelectItemIds } from "src/redux/app/operations";
+import { useSelectItemIds } from "src/redux/app/hooks";
 import { isSelecting } from "src/redux/app/selectors";
-import { useItem } from "src/redux/items/operations";
+import { useItem } from "src/redux/items/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { isFlow, ItemId } from "src/redux/items/types";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 import SymBase, {
     SymChild,
     SymComponent,

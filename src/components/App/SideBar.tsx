@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { useMode } from "src/redux/app/operations";
+import { useMode } from "src/redux/app/hooks";
 import EditSidebar from "./EditSidebar";
 import ExecuteSidebar from "./ExecuteSidebar";
 

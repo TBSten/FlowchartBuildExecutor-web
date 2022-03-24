@@ -1,5 +1,5 @@
 import { notImplement } from "src/lib/error";
-import { useSym } from "src/redux/items/operations";
+import { useSym } from "src/redux/items/hooks";
 import SymBase, { SymChild, SymComponent, SymRender } from "../base/SymBase";
 import Flow from "../flow/Flow";
 import { getOption } from "../option";

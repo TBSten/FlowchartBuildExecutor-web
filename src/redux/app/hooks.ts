@@ -21,7 +21,7 @@ import { ItemId } from "../items/types";
 import { useCallback } from "react";
 import { getAllItems } from "../items/selectors";
 import { getFlowIds } from "../meta/selectors";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 
 export function useMode() {
     const mode = useAppSelector(getMode());

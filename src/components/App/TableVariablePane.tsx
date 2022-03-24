@@ -7,7 +7,7 @@ import { FC } from "react";
 import { VariableValue } from "src/execute/eval";
 import { notImplementError } from "src/lib/error";
 import { isBoolean, isBooleanArray, isBooleanArray2D, isNumber, isNumberArray, isNumberArray2D, isString, isStringArray, isStringArray2D } from "src/lib/typechecker";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 import NoneVariable from "./NoneVariablePane";
 
 const TableVariablePane: FC<{

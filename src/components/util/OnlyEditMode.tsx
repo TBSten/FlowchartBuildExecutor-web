@@ -1,13 +1,13 @@
 import { FC, ReactNode } from "react";
-import { useMode } from "src/redux/app/operations";
+import { useMode } from "src/redux/app/hooks";
 
 export interface OnlyEditModeProps {
-    fallback? : ReactNode ;
+    fallback?: ReactNode;
 }
 
-const OnlyEditMode: FC<OnlyEditModeProps> = ({children,fallback=""}) => {
-    const [mode] = useMode() ;
-    return mode === "edit" ? <>{children}</> : <>{fallback}</> ;
+const OnlyEditMode: FC<OnlyEditModeProps> = ({ children, fallback = "" }) => {
+    const [mode] = useMode();
+    return mode === "edit" ? <>{children}</> : <>{fallback}</>;
 }
-export default OnlyEditMode ;
+export default OnlyEditMode;
 

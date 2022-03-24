@@ -1,8 +1,8 @@
 
 import Box from "@mui/material/Box";
 import ErrorView from "src/components/util/ErrorView";
-import { useItem } from "src/redux/items/operations";
-import { isFlow, isSym } from "src/redux/items/types";
+import { useItem } from "src/redux/items/hooks";
+import { isSym } from "src/redux/items/types";
 import SymBase, { SymChild, SymComponent, SymRender } from "../base/SymBase";
 import Flow from "../flow/Flow";
 import { getOption } from "../option";

@@ -4,7 +4,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import SpeedDialIcon from "@mui/material/SpeedDialIcon";
 import React, { FC } from "react";
-import { useMode, useZoom } from "src/redux/app/operations";
+import { useMode, useZoom } from "src/redux/app/hooks";
 
 export interface FabsProps { }
 

@@ -1,14 +1,13 @@
-import React, { FC, useRef, useEffect } from "react";
-import { config } from "../base/SymBase";
-import Box from "@mui/material/Box";
-import { useChange, useMode } from "src/redux/app/operations";
-import { useFlow, useItemOperations } from "src/redux/items/operations";
-import { Item, ItemId } from "src/redux/items/types";
-import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import { makeItemId } from "../util";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import React, { FC, useEffect, useRef } from "react";
+import { useChange, useMode, useSelectItemIds } from "src/redux/app/hooks";
+import { useFlow, useItemOperations } from "src/redux/items/hooks";
+import { Item, ItemId } from "src/redux/items/types";
+import { config } from "../base/SymBase";
 import { calcSymCreator } from "../calc/creator";
-import { useSelectItemIds } from "src/redux/app/operations";
+import { makeItemId } from "../util";
 
 const width = config.size.width;
 const height = config.size.height / 2;

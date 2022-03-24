@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { getRuntimeKeys } from "src/execute/runtime";
 import { FBE_VERSION } from "src/lib/constants";
 import { logger } from "src/lib/logger";
-import { useZoom } from "src/redux/app/operations";
+import { useZoom } from "src/redux/app/hooks";
 import { loadItems } from "src/redux/items/actions";
 import { Item, ItemId } from "src/redux/items/types";
 import { loadMeta } from "src/redux/meta/actions";

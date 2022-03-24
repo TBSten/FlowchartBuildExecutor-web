@@ -5,7 +5,7 @@ import SidebarContent from "src/components/App/SidebarContent";
 import ErrorView from "src/components/util/ErrorView";
 import { useScrollIntoView } from "src/lib/useScrollIntoView";
 import { Item } from "src/redux/items/types";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 import { useSp } from "src/style/media";
 import { Runtime } from "./Runtime";
 

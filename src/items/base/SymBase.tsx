@@ -2,11 +2,11 @@ import Box from "@mui/material/Box";
 import React, { FC, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { selectItemOne } from "src/redux/app/actions";
-import { useMode } from "src/redux/app/operations";
+import { useMode } from "src/redux/app/hooks";
 import { Mode } from "src/redux/app/types";
-import { useSym } from "src/redux/items/operations";
+import { useSym } from "src/redux/items/hooks";
 import { ItemId, Sym } from "src/redux/items/types";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 
 
 export const config = {

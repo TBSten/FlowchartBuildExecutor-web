@@ -1,9 +1,9 @@
 import { useDispatch } from "react-redux";
-import { useChange } from "../app/operations";
+import { useChange } from "../app/hooks";
 import { removeItem, setItem, setOption } from "./actions";
 import { getItem, getItems, getOption, } from "./selectors";
 import { isFlow, isSym, Item, ItemId, OptionValue } from "./types";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 
 export function useItem(itemId: ItemId) {
     const item = useAppSelector(getItem(itemId));

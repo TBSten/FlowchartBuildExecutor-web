@@ -1,14 +1,14 @@
-import { FC , useEffect } from "react";
-import { useChange } from "src/redux/app/operations";
+import { FC, useEffect } from "react";
+import { useChange } from "src/redux/app/hooks";
 
 
-export interface ConfirmOnUnloadProps {}
+export interface ConfirmOnUnloadProps { }
 
 const ConfirmOnUnload: FC<ConfirmOnUnloadProps> = () => {
-    const {isExistsChange} = useChange() ;
+    const { isExistsChange } = useChange();
     useEffect(() => {
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if(isExistsChange){
+            if (isExistsChange) {
                 e.preventDefault();
                 e.returnValue = "";
             }

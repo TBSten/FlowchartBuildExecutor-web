@@ -1,8 +1,8 @@
 import Stack from "@mui/material/Stack";
 import React, { FC } from "react";
-import { useFlow } from "src/redux/items/operations";
+import { useFlow } from "src/redux/items/hooks";
 import { ItemId } from "src/redux/items/types";
-import { useAppSelector } from "src/redux/root/operations";
+import { useAppSelector } from "src/redux/root/hooks";
 import Arrow from "./Arrow";
 import ChildSym from "./ChildSym";
 
