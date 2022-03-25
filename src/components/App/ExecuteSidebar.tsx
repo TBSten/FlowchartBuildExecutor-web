@@ -24,7 +24,6 @@ import { useSp } from "src/style/media";
 import SidebarContent from "./SidebarContent";
 import VariableDialog from "./VariableDialog";
 
-// const runtimeFactories = getRuntimeFactories();
 const runtimeNames = getRuntimeKeys();
 
 
@@ -118,9 +117,6 @@ const SelectRuntime: FC<{}> = () => {
 };
 
 const ExeButtons: FC<{}> = () => {
-    // const runtime = useAppSelector(state => state.app.runtime);
-    // const items = useAppSelector(getAllItems());
-    // const topFlowIds = useAppSelector(getFlowIds());
     const {
         runtime,
         initialize,

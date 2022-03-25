@@ -30,3 +30,6 @@ export const incZoom = actionCreator<{ zoom: number }>("app/zoom/inc");
 export const notifyChange = actionCreator("app/changeCount/notify");
 export const resetChangeCount = actionCreator("app/changeCount/reset");
 
+export const setDraggingItemId = actionCreator<{ itemId: ItemId | null }>("app/draggingItemId/set");
+
+

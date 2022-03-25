@@ -1,20 +1,22 @@
 import { useDispatch } from "react-redux";
 import { useChange } from "../app/hooks";
-import { removeItem, setItem, setOption } from "./actions";
+import { exchangeItems, removeItem, setItem, setOption } from "./actions";
 import { getItem, getItems, getOption, } from "./selectors";
 import { isFlow, isSym, Item, ItemId, OptionValue } from "./types";
 import { useAppSelector } from "src/redux/root/hooks";
 
 export function useItem(itemId: ItemId) {
     const item = useAppSelector(getItem(itemId));
-    const dispatch = useDispatch();
-
+    const { notifyChange } = useChange();
+    const { setItem, removeItem } = useItemOperations();
     const set = (item: Item) => {
-        dispatch(setItem({ item }));
+        setItem(item);
+        notifyChange();
     };
     const remove = () => {
-        dispatch(removeItem({ itemId }));
-    };
+        removeItem(itemId);
+        notifyChange();
+    }
     return [item, { set, remove }] as const;
 }
 
@@ -29,6 +31,13 @@ export function useItemOperations() {
         dispatch(removeItem({ itemId }))
         notifyChange();
     };
+    const exchange = (itemId1: ItemId, itemId2: ItemId) => {
+        dispatch(exchangeItems({
+            itemId1,
+            itemId2,
+        }));
+        notifyChange();
+    }
     const _setOption = (itemId: ItemId, name: string, value: OptionValue) => {
         dispatch(setOption({
             itemId,
@@ -41,6 +50,7 @@ export function useItemOperations() {
         setItem: set,
         removeItem: remove,
         setOption: _setOption,
+        exchangeItems: exchange,
     };
 }
 

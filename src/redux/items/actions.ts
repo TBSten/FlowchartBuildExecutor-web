@@ -10,6 +10,10 @@ export const setItem = actionCreator<{
 export const removeItem = actionCreator<{
     itemId: ItemId;
 }>("items/remove");
+export const exchangeItems = actionCreator<{
+    itemId1: ItemId,
+    itemId2: ItemId
+}>("items/exchange");
 export const setOption = actionCreator<{
     itemId: ItemId;
     name: string;

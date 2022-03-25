@@ -1,5 +1,7 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+    getDraggingItemId,
+    getLogs,
     getMode,
     getSelectItemIds,
     getZoom,
@@ -16,12 +18,14 @@ import {
     notifyChange as notifyChangeAction,
     resetChangeCount as resetChangeCountAction,
     setSelectMode,
+    setDraggingItemId,
 } from "./actions";
 import { ItemId } from "../items/types";
-import { useCallback } from "react";
+import { DragEventHandler, useCallback } from "react";
 import { getAllItems } from "../items/selectors";
 import { getFlowIds } from "../meta/selectors";
 import { useAppSelector } from "src/redux/root/hooks";
+import { useItemOperations } from "../items/hooks";
 
 export function useMode() {
     const mode = useAppSelector(getMode());
@@ -150,4 +154,54 @@ export function useExecute() {
         canStop,
     } as const;
 }
+
+export function useLogs() {
+    const logs = useSelector(getLogs());
+    return {
+        logs,
+    };
+}
+
+const TRANSFER_KEY = "FBE_DRAGGING_ITEM_ID";
+export function useDragAndDropItem(itemId: ItemId) {
+    const dispatch = useDispatch();
+    const isDragging = useSelector(getDraggingItemId()) === itemId;
+    const { exchangeItems } = useItemOperations();
+    const [selectItemIds, { selectOne }] = useSelectItemIds();
+    const onDragStart: DragEventHandler = (e) => {
+        dispatch(setDraggingItemId({ itemId }))
+        e.dataTransfer.setData(TRANSFER_KEY, itemId);
+        selectOne(itemId);
+    };
+    const onDrop: DragEventHandler = (e) => {
+        dispatch(setDraggingItemId({ itemId: null }))
+        const fromId = e.dataTransfer.getData(TRANSFER_KEY);
+        const toId = itemId;
+        console.log("from", fromId);
+        console.log("to", toId);
+        exchangeItems(fromId, toId);
+    };
+    const onDragEnd: DragEventHandler = () => {
+        dispatch(setDraggingItemId({ itemId: null }))
+    }
+    const onDragEnter: DragEventHandler = (e) => {
+        e.preventDefault();
+        if (e.dataTransfer.getData(TRANSFER_KEY) !== itemId) {
+            console.log("dragover")
+        }
+    };
+    const onDragOver: DragEventHandler = (e) => {
+        e.preventDefault();
+    };
+    return {
+        isDragging,
+        onDragStart,
+        onDragEnd,
+        onDrop,
+        onDragEnter,
+        onDragOver,
+        draggable: true,
+    }
+}
+
 

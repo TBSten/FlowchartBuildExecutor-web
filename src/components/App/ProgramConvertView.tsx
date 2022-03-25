@@ -11,8 +11,6 @@ import { EnableTarget } from "src/lib/fbeToProgram";
 import UtilDialog, { useUtilDialog } from "./UtilDialog";
 
 const StyledPre = styled("pre")({
-    // backgroundColor: "#222327",
-    // color: "white",
     padding: 8,
     margin: 0,
     minWidth: "100%",

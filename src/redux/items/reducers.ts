@@ -1,6 +1,9 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
 import { isFlow, isSym, Items, Option, Sym } from "./types";
 import * as actions from "./actions";
+import produce from "immer";
+import { notImplement, notImplementError } from "src/lib/error";
+import { logger } from "src/lib/logger";
 
 export const init: Items = [];
 
@@ -41,6 +44,22 @@ export const items = reducerWithInitialState(init)
         });
         return newState;
     })
+    .case(actions.exchangeItems, (state, payload) => {
+        if (payload.itemId1 === payload.itemId2) return state;
+        const { itemId1, itemId2 } = payload;
+        return produce(state, draft => {
+            const idx1 = draft.findIndex(item => item.itemId === itemId1);
+            const idx2 = draft.findIndex(item => item.itemId === itemId2);
+            if (idx1 >= 0 && idx2 >= 0) {
+                draft[idx1].itemId = itemId2;
+                draft[idx2].itemId = itemId1;
+            } else {
+                logger.error("invalid itemIds", itemId1, itemId2)
+                throw notImplementError(`invalid itemIds`);
+            }
+            console.log(draft)
+        });
+    })
     .case(actions.setOption, (state, payload) => {
         const targetId = payload.itemId;
         const targetName = payload.name;
@@ -67,6 +86,6 @@ export const items = reducerWithInitialState(init)
         return payload.items;
     })
     .case(actions.resetItems, () => {
-        return init ;
+        return init;
     })
 

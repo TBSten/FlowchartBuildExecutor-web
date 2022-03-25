@@ -145,15 +145,6 @@ export type PureVariableValue =
     | number
     | boolean;
 export type VariableValue =
-    // | string
-    // | number
-    // | boolean
-    // | string[]
-    // | number[]
-    // | boolean[]
-    // | string[][]
-    // | number[][]
-    // | boolean[][];
     | PureVariableValue
     | PureVariableValue[]
     | PureVariableValue[][];
@@ -231,6 +222,5 @@ export function evalFormula(
     Object.entries(doubleOperators).forEach(([op, { priority, callback }]) => {
         jseEval.addBinaryOp(op, priority, callback);
     })
-    // delete ExpressionEval.evaluators["ArrayExpression"];    //配列の無効化
 })();
 

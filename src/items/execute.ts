@@ -21,8 +21,5 @@ const executes: {
 });
 executes["flow"] = flowExecute;
 
-
-console.log(executes)
-
 export default executes;
 

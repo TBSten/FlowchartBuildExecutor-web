@@ -99,10 +99,6 @@ export const optionInputs: {
 
 };
 
-
-// export function useOptionInputs(option:Option){
-// }
-
 export function getOption(item: Item, name: string) {
     if (isSym(item)) {
         const option = item.options.find(o => o.name === name);

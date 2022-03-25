@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
-// import Guide from "./components/App/Guide";
 import { useEffect, useRef } from "react";
 import { loadFromBrowser } from "src/format";
 import BuildPane from "./components/App/BuildPane";

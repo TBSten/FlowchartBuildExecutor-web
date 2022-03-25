@@ -27,15 +27,6 @@ const bottom = {
     x: width / 2,
     y: height
 };
-// const base = Math.min(height/4,10) ;
-// const left = {
-//     x: bottom.x-base,
-//     y: bottom.y-base
-// } ;
-// const right = {
-//     x: bottom.x+base,
-//     y: bottom.y-base
-// } ;
 
 const Arrow: FC<ArrowProps> = ({ flowId, index, arrow = true, selectable }) => {
     const ref = useRef<HTMLCanvasElement>(null);

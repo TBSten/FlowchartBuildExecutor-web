@@ -26,7 +26,6 @@ const TableVariablePane: FC<{
     }, new Set<string>());
     const headers = Array.from(headerSet.values());
     return (
-        // <TableContainer>
         <Table stickyHeader size="small" sx={{ minWidth: "70vw" }}>
             <TableHead>
                 <TableRow>
@@ -63,7 +62,6 @@ const TableVariablePane: FC<{
                 ))}
             </TableBody>
         </Table>
-        // </TableContainer>
     );
 };
 

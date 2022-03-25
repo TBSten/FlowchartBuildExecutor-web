@@ -29,5 +29,5 @@ export const getZoom = () => (state: StoreState) => state.app.zoom;
 
 export const isExistsChange = () => (state: StoreState) => state.app.changeCount > 0;
 
-
+export const getDraggingItemId = () => (state: StoreState) => state.app.draggingItemId;
 

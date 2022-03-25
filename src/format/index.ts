@@ -77,7 +77,6 @@ export function saveFormatToJson(saveFormat: SaveFormat) {
 export function storeStateToJson() {
     return saveFormatToJson(storeStateToSaveFormat());
 }
-// const SAVE_KEY = "FBE_TEMP_SAVE_DATA_KEY";
 export function saveToBrowser() {
     const saveFormat = storeStateToJson();
     storeJs(SAVE_KEYS.FBE_SAVE_DATA, saveFormat);

@@ -6,6 +6,8 @@ import { Runtime } from "src/execute/runtime/Runtime";
 import { ReactNode } from "react";
 import { Log } from "src/lib/logger";
 
+export const zoomUnit = 0.1;
+
 export const init = {
     mode: "edit" as Mode,
     selectItemIds: [] as ItemId[],
@@ -21,7 +23,7 @@ export const init = {
 
     changeCount: 0,
 
-
+    draggingItemId: null as ItemId | null,
 
 };
 
@@ -113,16 +115,18 @@ export const app = reducerWithInitialState(init)
 
     //zoom
     .case(actions.setZoom, (state, payload) => {
+        const newValue = payload.zoom;
         if (state.zoom === payload.zoom) return state;
         return {
             ...state,
-            zoom: payload.zoom,
+            zoom: Math.round(newValue / zoomUnit) * zoomUnit,
         };
     })
     .case(actions.incZoom, (state, payload) => {
+        const newValue = state.zoom + payload.zoom;
         return {
             ...state,
-            zoom: state.zoom + payload.zoom,
+            zoom: Math.round(newValue / zoomUnit) * zoomUnit,
         };
     })
 
@@ -140,6 +144,14 @@ export const app = reducerWithInitialState(init)
         };
     })
 
+    //draggingItemId
+    .case(actions.setDraggingItemId, (state, payload) => {
+        if (payload.itemId === state.draggingItemId) return state;
+        return {
+            ...state,
+            draggingItemId: payload.itemId,
+        }
+    })
 
 
 

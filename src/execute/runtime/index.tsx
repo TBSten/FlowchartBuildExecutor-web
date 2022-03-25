@@ -8,14 +8,7 @@ const runtimeFactories: {
 } = {
     "メッセージボックス": () => new MsgRuntime(),
     "ターミナル": () => new TerminalRuntime(),
-    // "for test": () => new TestRuntime(),
 };
-
-
-// export function getRuntimes(){
-//     return runtimeFas ;
-// }
-
 
 export function getRuntime(name: string = "メッセージボックス") {
     logger.log("getRuntime", name)

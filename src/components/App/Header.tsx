@@ -38,12 +38,13 @@ import { useDispatch } from "react-redux";
 import {
     loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
 } from "src/format";
-import { FBE_DOC_URL, VERSION } from "src/lib/constants";
+import { FBE_DOC_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
 import { donwloadImage } from "src/lib/image";
 import { logger } from "src/lib/logger";
-import { useChange, useExecute, useMode, useSelectItemIds, useZoom } from "src/redux/app/hooks";
+import { useChange, useExecute, useLogs, useMode, useSelectItemIds, useZoom } from "src/redux/app/hooks";
+import { zoomUnit } from "src/redux/app/reducers";
 import { resetItems } from "src/redux/items/actions";
 import { useItemOperations } from "src/redux/items/hooks";
 import { resetMeta } from "src/redux/meta/actions";
@@ -54,7 +55,6 @@ import OnlyExeMode from "../util/OnlyExeMode";
 import ProgramConvertView from "./ProgramConvertView";
 import UtilDialog, { useUtilDialog, UtilDialogProps } from "./UtilDialog";
 
-// import { StoreState } from "src/redux/store";
 
 export interface HeaderProps { }
 
@@ -101,10 +101,19 @@ const Title: FC<HeaderProps> = () => {
 interface RightTopMenuProps {
 }
 function useMenuItems(): ({ label: string, onSelect?: () => any } | "hr")[] {
-    const { } = use
-    const handleSendError = useCallback(() => {
-        logger.log("send error")
-    }, []);
+    const { logs } = useLogs();
+    const handleSendError = useCallback(async () => {
+        try {
+            logger.log("send error", logs)
+            const res = await fetch(FBE_SUPPORT_BACKEND_URL, {
+                method: "POST",
+                body: JSON.stringify({ logs })
+            });
+            logger.log(res)
+        } catch (e) {
+            logger.error(e)
+        }
+    }, [logs]);
     return useMemo(() => [
         { label: "全てのメニュー", },
         "hr",
@@ -136,16 +145,19 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
                 open={open}
                 onClose={handleClose}
             >
-                {menuItems.map(menuItem => (
+                {menuItems.map((menuItem, i) => (
                     menuItem === "hr" ?
-                        <Divider orientation="horizontal" />
+                        <Divider orientation="horizontal" key={menuItem + i} />
                         :
                         menuItem.onSelect ?
-                            <MenuItem onClick={handleSelectMenuItem(menuItem.onSelect)} key={menuItem.label}>
+                            <MenuItem
+                                key={menuItem.label}
+                                onClick={handleSelectMenuItem(menuItem.onSelect)}
+                            >
                                 {menuItem.label}
                             </MenuItem>
                             :
-                            <MenuItem disabled>
+                            <MenuItem disabled key={menuItem.label}>
                                 {menuItem.label}
                             </MenuItem>
                 ))}
@@ -306,7 +318,6 @@ const LeftTopMenu: FC<{}> = () => {
 const Tools: FC<{}> = () => {
     const { resetChangeCount, isExistsChange } = useChange();
     const [mode, setMode] = useMode();
-    // const runtime = useAppSelector((state:StoreState)=>state.app.runtime);
     const [, , incZoom] = useZoom();
     const [selectItemIds] = useSelectItemIds();
     const [, { removeFlow }] = useFlows();
@@ -328,12 +339,11 @@ const Tools: FC<{}> = () => {
             setMode("execute");
         }
         if (mode === "execute") {
-            // runtime?.executeNext();
             setMode("edit");
         }
     };
-    const handleZoomIn = () => incZoom(+0.05);
-    const handleZoomOut = () => incZoom(-0.05);
+    const handleZoomIn = () => incZoom(+zoomUnit);
+    const handleZoomOut = () => incZoom(-zoomUnit);
     const handleRemoveSelectItem = () => {
         selectItemIds.forEach(id => {
             removeFlow(id);
@@ -448,7 +458,6 @@ const SelectTarget: FC<SelectTargetProps> = ({
         try {
             const start = new Date();
             setFetchState("fetching")
-            // const program = await fbeToProgram(target);
             const [program] = await Promise.all([
                 fbeToProgram(target),
                 new Promise<void>((resolve) => setTimeout(resolve, 750))
@@ -460,7 +469,6 @@ const SelectTarget: FC<SelectTargetProps> = ({
             setFetchState("success")
         } catch (e) {
             logger.error(e);
-            // alert("エラーが発生しました");
             setFetchState("error")
             const error = e as any;
             setErrMsg(

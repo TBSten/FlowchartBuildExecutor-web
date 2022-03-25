@@ -5,7 +5,6 @@ import produce from "immer";
 import { clone, isNumber } from "lodash";
 import { ReactNode } from "react";
 import { evalFormula, evalFormulaAsVariableValue, isVariableValue, PureVariableValue, Variable, VariableValue } from "src/execute/eval";
-// import _ from "lodash" ;
 import executes from "src/items/execute";
 import { getOption } from "src/items/option";
 import { notImplement, notImplementError } from "src/lib/error";
@@ -330,7 +329,6 @@ export abstract class Runtime {
         return vars;
     }
     async getVariable(name: string): Promise<Variable | undefined> {
-        // const split = name.split(/\]\[|\]|\[/).filter(e => e !== "" && !e.match(/^(\s+)$/));
         const variable = this.variables.find((v) => v.name === name);;
         return variable;
     }
@@ -362,7 +360,6 @@ export abstract class Runtime {
             indexes = indexes.slice(1)
             const v = await this.getVariable(name);
             if (!v) { throw notImplementError(`invalid value ${name} : ${v}`); }
-            // console.log(name, ...(indexes.splice(1)), "<-", assignValue)
             const arr = (await this.getVariable(name))?.value;
             if (!(arr instanceof Array)) throw notImplementError(`invalid array ${arr}`);
             let newValue: Exclude<VariableValue, PureVariableValue> = clone(arr);

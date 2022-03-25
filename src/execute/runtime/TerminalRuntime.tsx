@@ -30,7 +30,6 @@ export class TerminalRuntime extends Runtime {
         this.ioHistory = [];
     }
     async output(...data: string[]): Promise<void> {
-        // await this.showMsgBox(data.join(" "));
         this.ioHistory = produce(this.ioHistory, draft => {
             draft.push({
                 type: "out",

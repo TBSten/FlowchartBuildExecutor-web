@@ -17,12 +17,6 @@ const Fabs: FC<FabsProps> = () => {
     const handleToExeMode = () => {
         setMode("execute");
     };
-    // const handleZoomIn = () => {
-    //     incZoom(+0.05);
-    // };
-    // const handleZoomOut = () => {
-    //     incZoom(-0.05);
-    // };
     return (
         <>
             <SpeedDial ariaLabel="" icon={<SpeedDialIcon />} direction="down">

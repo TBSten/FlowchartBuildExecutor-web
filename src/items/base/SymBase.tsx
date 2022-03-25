@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import React, { FC, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { selectItemOne } from "src/redux/app/actions";
-import { useMode } from "src/redux/app/hooks";
+import { useDragAndDropItem, useMode } from "src/redux/app/hooks";
 import { Mode } from "src/redux/app/types";
 import { useSym } from "src/redux/items/hooks";
 import { ItemId, Sym } from "src/redux/items/types";
@@ -69,7 +69,7 @@ const SymBase = (
             {children}
         </Box>
     );
-    const ChildCon: FC<{}> = ({ children }) => (
+    const ChildCon: FC<{}> = ({ children, ...other }) => (
         <Box
             sx={{
                 position: "absolute",
@@ -84,12 +84,19 @@ const SymBase = (
                 fontSize: "14px",
                 p: 1,
             }}
+            {...other}
         >
             {children}
         </Box>
     );
     const Sym: SymComponent = ({ itemId }) => {
-        const { handleSelect, canvasRef, sym } = useSymBase({ itemId, render });
+        const {
+            handleSelect,
+            canvasRef,
+            sym,
+            isDragging,
+            props,
+        } = useSymBase({ itemId, render });
         return (
             <Box
                 sx={{
@@ -113,7 +120,9 @@ const SymBase = (
                         ref={canvasRef}
                     />
                 </CanvasCon>
-                <ChildCon>
+                <ChildCon
+                    {...props}
+                >
                     <Child sym={sym} />
                 </ChildCon>
             </Box>
@@ -132,10 +141,15 @@ export function useSymBase({ itemId, render }: UseSymBaseArg) {
     const [sym] = useSym(itemId);
     const canvasRef = useSymRender({ itemId, render });
     const handleSelect = useSymSelect({ itemId });
+    const [isDragging, dragProps] = useSymDragAndDrop(itemId);
     return {
         handleSelect,
         canvasRef,
         sym,
+        isDragging,
+        props: {
+            ...dragProps,
+        }
     };
 }
 
@@ -156,8 +170,10 @@ export function useSymRender({
     const isExecuting = useAppSelector(state => {
         return state.app.runtime?.executingItemId === itemId;
     });
-
+    const { isDragging } = useDragAndDropItem(itemId);
     useEffect(() => {
+        console.log("canvas render", itemId);
+
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext("2d");
         if (canvas && ctx) {
@@ -169,7 +185,7 @@ export function useSymRender({
             const color = {
                 ...config.color,
             };
-            if (isSelect) {
+            if (isSelect || isDragging) {
                 color.fore = "#0808b1";
             }
             if (isExecuting) {
@@ -183,7 +199,7 @@ export function useSymRender({
 
             render(ctx, size, color, mode, isSelect);
         }
-    }, [mode, itemId, isSelect, isExecuting, render]);
+    }, [mode, itemId, isSelect, isDragging, isExecuting, render]);
     return canvasRef;
 }
 
@@ -200,3 +216,12 @@ export function useSymSelect({ itemId }: UseSymSelectArg) {
     };
     return handleSelect;
 }
+
+export function useSymDragAndDrop(itemId: ItemId) {
+    const { isDragging, ...other } = useDragAndDropItem(itemId);
+    return [
+        isDragging,
+        other,
+    ] as const;
+}
+

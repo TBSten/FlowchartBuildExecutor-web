@@ -333,7 +333,6 @@ const OptionDialog = React.memo(
     }) => {
         const { setOption } = useItemOperations();
         const { notifyChange } = useChange();
-        // const [openDialog,setOpenDialog] = useState(false) ;
         const Input = optionInputs[option.type].component;
         const handleUpdate: UpdateOption = (newValue) => {
             setOption(itemId, option.name, newValue);
