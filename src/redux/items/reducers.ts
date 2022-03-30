@@ -57,7 +57,6 @@ export const items = reducerWithInitialState(init)
                 logger.error("invalid itemIds", itemId1, itemId2)
                 throw notImplementError(`invalid itemIds`);
             }
-            console.log(draft)
         });
     })
     .case(actions.setOption, (state, payload) => {

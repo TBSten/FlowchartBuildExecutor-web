@@ -177,8 +177,6 @@ export function useDragAndDropItem(itemId: ItemId) {
         dispatch(setDraggingItemId({ itemId: null }))
         const fromId = e.dataTransfer.getData(TRANSFER_KEY);
         const toId = itemId;
-        console.log("from", fromId);
-        console.log("to", toId);
         exchangeItems(fromId, toId);
     };
     const onDragEnd: DragEventHandler = () => {
@@ -187,7 +185,6 @@ export function useDragAndDropItem(itemId: ItemId) {
     const onDragEnter: DragEventHandler = (e) => {
         e.preventDefault();
         if (e.dataTransfer.getData(TRANSFER_KEY) !== itemId) {
-            console.log("dragover")
         }
     };
     const onDragOver: DragEventHandler = (e) => {

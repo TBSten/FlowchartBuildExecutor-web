@@ -172,8 +172,6 @@ export function useSymRender({
     });
     const { isDragging } = useDragAndDropItem(itemId);
     useEffect(() => {
-        console.log("canvas render", itemId);
-
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext("2d");
         if (canvas && ctx) {

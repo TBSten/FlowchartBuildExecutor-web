@@ -42,13 +42,14 @@ import { FBE_DOC_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
 import { donwloadImage } from "src/lib/image";
-import { logger } from "src/lib/logger";
+import { Log, logger } from "src/lib/logger";
 import { useChange, useExecute, useLogs, useMode, useSelectItemIds, useZoom } from "src/redux/app/hooks";
 import { zoomUnit } from "src/redux/app/reducers";
 import { resetItems } from "src/redux/items/actions";
 import { useItemOperations } from "src/redux/items/hooks";
 import { resetMeta } from "src/redux/meta/actions";
 import { useFlows, useTitle } from "src/redux/meta/hooks";
+import { usePc } from "src/style/media";
 import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
 import OnlyEditMode from "../util/OnlyEditMode";
 import OnlyExeMode from "../util/OnlyExeMode";
@@ -98,31 +99,35 @@ const Title: FC<HeaderProps> = () => {
     );
 };
 
+async function sendLogs(logs: Log[]) {
+    try {
+        logger.log("send error", logs)
+        const res = await fetch(FBE_SUPPORT_BACKEND_URL, {
+            method: "POST",
+            headers: new Headers({
+                "Content-Type": "application/json",
+            }),
+            body: JSON.stringify({ logs, })
+        });
+        const json = await res.json();
+        logger.log(res, json)
+        return typeof json?.reportNo === "number" ? json.reportNo : -1;
+    } catch (e) {
+        logger.error(e)
+    }
+}
 interface RightTopMenuProps {
 }
-function useMenuItems(): ({ label: string, onSelect?: () => any } | "hr")[] {
-    const { logs } = useLogs();
-    const handleSendError = useCallback(async () => {
-        try {
-            logger.log("send error", logs)
-            const res = await fetch(FBE_SUPPORT_BACKEND_URL, {
-                method: "POST",
-                body: JSON.stringify({ logs })
-            });
-            logger.log(res)
-        } catch (e) {
-            logger.error(e)
-        }
-    }, [logs]);
-    return useMemo(() => [
-        { label: "全てのメニュー", },
-        "hr",
-        {
-            label: "エラーレポートを送信",
-            onSelect: handleSendError,
-        }
-    ], [handleSendError]);
-}
+// function useMenuItems(): ({ label: string, onSelect?: () => any } | "hr")[] {
+//     return useMemo(() => [
+//         { label: "全てのメニュー", },
+//         "hr",
+//         {
+//             label: "エラーレポートを送信",
+//             onSelect: handleSendError,
+//         }
+//     ], [handleSendError]);
+// }
 const RightTopMenu: FC<RightTopMenuProps> = () => {
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const open = Boolean(anchor);
@@ -134,7 +139,52 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             cb();
         }
     }
-    const menuItems = useMenuItems();
+    // const menuItems = useMenuItems();
+    const { logs } = useLogs();
+    const [reportNo, setReportNo] = useState(-1);
+    const isPc = usePc();
+    const [confirm, confirmProps] = useConfirmDialog(reportNo >= 0 ? <>
+        <Typography variant="h6" textAlign="center">
+            レポートを送信しました。
+        </Typography>
+        <Box fontSize={12}>
+            レポート番号:
+        </Box>
+        <Box
+            textAlign="center"
+            fontSize={isPc ? 40 : 20}
+            px={1}
+            py={2}
+            color={theme => theme.palette.primary.main}
+            sx={{ overflowWrap: "break-word" }}
+        >
+            {reportNo}
+        </Box>
+        <Typography variant="body2">
+            レポート番号は後にサポートを受けるために必要なレポートの識別番号です。
+            保管することをお勧めします。
+        </Typography>
+    </> : <>
+        <Typography variant="h6" textAlign="center">
+            レポートの送信に失敗しました。
+        </Typography>
+        <Typography variant="body2">
+            もう一度送り直してください。
+        </Typography>
+    </>);
+    const handleSendError = useCallback(async () => {
+        const reportNo = await sendLogs(logs)
+        setReportNo(reportNo);
+        confirm();
+    }, [logs]);
+    const menuItems = useMemo(() => [
+        { label: "全てのメニュー", },
+        "hr",
+        {
+            label: "エラーレポートを送信",
+            onSelect: handleSendError,
+        }
+    ] as const, [handleSendError]);
     return (
         <>
             <IconButton onClick={handleOpen}>
@@ -149,10 +199,10 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
                     menuItem === "hr" ?
                         <Divider orientation="horizontal" key={menuItem + i} />
                         :
-                        menuItem.onSelect ?
+                        (menuItem as any).onSelect ?
                             <MenuItem
                                 key={menuItem.label}
-                                onClick={handleSelectMenuItem(menuItem.onSelect)}
+                                onClick={handleSelectMenuItem((menuItem as any).onSelect)}
                             >
                                 {menuItem.label}
                             </MenuItem>
@@ -162,6 +212,9 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
                             </MenuItem>
                 ))}
             </Menu>
+            <ConfirmDialog {...confirmProps}>
+
+            </ConfirmDialog>
         </>
     );
 }
