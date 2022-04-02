@@ -32,4 +32,5 @@ export const resetChangeCount = actionCreator("app/changeCount/reset");
 
 export const setDraggingItemId = actionCreator<{ itemId: ItemId | null }>("app/draggingItemId/set");
 
+export const setEmphasisTarget = actionCreator<{ key: string }>("app/emphasisTarget/set");
 

@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import React, { FC } from "react";
 import { useSavedZoom } from "src/format";
 import CompFlow from "src/items/flow/Flow";
-import { useSelectItemIds } from "src/redux/app/hooks";
+import { useMode, useSelectItemIds } from "src/redux/app/hooks";
 import { isSelecting } from "src/redux/app/selectors";
 import { ItemId } from "src/redux/items/types";
 import { useFlows } from "src/redux/meta/hooks";
@@ -59,14 +59,17 @@ export default React.memo(BuildPane);
 const FlowContainer: FC<{ flowId: ItemId }> = ({ flowId }) => {
     const [, { selectOne }] = useSelectItemIds();
     const isSelect = useAppSelector(isSelecting(flowId))
+    const [mode] = useMode();
     const handleSelect = () => {
         selectOne(flowId);
     };
     return (
         <Box>
-            <Box onClick={handleSelect} >
-                <SelectAllIcon color={isSelect ? "primary" : "inherit"} />
-            </Box>
+            {mode === "edit" ?
+                <Box onClick={handleSelect} >
+                    <SelectAllIcon color={isSelect ? "primary" : "inherit"} />
+                </Box>
+                : null}
             <CompFlow key={flowId} flowId={flowId} selectable={false} />
         </Box>
 

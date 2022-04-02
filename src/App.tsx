@@ -54,32 +54,25 @@ function App() {
                     <BuildPane />
                 </Box>
 
-                {/* <Box
-                    sx={{
-                        position: "fixed",
-                        right: isSp ? 16 : 20,
-                        top: `calc(${headerHeight}px + 10px)`,
-                    }}
-                >
-                    <Fabs />
-                </Box> */}
-
                 <Box
                     sx={{
                         position: "fixed",
                         right: isSp ? 0 : 20,
                         bottom: isSp ? 0 : 10,
                         maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
-                        minWidth: isSp ? "100%" : null,
+                        minWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
+                        // minWidth: isSp ? "100%" : null,
                         maxHeight: isSp ? "35vh" : "calc(100vh - 10px - 132px )",
+                        // minHeight: isSp ? null : "calc(100vh - 10px - 132px )",
                         p: isSp ? 0.5 : undefined,
                         overflow: "auto",
                     }}
                 >
+
                     <Box
                         sx={{
                             overflow: isSp ? "auto" : "visible",
-                            maxHeight: "100%"
+                            maxHeight: "100%",
                         }}
                     >
                         <TitleAccordion title="サイドバー" defaultExpanded>

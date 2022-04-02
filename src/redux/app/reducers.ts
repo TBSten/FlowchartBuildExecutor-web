@@ -25,6 +25,8 @@ export const init = {
 
     draggingItemId: null as ItemId | null,
 
+    emphasisTarget: "",
+
 };
 
 export function changeMode(state: typeof init, mode: Mode) {
@@ -153,6 +155,14 @@ export const app = reducerWithInitialState(init)
         }
     })
 
+    //emphansisTarget
+    .case(actions.setEmphasisTarget, (state, payload) => {
+        if (payload.key === state.emphasisTarget) return state;
+        return {
+            ...state,
+            emphasisTarget: payload.key,
+        }
+    })
 
 
 

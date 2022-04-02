@@ -41,9 +41,10 @@ import {
 import { FBE_DOC_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
-import { donwloadImage } from "src/lib/image";
 import { Log, logger } from "src/lib/logger";
+import { editMode, executeMode, exportMode, setEmphasisTarget } from "src/redux/app/actions";
 import { useChange, useExecute, useLogs, useMode, useSelectItemIds, useZoom } from "src/redux/app/hooks";
+import { TO_IMG_KEY, TO_PROGRAM_KEY } from "src/redux/app/lib";
 import { zoomUnit } from "src/redux/app/reducers";
 import { resetItems } from "src/redux/items/actions";
 import { useItemOperations } from "src/redux/items/hooks";
@@ -177,14 +178,37 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
         setReportNo(reportNo);
         confirm();
     }, [logs]);
+    const dispatch = useDispatch();
+    const handleEditMode = useCallback(() => {
+        dispatch(editMode())
+    }, [])
+    const handleExeMode = useCallback(() => {
+        dispatch(executeMode())
+    }, [])
+    const handleExportMode = useCallback(() => {
+        dispatch(exportMode())
+    }, [])
     const menuItems = useMemo(() => [
         { label: "全てのメニュー", },
         "hr",
         {
+            label: "編集する",
+            onSelect: handleEditMode,
+        },
+        {
+            label: "実行する",
+            onSelect: handleExeMode,
+        },
+        {
+            label: "出力する",
+            onSelect: handleExportMode,
+        },
+        "hr",
+        {
             label: "エラーレポートを送信",
             onSelect: handleSendError,
-        }
-    ] as const, [handleSendError]);
+        },
+    ] as const, [handleSendError, handleEditMode, handleExeMode, handleExportMode]);
     return (
         <>
             <IconButton onClick={handleOpen}>
@@ -258,8 +282,18 @@ const LeftTopMenu: FC<{}> = () => {
         resetChangeCount();
     };
     const handleDownloadImage = () => {
-        donwloadImage(title);
+        // donwloadImage(title);
+        setOpen(false);
+        saveToBrowser();
+        dispatch(exportMode());
+        dispatch(setEmphasisTarget({ key: TO_IMG_KEY }));
     };
+    const handleToProgram = () => {
+        // openTargetSelectDialog();
+        setOpen(false);
+        dispatch(exportMode());
+        dispatch(setEmphasisTarget({ key: TO_PROGRAM_KEY }));
+    }
     return (
         <>
             <IconButton color="inherit" onClick={() => setOpen(true)}>
@@ -320,7 +354,7 @@ const LeftTopMenu: FC<{}> = () => {
                         画像としてエクスポート
                     </ListItem>
 
-                    <ListItem button onClick={openTargetSelectDialog}>
+                    <ListItem button onClick={handleToProgram}>
                         <ListItemIcon>
                             <ChangeCircleIcon />
                         </ListItemIcon>
@@ -394,6 +428,9 @@ const Tools: FC<{}> = () => {
         if (mode === "execute") {
             setMode("edit");
         }
+        if (mode === "export") {
+            setMode("edit");
+        }
     };
     const handleZoomIn = () => incZoom(+zoomUnit);
     const handleZoomOut = () => incZoom(-zoomUnit);
@@ -418,8 +455,8 @@ const Tools: FC<{}> = () => {
             {/* <Box sx={{ flexGrow: 1 }}></Box> */}
             <Tooltip title={mode === "execute" ? "編集する" : "実行する"}>
                 <Button color="primary" variant="text" onClick={handleToggle} sx={{ minWidth: "fit-content" }}>
-                    {mode === "execute" ? <EditIcon /> : <PlayArrowIcon />}
-                    {mode === "execute" ? "編集する" : "実行する"}
+                    {mode === "edit" ? <PlayArrowIcon /> : <EditIcon />}
+                    {mode === "edit" ? "実行する" : "編集する"}
                 </Button>
             </Tooltip>
             <Tooltip title="拡大">
