@@ -4,4 +4,5 @@ git add .
 git commit 
 git checkout main
 git merge dev
-git checkout nowBranch
+git checkout $nowBranch
+
