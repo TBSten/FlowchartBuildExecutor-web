@@ -10,73 +10,8 @@ import { loadMeta } from "src/redux/meta/actions";
 import { store } from "src/redux/store";
 import { useSp } from "src/style/media";
 import storeJs from "storejs";
+import { storeStateToJson, SAVE_KEYS, SaveFormat, isSaveFormat, loadJson } from "./util";
 
-const pre = "FBE_TEMP_";
-const SAVE_KEYS = {
-    FBE_SAVE_DATA: pre + "SAVE_DATA_KEY",
-    ZOOM: pre + "ZOOM",
-    RUNTIME_NAME: pre + "RUNTIME_NAME",
-}
-
-//FBE セーブ
-
-export interface SaveFormat {
-    version: string;
-    items: Item[];
-    meta: {
-        flowIds: ItemId[];
-        title: string;
-    };
-}
-export function isSaveFormat(arg: any): arg is SaveFormat {
-    return (
-        arg &&
-        typeof arg === "object" &&
-        typeof arg.version === "string" &&
-        arg.items instanceof Array &&
-        typeof arg.meta === "object" &&
-        arg.meta.flowIds instanceof Array &&
-        typeof arg.meta.title === "string"
-    );
-}
-
-export function toSaveFormat({
-    items,
-    flowIds,
-    title,
-}: {
-    items: Item[];
-    flowIds: ItemId[];
-    title: string;
-}): SaveFormat {
-    return {
-        version: FBE_VERSION,
-        items,
-        meta: {
-            flowIds,
-            title,
-        },
-    };
-}
-export function storeStateToSaveFormat() {
-    const state = store.getState();
-
-    const items = state.items;
-    const flowIds = state.meta.flowIds;
-    const title = state.meta.title;
-
-    return toSaveFormat({
-        items,
-        flowIds,
-        title,
-    });
-}
-export function saveFormatToJson(saveFormat: SaveFormat) {
-    return JSON.stringify(saveFormat);
-}
-export function storeStateToJson() {
-    return saveFormatToJson(storeStateToSaveFormat());
-}
 export function saveToBrowser() {
     const saveFormat = storeStateToJson();
     storeJs(SAVE_KEYS.FBE_SAVE_DATA, saveFormat);
@@ -101,14 +36,6 @@ export function loadSaveFormatToStoreState(saveFormat: SaveFormat) {
     }));
 }
 
-export function loadJson(obj: any) {
-    if (isSaveFormat(obj)) {
-        loadSaveFormatToStoreState(obj);
-    } else {
-        logger.error("invalid", obj)
-        throw new Error(`invalid argument of loadJson`);
-    }
-}
 
 export function loadFromBrowser() {
     const saveFormat = storeJs(SAVE_KEYS.FBE_SAVE_DATA);

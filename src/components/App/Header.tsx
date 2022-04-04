@@ -35,15 +35,19 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import React, { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { TwitterIcon, TwitterShareButton } from "react-share";
 import {
-    loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
-} from "src/format";
+    resetBrowserSave, saveToBrowser
+} from "src/format/browser";
+import { saveToServer } from "src/format/share";
+import { loadJson, storeStateToJson } from "src/format/util";
 import { FBE_DOC_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
-import { donwloadImage } from "src/lib/image";
 import { Log, logger } from "src/lib/logger";
+import { editMode, executeMode, exportMode, setEmphasisTarget } from "src/redux/app/actions";
 import { useChange, useExecute, useLogs, useMode, useSelectItemIds, useZoom } from "src/redux/app/hooks";
+import { TO_IMG_KEY, TO_PROGRAM_KEY } from "src/redux/app/lib";
 import { zoomUnit } from "src/redux/app/reducers";
 import { resetItems } from "src/redux/items/actions";
 import { useItemOperations } from "src/redux/items/hooks";
@@ -54,8 +58,8 @@ import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
 import OnlyEditMode from "../util/OnlyEditMode";
 import OnlyExeMode from "../util/OnlyExeMode";
 import ProgramConvertView from "./ProgramConvertView";
+import SidebarContent from "./SidebarContent";
 import UtilDialog, { useUtilDialog, UtilDialogProps } from "./UtilDialog";
-
 
 export interface HeaderProps { }
 
@@ -172,19 +176,62 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             もう一度送り直してください。
         </Typography>
     </>);
+    const [
+        _,
+        shareDialogProps, {
+            open: openShareDialog,
+            close: closeShareDialog,
+        }] = useUtilDialog({ defaultOpen: false, });
     const handleSendError = useCallback(async () => {
         const reportNo = await sendLogs(logs)
         setReportNo(reportNo);
         confirm();
     }, [logs]);
+    const dispatch = useDispatch();
+    const handleEditMode = useCallback(() => {
+        dispatch(editMode())
+    }, [])
+    const handleExeMode = useCallback(() => {
+        dispatch(executeMode())
+    }, [])
+    const handleExportMode = useCallback(() => {
+        dispatch(exportMode())
+    }, [])
+    const handleShare = useCallback(() => {
+        openShareDialog();
+    }, [])
     const menuItems = useMemo(() => [
         { label: "全てのメニュー", },
         "hr",
         {
+            label: "編集する",
+            onSelect: handleEditMode,
+        },
+        {
+            label: "実行する",
+            onSelect: handleExeMode,
+        },
+        {
+            label: "出力する",
+            onSelect: handleExportMode,
+        },
+        "hr",
+        {
+            label: "フローチャートを共有する",
+            onSelect: handleShare,
+        },
+        "hr",
+        {
             label: "エラーレポートを送信",
             onSelect: handleSendError,
-        }
-    ] as const, [handleSendError]);
+        },
+    ] as const, [
+        handleSendError,
+        handleEditMode,
+        handleExeMode,
+        handleExportMode,
+        handleShare,
+    ]);
     return (
         <>
             <IconButton onClick={handleOpen}>
@@ -215,9 +262,77 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             <ConfirmDialog {...confirmProps}>
 
             </ConfirmDialog>
+
+            <ShareDialog shareDialogProps={shareDialogProps} />
         </>
     );
 }
+
+interface ShareDialogProps {
+    shareDialogProps: UtilDialogProps,
+}
+const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
+    const [shareId, setShareId] = useState<null | string>(null);
+    const [isError, setIsError] = useState(false);
+    useEffect(() => {
+        if (shareDialogProps.open) {
+            saveToServer().then(id => {
+                logger.log("save to server id:", id);
+                setShareId(id);
+            }).catch(e => {
+                logger.error(isError)
+                setIsError(true);
+            })
+        }
+    }, [shareDialogProps.open]);
+    const [title] = useTitle();
+    const handleClose = () => {
+        const close = shareDialogProps.onClose;
+        if (close) close();
+    }
+    const url = `https://fbe.vercel.app/?shareId=${shareId}`
+    const handleCopy = () => {
+        if (navigator.clipboard && typeof url === "string") {
+            var copyText = url;
+            navigator.clipboard.writeText(copyText).then(() => {
+                alert('コピーしました。');
+            });
+        } else {
+            alert('対応していません。');
+        }
+    };
+    return (
+        <UtilDialog {...shareDialogProps}>
+            <DialogContent>
+                {isError ? "エラーが発生しました" :
+                    shareId ? <>
+                        <SidebarContent title="URL">
+                            {url}
+                            <Button onClick={handleCopy}>
+                                コピー
+                            </Button>
+                        </SidebarContent>
+                        <SidebarContent title="SNSでシェア">
+                            <TwitterShareButton
+                                title={title}
+                                url={url}
+                                hashtags={["FBE", "フローチャート"]}
+                            >
+                                <TwitterIcon size={40} round />
+                            </TwitterShareButton>
+                        </SidebarContent>
+                    </> : (!isError) && "取得中..."
+                }
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose}>
+                    閉じる
+                </Button>
+            </DialogActions>
+        </UtilDialog>
+    );
+}
+
 
 const LeftTopMenu: FC<{}> = () => {
     const [open, setOpen] = useState(false);
@@ -258,8 +373,18 @@ const LeftTopMenu: FC<{}> = () => {
         resetChangeCount();
     };
     const handleDownloadImage = () => {
-        donwloadImage(title);
+        // donwloadImage(title);
+        setOpen(false);
+        saveToBrowser();
+        dispatch(exportMode());
+        dispatch(setEmphasisTarget({ key: TO_IMG_KEY }));
     };
+    const handleToProgram = () => {
+        // openTargetSelectDialog();
+        setOpen(false);
+        dispatch(exportMode());
+        dispatch(setEmphasisTarget({ key: TO_PROGRAM_KEY }));
+    }
     return (
         <>
             <IconButton color="inherit" onClick={() => setOpen(true)}>
@@ -320,7 +445,7 @@ const LeftTopMenu: FC<{}> = () => {
                         画像としてエクスポート
                     </ListItem>
 
-                    <ListItem button onClick={openTargetSelectDialog}>
+                    <ListItem button onClick={handleToProgram}>
                         <ListItemIcon>
                             <ChangeCircleIcon />
                         </ListItemIcon>
@@ -394,6 +519,9 @@ const Tools: FC<{}> = () => {
         if (mode === "execute") {
             setMode("edit");
         }
+        if (mode === "export") {
+            setMode("edit");
+        }
     };
     const handleZoomIn = () => incZoom(+zoomUnit);
     const handleZoomOut = () => incZoom(-zoomUnit);
@@ -418,8 +546,8 @@ const Tools: FC<{}> = () => {
             {/* <Box sx={{ flexGrow: 1 }}></Box> */}
             <Tooltip title={mode === "execute" ? "編集する" : "実行する"}>
                 <Button color="primary" variant="text" onClick={handleToggle} sx={{ minWidth: "fit-content" }}>
-                    {mode === "execute" ? <EditIcon /> : <PlayArrowIcon />}
-                    {mode === "execute" ? "編集する" : "実行する"}
+                    {mode === "edit" ? <PlayArrowIcon /> : <EditIcon />}
+                    {mode === "edit" ? "実行する" : "編集する"}
                 </Button>
             </Tooltip>
             <Tooltip title="拡大">
@@ -445,15 +573,13 @@ const Tools: FC<{}> = () => {
 
             <OnlyExeMode>
                 <Tooltip title="実行">
-                    <Button
-                        startIcon={<PlayArrowIcon />}
+                    <IconButton
                         color="inherit"
                         onClick={executeNext}
                         disabled={!canExecuteNext}
-                        sx={{ minWidth: "fit-content" }}
                     >
-                        実行
-                    </Button>
+                        <PlayArrowIcon />
+                    </IconButton>
                 </Tooltip>
                 <Tooltip title="全て実行">
                     <Button
@@ -467,15 +593,13 @@ const Tools: FC<{}> = () => {
                     </Button>
                 </Tooltip>
                 <Tooltip title="中止">
-                    <Button
-                        startIcon={<StopIcon />}
+                    <IconButton
                         color="inherit"
                         onClick={stop}
                         disabled={!canStop}
-                        sx={{ minWidth: "fit-content" }}
                     >
-                        中止
-                    </Button>
+                        <StopIcon />
+                    </IconButton>
                 </Tooltip>
             </OnlyExeMode>
 

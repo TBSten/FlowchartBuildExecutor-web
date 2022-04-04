@@ -1,7 +1,9 @@
+import Box from "@mui/material/Box";
 import React, { FC } from "react";
 import { useMode } from "src/redux/app/hooks";
 import EditSidebar from "./EditSidebar";
 import ExecuteSidebar from "./ExecuteSidebar";
+import ExportSideBar from "./ExportSideBar";
 
 
 export interface SidebarProps { }
@@ -9,7 +11,9 @@ export interface SidebarProps { }
 const Sidebar: FC<SidebarProps> = () => {
   const [mode,] = useMode();
   return (
-    <>
+    <Box
+      minHeight="70vh"
+    >
       {mode === "edit" &&
         <EditSidebar />
       }
@@ -18,7 +22,11 @@ const Sidebar: FC<SidebarProps> = () => {
         <ExecuteSidebar />
       }
 
-    </>
+      {mode === "export" &&
+        <ExportSideBar />
+      }
+
+    </Box>
   );
 };
 export default React.memo(Sidebar);

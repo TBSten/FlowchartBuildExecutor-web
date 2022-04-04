@@ -1,12 +1,12 @@
 export type ItemId = string;
 
-export type OptionValue =
+type PureOptionValue =
     | string
     | number
-    | boolean
-    | string[]
-    | number[]
-    | boolean[];
+    | boolean;
+export type OptionValue =
+    | PureOptionValue
+    | PureOptionValue[];
 
 export interface Option {
     name: string;

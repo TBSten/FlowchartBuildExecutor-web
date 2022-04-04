@@ -13,7 +13,7 @@ import Stack from "@mui/material/Stack";
 import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getRuntime, getRuntimeKeys } from "src/execute/runtime";
-import { getRuntimeNameFromBrowser, saveRuntimeNameToBrowser } from "src/format";
+import { getRuntimeNameFromBrowser, saveRuntimeNameToBrowser } from "src/format/browser";
 import { logger } from "src/lib/logger";
 import { setRuntime } from "src/redux/app/actions";
 import { useRuntime } from "src/redux/app/hooks";

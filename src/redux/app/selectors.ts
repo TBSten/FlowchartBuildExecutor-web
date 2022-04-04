@@ -31,3 +31,6 @@ export const isExistsChange = () => (state: StoreState) => state.app.changeCount
 
 export const getDraggingItemId = () => (state: StoreState) => state.app.draggingItemId;
 
+export const getEmphasisTarget = () => (state: StoreState) => state.app.emphasisTarget;
+
+

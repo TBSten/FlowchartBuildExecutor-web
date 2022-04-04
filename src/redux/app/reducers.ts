@@ -25,6 +25,8 @@ export const init = {
 
     draggingItemId: null as ItemId | null,
 
+    emphasisTarget: "",
+
 };
 
 export function changeMode(state: typeof init, mode: Mode) {
@@ -52,6 +54,12 @@ export const app = reducerWithInitialState(init)
 
     // selectItemIds
     .case(actions.selectItemOne, (state, payload) => {
+        if (state.selectItemIds.includes(payload.itemId)) {
+            return {
+                ...state,
+                selectItemIds: state.selectItemIds.filter(id => id != payload.itemId)
+            }
+        }
         return {
             ...state,
             selectItemIds: [payload.itemId],
@@ -153,6 +161,14 @@ export const app = reducerWithInitialState(init)
         }
     })
 
+    //emphansisTarget
+    .case(actions.setEmphasisTarget, (state, payload) => {
+        if (payload.key === state.emphasisTarget) return state;
+        return {
+            ...state,
+            emphasisTarget: payload.key,
+        }
+    })
 
 
 

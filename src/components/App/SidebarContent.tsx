@@ -9,15 +9,19 @@ const SidebarContent: FC<SidebarContentProps> = ({ children, title }) => {
     const isSp = useSp();
     return (
         <Box
-            py={isSp ? 0.5 : 1} px={isSp ? 0 : 0.5}
+            py={isSp ? 0.5 : 1} px={isSp ? 0 : 0.5} pb={3}
             width="100%"
             overflow="auto"
         >
             {title ?
-                <Typography color="text.secondary">{title}</Typography>
+                <Typography color="text.secondary" id={`sidebar-${title ?? "content"}`}>
+                    {title}
+                </Typography>
                 : null
             }
-            {children}
+            <Box pl={2} py={0.5}>
+                {children}
+            </Box>
         </Box>
     );
 }
