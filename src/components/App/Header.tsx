@@ -35,9 +35,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import React, { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { TwitterIcon, TwitterShareButton } from "react-share";
 import {
     resetBrowserSave, saveToBrowser
 } from "src/format/browser";
+import { saveToServer } from "src/format/share";
 import { loadJson, storeStateToJson } from "src/format/util";
 import { FBE_DOC_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
@@ -56,8 +58,8 @@ import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
 import OnlyEditMode from "../util/OnlyEditMode";
 import OnlyExeMode from "../util/OnlyExeMode";
 import ProgramConvertView from "./ProgramConvertView";
+import SidebarContent from "./SidebarContent";
 import UtilDialog, { useUtilDialog, UtilDialogProps } from "./UtilDialog";
-
 
 export interface HeaderProps { }
 
@@ -174,6 +176,12 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             もう一度送り直してください。
         </Typography>
     </>);
+    const [
+        _,
+        shareDialogProps, {
+            open: openShareDialog,
+            close: closeShareDialog,
+        }] = useUtilDialog({ defaultOpen: false, });
     const handleSendError = useCallback(async () => {
         const reportNo = await sendLogs(logs)
         setReportNo(reportNo);
@@ -188,6 +196,9 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
     }, [])
     const handleExportMode = useCallback(() => {
         dispatch(exportMode())
+    }, [])
+    const handleShare = useCallback(() => {
+        openShareDialog();
     }, [])
     const menuItems = useMemo(() => [
         { label: "全てのメニュー", },
@@ -206,10 +217,21 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
         },
         "hr",
         {
+            label: "フローチャートを共有する",
+            onSelect: handleShare,
+        },
+        "hr",
+        {
             label: "エラーレポートを送信",
             onSelect: handleSendError,
         },
-    ] as const, [handleSendError, handleEditMode, handleExeMode, handleExportMode]);
+    ] as const, [
+        handleSendError,
+        handleEditMode,
+        handleExeMode,
+        handleExportMode,
+        handleShare,
+    ]);
     return (
         <>
             <IconButton onClick={handleOpen}>
@@ -240,9 +262,77 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             <ConfirmDialog {...confirmProps}>
 
             </ConfirmDialog>
+
+            <ShareDialog shareDialogProps={shareDialogProps} />
         </>
     );
 }
+
+interface ShareDialogProps {
+    shareDialogProps: UtilDialogProps,
+}
+const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
+    const [shareId, setShareId] = useState<null | string>(null);
+    const [isError, setIsError] = useState(false);
+    useEffect(() => {
+        if (shareDialogProps.open) {
+            saveToServer().then(id => {
+                logger.log("save to server id:", id);
+                setShareId(id);
+            }).catch(e => {
+                logger.error(isError)
+                setIsError(true);
+            })
+        }
+    }, [shareDialogProps.open]);
+    const [title] = useTitle();
+    const handleClose = () => {
+        const close = shareDialogProps.onClose;
+        if (close) close();
+    }
+    const url = `https://fbe.vercel.app/?shareId=${shareId}`
+    const handleCopy = () => {
+        if (navigator.clipboard && typeof url === "string") {
+            var copyText = url;
+            navigator.clipboard.writeText(copyText).then(() => {
+                alert('コピーしました。');
+            });
+        } else {
+            alert('対応していません。');
+        }
+    };
+    return (
+        <UtilDialog {...shareDialogProps}>
+            <DialogContent>
+                {isError ? "エラーが発生しました" :
+                    shareId ? <>
+                        <SidebarContent title="URL">
+                            {url}
+                            <Button onClick={handleCopy}>
+                                コピー
+                            </Button>
+                        </SidebarContent>
+                        <SidebarContent title="SNSでシェア">
+                            <TwitterShareButton
+                                title={title}
+                                url={url}
+                                hashtags={["FBE", "フローチャート"]}
+                            >
+                                <TwitterIcon size={40} round />
+                            </TwitterShareButton>
+                        </SidebarContent>
+                    </> : (!isError) && "取得中..."
+                }
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose}>
+                    閉じる
+                </Button>
+            </DialogActions>
+        </UtilDialog>
+    );
+}
+
 
 const LeftTopMenu: FC<{}> = () => {
     const [open, setOpen] = useState(false);

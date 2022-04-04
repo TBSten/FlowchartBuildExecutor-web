@@ -16,8 +16,14 @@ export async function saveToServer() {
         }),
     });
     const json = await res?.json();
-    const id = json?.id;
+    const id = json?.tmpSaveId;
+    if (typeof id !== "string") {
+        logger.error("res", res);
+        logger.error("json", json);
+        throw notImplementError(`invalid response`);
+    }
     storeJs(SAVE_KEYS.SERVER_SAVEPOINT_ID, id);
+    return id;
 }
 export async function getFromServer(id?: string) {
     if (!id) {

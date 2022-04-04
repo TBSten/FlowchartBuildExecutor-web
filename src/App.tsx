@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 import { useEffect, useRef } from "react";
-import { loadFromBrowser } from "src/format/browser";
+import { loadFromBrowser, saveToBrowser } from "src/format/browser";
 import BuildPane from "./components/App/BuildPane";
 import ConfirmOnUnload from "./components/App/ConfirmOnUnload";
 import Header from "./components/App/Header";
@@ -116,7 +116,7 @@ function useSharedSaveData() {
         (async () => {
             const params = new URLSearchParams(window.location.search);
             const SHAREID = "shareId";
-            console.log(Array.from(params.keys()))
+            console.log(params.get(SHAREID))
             //shareIdが指定されていたらサーバからセーブフォーマット取得
             if (params.has(SHAREID)) {
                 logger.log("refer shared fbe ")
@@ -124,6 +124,7 @@ function useSharedSaveData() {
                 logger.log("id", id)
                 const fbe = await getFromServer(id);
                 loadJson(fbe);
+                saveToBrowser();
             }
         })()
     }, []);
