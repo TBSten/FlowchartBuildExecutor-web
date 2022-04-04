@@ -2,7 +2,7 @@ import SelectAllIcon from "@mui/icons-material/SelectAll";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import React, { FC } from "react";
-import { useSavedZoom } from "src/format";
+import { useSavedZoom } from "src/format/browser";
 import CompFlow from "src/items/flow/Flow";
 import { useMode, useSelectItemIds } from "src/redux/app/hooks";
 import { isSelecting } from "src/redux/app/selectors";
@@ -16,7 +16,9 @@ const BuildPane: FC<BuildPaneProps> = () => {
     console.log("render build pane");
     const [flowIds] = useFlows();
     const [zoom, setZoom] = useSavedZoom();
+    const [mode] = useMode();
     return (
+
         <Box
             sx={{
                 width: "fit-content",
@@ -26,9 +28,8 @@ const BuildPane: FC<BuildPaneProps> = () => {
                 minWidth: "20vw",
                 minHeight: "20vh",
                 overflow: "auto",
-                backgroundColor: "#dbdbdb",
-                px: "75vw",
-                py: "75vh",
+                px: "80vw",
+                py: "70vh",
             }}
         >
             <Box id="fbe-build-pane">
@@ -51,6 +52,7 @@ const BuildPane: FC<BuildPaneProps> = () => {
                 </Stack>
             </Box>
         </Box>
+
     );
 };
 export default React.memo(BuildPane);

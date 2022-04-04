@@ -1,13 +1,16 @@
 import Box from "@mui/material/Box";
 import makeStyles from "@mui/styles/makeStyles";
 import { useEffect, useRef } from "react";
-import { loadFromBrowser } from "src/format";
+import { loadFromBrowser } from "src/format/browser";
 import BuildPane from "./components/App/BuildPane";
 import ConfirmOnUnload from "./components/App/ConfirmOnUnload";
 import Header from "./components/App/Header";
 import KeyboardHotkeys from "./components/App/KeyboardHotkeys";
 import Sidebar from "./components/App/SideBar";
 import TitleAccordion from "./components/util/TitleAccordion";
+import { getFromServer } from "./format/share";
+import { loadJson } from "./format/util";
+import { logger } from "./lib/logger";
 import { useSp } from "./style/media";
 
 
@@ -29,6 +32,7 @@ function App() {
     useEffect(() => {
         loadFromBrowser();
     }, []);
+    useSharedSaveData();
     const headerHeight = (isSp ? 56 : 64) * 2;
     return (
         <Box className={appClasses.root}>
@@ -42,6 +46,7 @@ function App() {
                     overflow: "scroll",
                     position: "relative",
                     height: `calc(100% - ${headerHeight}px)`,
+                    backgroundColor: "#dbdbdb",
                 }}
                 ref={ref}
             >
@@ -106,3 +111,20 @@ function useScrollPos() {
     return ref;
 }
 
+function useSharedSaveData() {
+    useEffect(() => {
+        (async () => {
+            const params = new URLSearchParams(window.location.search);
+            const SHAREID = "shareId";
+            console.log(Array.from(params.keys()))
+            //shareIdが指定されていたらサーバからセーブフォーマット取得
+            if (params.has(SHAREID)) {
+                logger.log("refer shared fbe ")
+                const id = params.get(SHAREID) as string;
+                logger.log("id", id)
+                const fbe = await getFromServer(id);
+                loadJson(fbe);
+            }
+        })()
+    }, []);
+}

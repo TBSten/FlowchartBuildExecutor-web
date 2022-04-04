@@ -12,6 +12,7 @@ const Sidebar: FC<SidebarProps> = () => {
   const [mode,] = useMode();
   return (
     <Box
+      minHeight="70vh"
     >
       {mode === "edit" &&
         <EditSidebar />

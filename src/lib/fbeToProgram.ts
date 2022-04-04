@@ -1,4 +1,4 @@
-import { storeStateToSaveFormat } from "src/format";
+import { storeStateToSaveFormat } from "src/format/util";
 import { FBE_TO_PROGRAM_URL } from "./constants";
 import { logger } from "./logger";
 import { notImplementError } from "./error";

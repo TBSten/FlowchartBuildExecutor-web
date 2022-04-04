@@ -54,6 +54,12 @@ export const app = reducerWithInitialState(init)
 
     // selectItemIds
     .case(actions.selectItemOne, (state, payload) => {
+        if (state.selectItemIds.includes(payload.itemId)) {
+            return {
+                ...state,
+                selectItemIds: state.selectItemIds.filter(id => id != payload.itemId)
+            }
+        }
         return {
             ...state,
             selectItemIds: [payload.itemId],

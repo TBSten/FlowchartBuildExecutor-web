@@ -36,8 +36,9 @@ import Typography from "@mui/material/Typography";
 import React, { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
-    loadJson, resetBrowserSave, saveToBrowser, storeStateToJson
-} from "src/format";
+    resetBrowserSave, saveToBrowser
+} from "src/format/browser";
+import { loadJson, storeStateToJson } from "src/format/util";
 import { FBE_DOC_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
@@ -482,15 +483,13 @@ const Tools: FC<{}> = () => {
 
             <OnlyExeMode>
                 <Tooltip title="実行">
-                    <Button
-                        startIcon={<PlayArrowIcon />}
+                    <IconButton
                         color="inherit"
                         onClick={executeNext}
                         disabled={!canExecuteNext}
-                        sx={{ minWidth: "fit-content" }}
                     >
-                        実行
-                    </Button>
+                        <PlayArrowIcon />
+                    </IconButton>
                 </Tooltip>
                 <Tooltip title="全て実行">
                     <Button
@@ -504,15 +503,13 @@ const Tools: FC<{}> = () => {
                     </Button>
                 </Tooltip>
                 <Tooltip title="中止">
-                    <Button
-                        startIcon={<StopIcon />}
+                    <IconButton
                         color="inherit"
                         onClick={stop}
                         disabled={!canStop}
-                        sx={{ minWidth: "fit-content" }}
                     >
-                        中止
-                    </Button>
+                        <StopIcon />
+                    </IconButton>
                 </Tooltip>
             </OnlyExeMode>
 

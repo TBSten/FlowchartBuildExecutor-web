@@ -1,5 +1,5 @@
 import { useHotkeys } from "react-hotkeys-hook";
-import { saveToBrowser } from "src/format";
+import { saveToBrowser } from "src/format/browser";
 import { useChange } from "src/redux/app/hooks";
 
 

@@ -1,12 +1,15 @@
-import { Alert, ButtonGroup, CircularProgress, MenuItem, Select, SelectChangeEvent, Stack } from "@mui/material";
+import { Alert, ButtonGroup, CircularProgress, MenuItem, Select, SelectChangeEvent, Stack, Tab, Tabs } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { donwloadImage } from "src/lib/image";
 import { logger } from "src/lib/logger";
+import { setEmphasisTarget } from "src/redux/app/actions";
 import { useChange } from "src/redux/app/hooks";
-import { TO_IMG_KEY, TO_PROGRAM_KEY } from "src/redux/app/lib";
+import { NONE_KEY, TO_IMG_KEY, TO_PROGRAM_KEY } from "src/redux/app/lib";
+import { getEmphasisTarget } from "src/redux/app/selectors";
 import { useTitle } from "src/redux/meta/hooks";
 import Emphansible from "../util/Emphansible";
 import ProgramConvertView from "./ProgramConvertView";
@@ -16,17 +19,75 @@ interface ExportSideBarProps {
 }
 const ExportSideBar: FC<ExportSideBarProps> = () => {
     const [title] = useTitle();
-    const handleToImg = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setEmphasisTarget({ key: NONE_KEY }))
+    }, []);
+    const handleToImg = useCallback(() => {
         donwloadImage(title);
+    }, [])
+    const tabs = useMemo(() => [
+        {
+            label: "画像に変換",
+            node:
+                <Emphansible
+                    target={TO_IMG_KEY}
+                    p={1}
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                    }}>
+                    <ButtonGroup variant="contained">
+                        <Button onClick={handleToImg} >
+                            画像に変換する
+                        </Button>
+                    </ButtonGroup>
+                </Emphansible>
+        }, {
+            label: "PDFに変換",
+            node:
+                <Box p={1}>
+                    準備中...
+                </Box>
+
+        },
+        {
+            label: "プログラムに変換",
+            node:
+                <Emphansible target={TO_PROGRAM_KEY} p={1}>
+                    <ToProgram />
+                </Emphansible>
+
+        }
+    ], [handleToImg,]);
+    const [nowTab, setNowTab] = useState(tabs[0].label);
+    const handleChangeTab = (e: React.SyntheticEvent, newValue: string) => {
+        setNowTab(newValue)
     }
+    const emphasisTarget = useSelector(getEmphasisTarget());
+    useEffect(() => {
+        if (tabs.find(t => t.label === emphasisTarget)) {
+            setNowTab(emphasisTarget);
+            window.location.hash = "sidebar-" + emphasisTarget;
+        }
+    }, [emphasisTarget])
     return (
         <Box>
             <Box>
+                フローチャートを出力する
 
-            </Box>
-            <Box>
-                出力モード
-
+                <Tabs
+                    value={nowTab}
+                    onChange={handleChangeTab}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    allowScrollButtonsMobile
+                >
+                    {tabs.map(tab => (
+                        <Tab label={tab.label} value={tab.label} key={tab.label} />
+                    ))}
+                </Tabs>
+                {/* 
                 <SidebarContent title="画像に変換">
                     <Emphansible
                         target={TO_IMG_KEY}
@@ -53,7 +114,13 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
                     <Emphansible target={TO_PROGRAM_KEY} p={1}>
                         <ToProgram />
                     </Emphansible>
-                </SidebarContent>
+                </SidebarContent> */}
+                {tabs.map(tab => (
+                    tab.label === nowTab &&
+                    <SidebarContent title={tab.label}>
+                        {tab.node}
+                    </SidebarContent>
+                ))}
             </Box >
         </Box >
     );
