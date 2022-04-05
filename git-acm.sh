@@ -1,7 +1,7 @@
 
-nowBranch="$(git branch --contains | cut -d " " -f 2)"
-git add .
-git commit 
-git checkout main
-git merge $nowBranch
-git checkout nowBranch
+echo \#\#\#\# add and commit
+sh git-ac.sh
+
+echo \#\#\#\# merge
+sh git-m.sh
+
