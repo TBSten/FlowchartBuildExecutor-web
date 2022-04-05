@@ -1,5 +1,5 @@
 
-export const VERSION = "2.1.0";
+export const VERSION = "2.1.1";
 export const FBE_VERSION = "2.0.0";
 
 export const FBE_TO_PROGRAM_URL = "https://asia-northeast1-fbe-gcp-project.cloudfunctions.net/fbeToProgram";
