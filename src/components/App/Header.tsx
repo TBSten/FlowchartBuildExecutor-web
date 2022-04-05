@@ -35,7 +35,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import React, { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { TwitterIcon, TwitterShareButton } from "react-share";
+import { LineIcon, LineShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 import {
     resetBrowserSave, saveToBrowser
 } from "src/format/browser";
@@ -318,8 +318,11 @@ const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
                                 url={url}
                                 hashtags={["FBE", "フローチャート"]}
                             >
-                                <TwitterIcon size={40} round />
+                                <TwitterIcon size={40} />
                             </TwitterShareButton>
+                            <LineShareButton url={url} title={title}>
+                                <LineIcon size={40} />
+                            </LineShareButton>
                         </SidebarContent>
                     </> : (!isError) && "取得中..."
                 }

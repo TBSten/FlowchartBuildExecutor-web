@@ -1,8 +1,8 @@
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import produce from "immer";
-import { clone, isNumber } from "lodash";
+import { produce } from "immer";
+import { isNumber } from "lodash";
 import { ReactNode } from "react";
 import { evalFormula, evalFormulaAsVariableValue, isVariableValue, PureVariableValue, Variable, VariableValue } from "src/execute/eval";
 import executes from "src/items/execute";
@@ -16,12 +16,18 @@ import { isFlow, isSym, Item, ItemId } from "src/redux/items/types";
 import { store } from "src/redux/store";
 import { RuntimeTab } from "./types";
 
-
-
 type VariableHistoryLine = (Variable[] & { changedName: string });
 type VariableHistory = VariableHistoryLine[];
 type TempData = {
     [k: string]: unknown;
+}
+function createHistory(variables: Variable[], changedName: string) {
+    const arr = [...variables];
+    let ans = Object.create(arr);
+    ans = Object.assign(ans, {
+        changedName,
+    })
+    return ans;
 }
 
 export abstract class Runtime {
@@ -334,21 +340,27 @@ export abstract class Runtime {
     }
     async setVariable(name: string, value: VariableValue): Promise<void> {
         logger.log("setVariable", name, "to", value);
+        // this.variables = produce(this.variables, draft => {
+        //     let idx = draft.findIndex(v => v.name === name);
+        //     if (idx < 0) idx = draft.length;
+        //     draft[idx] = { name, value }
+        // })
         this.variables = (() => {
-            const work = clone(this.variables);
-            let idx = work.findIndex(v => v.name === name)
-            if (idx < 0) idx = work.length;
-            work[idx] = { name, value, };
-            return work;
+            const draft = this.variables;
+            let idx = draft.findIndex(v => v.name === name);
+            if (idx < 0) idx = draft.length;
+            draft[idx] = { name, value }
+            return draft;
         })();
+        this.checkpointVariableHistory(name);
+    }
+    checkpointVariableHistory(name: string) {
         //履歴の更新
         this.variableHistory = produce(this.variableHistory, draft => {
-            const newHistory = Object.assign(
-                Object.create(this.variables),
-                { changedName: name, }
-            );
-            draft.push(newHistory)
+            const newHistory = createHistory(this.variables, name);
+            draft.push(newHistory as VariableHistoryLine);
         });
+        console.log("variable history", this.variableHistory)
     }
     async assignVariable(target: string, value: PureVariableValue) {
         let name = target;
@@ -362,7 +374,7 @@ export abstract class Runtime {
             if (!v) { throw notImplementError(`invalid value ${name} : ${v}`); }
             const arr = (await this.getVariable(name))?.value;
             if (!(arr instanceof Array)) throw notImplementError(`invalid array ${arr}`);
-            let newValue: Exclude<VariableValue, PureVariableValue> = clone(arr);
+            let newValue = [...arr];
             Promise.all(
                 indexes.map(async (index, at) => {
                     const i = await this.eval(index);
@@ -374,23 +386,13 @@ export abstract class Runtime {
                     newValue = arr[i] as any;
                 })
             );
-            console.log("assigned", newValue);
-            v.value = newValue;
+            console.log("assigned", newValue, "to", v);
+            // v.value = newValue as VariableValue;
+            this.setVariable(v.name, newValue as VariableValue);
         } else {
-            const idx = this.variables.findIndex(v => v.name === name);
-            if (!this.variables[idx]) {
-                logger.log("new variable", name, value)
-                this.variables.push({
-                    name, value,
-                });
-            } else {
-                logger.log("update variable", name, value)
-                this.variables[idx].value = assignValue;
-            }
+            this.setVariable(name, assignValue);
         }
     }
-    // async getVariableValue(target: string) {
-    // }
     _splitNameAndIndex(target: string) {
         const split = target.split(/\]\[|\]|\[/).filter(e => e !== "" && !e.match(/^(\s+)$/));
         return split;
