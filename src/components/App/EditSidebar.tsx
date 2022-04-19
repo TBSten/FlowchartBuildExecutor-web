@@ -130,7 +130,8 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                                 <ButtonGroup variant="outlined">
                                     <Button onClick={handleOpenDialog}>
                                         {" "}
-                                        記号の種類を変更{" "}
+                                        記号の種類を変更
+                                        {" "}
                                     </Button>
                                     <Button onClick={handleRemove}>
                                         記号を削除
@@ -140,13 +141,11 @@ const EditSidebar: FC<EditSidebarProps> = () => {
 
                             <SidebarContent title="オプション">
                                 {selectItem.options.map((o) => (
-                                    <>
-                                        <OptionRow
-                                            key={o.name}
-                                            itemId={selectItem.itemId}
-                                            name={o.name}
-                                        />
-                                    </>
+                                    <OptionRow
+                                        key={o.name}
+                                        itemId={selectItem.itemId}
+                                        name={o.name}
+                                    />
                                 ))}
                             </SidebarContent>
                         </>

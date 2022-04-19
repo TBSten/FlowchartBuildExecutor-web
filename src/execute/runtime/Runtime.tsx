@@ -340,11 +340,6 @@ export abstract class Runtime {
     }
     async setVariable(name: string, value: VariableValue): Promise<void> {
         logger.log("setVariable", name, "to", value);
-        // this.variables = produce(this.variables, draft => {
-        //     let idx = draft.findIndex(v => v.name === name);
-        //     if (idx < 0) idx = draft.length;
-        //     draft[idx] = { name, value }
-        // })
         this.variables = (() => {
             const draft = this.variables;
             let idx = draft.findIndex(v => v.name === name);
@@ -386,7 +381,6 @@ export abstract class Runtime {
                     newValue = arr[i] as any;
                 })
             );
-            console.log("assigned", newValue, "to", v);
             // v.value = newValue as VariableValue;
             this.setVariable(v.name, newValue as VariableValue);
         } else {
