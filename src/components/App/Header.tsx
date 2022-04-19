@@ -177,29 +177,28 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
         </Typography>
     </>);
     const [
-        _,
+        ,
         shareDialogProps, {
             open: openShareDialog,
-            close: closeShareDialog,
         }] = useUtilDialog({ defaultOpen: false, });
     const handleSendError = useCallback(async () => {
         const reportNo = await sendLogs(logs)
         setReportNo(reportNo);
         confirm();
-    }, [logs]);
+    }, [confirm, logs]);
     const dispatch = useDispatch();
     const handleEditMode = useCallback(() => {
         dispatch(editMode())
-    }, [])
+    }, [dispatch])
     const handleExeMode = useCallback(() => {
         dispatch(executeMode())
-    }, [])
+    }, [dispatch])
     const handleExportMode = useCallback(() => {
         dispatch(exportMode())
-    }, [])
+    }, [dispatch])
     const handleShare = useCallback(() => {
         openShareDialog();
-    }, [])
+    }, [openShareDialog])
     const menuItems = useMemo(() => [
         { label: "全てのメニュー", },
         "hr",
@@ -220,7 +219,6 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             label: "フローチャートを共有する",
             onSelect: handleShare,
         },
-        "hr",
         {
             label: "エラーレポートを送信",
             onSelect: handleSendError,
@@ -347,9 +345,8 @@ const LeftTopMenu: FC<{}> = () => {
     const { resetChangeCount } = useChange();
     const [
         ,
-        selectTargetDialogProps, {
-            open: openTargetSelectDialog,
-        }] = useUtilDialog({});
+        selectTargetDialogProps
+    ] = useUtilDialog({});
     const [target, setTarget] = useState<(EnableTarget)>("javascript");
 
     const handleSave = () => {
@@ -374,6 +371,7 @@ const LeftTopMenu: FC<{}> = () => {
         dispatch(resetMeta());
         dispatch(resetItems());
         resetChangeCount();
+        window.location.href = window.location.toString().replace(window.location.search, "")
     };
     const handleDownloadImage = () => {
         // donwloadImage(title);

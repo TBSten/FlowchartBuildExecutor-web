@@ -1,7 +1,7 @@
 
-echo \#\#\#\# add and commit
+echo "####" add and commit
 sh git-ac.sh
 
-echo \#\#\#\# merge
+echo "####" merge
 sh git-m.sh
 

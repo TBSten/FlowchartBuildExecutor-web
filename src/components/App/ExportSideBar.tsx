@@ -213,6 +213,9 @@ const ToProgram: FC<ToProgramProps> = () => {
                             }
                         </Alert>
                 }
+                {typeof program === "string" ?
+                    <ProgramConvertView target={target}>{program}</ProgramConvertView>
+                    : ""}
                 <Button
                     variant={program === null ? "contained" : "text"}
                     onClick={handleFBEToProgram}
@@ -221,9 +224,6 @@ const ToProgram: FC<ToProgramProps> = () => {
                     {program === null ? "" : "もう一度"}
                     変換する
                 </Button>
-                {typeof program === "string" ?
-                    <ProgramConvertView target={target}>{program}</ProgramConvertView>
-                    : ""}
             </Stack>
         </>
     );
