@@ -214,7 +214,9 @@ const ToProgram: FC<ToProgramProps> = () => {
                         </Alert>
                 }
                 {typeof program === "string" ?
-                    <ProgramConvertView target={target}>{program}</ProgramConvertView>
+                    <ProgramConvertView target={target}>
+                        {program}
+                    </ProgramConvertView>
                     : ""}
                 <Button
                     variant={program === null ? "contained" : "text"}
