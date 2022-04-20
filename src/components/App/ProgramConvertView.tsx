@@ -2,7 +2,6 @@ import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import styled from "@mui/styles/styled";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import PrismDarkTheme from "prism-react-renderer/themes/vsDark";
 import Prism from "prismjs";
@@ -10,12 +9,6 @@ import { FC, useEffect } from "react";
 import { EnableTarget } from "src/lib/fbeToProgram";
 import UtilDialog, { useUtilDialog } from "./UtilDialog";
 
-const StyledPre = styled("pre")({
-    padding: 8,
-    margin: 0,
-    minWidth: "100%",
-    width: "fit-content",
-});
 
 export interface ProgramConvertViewProps {
     target: EnableTarget,
@@ -58,6 +51,8 @@ const ProgramConvertView: FC<ProgramConvertViewProps> = ({ children, target }) =
                                 style={{
                                     ...style,
                                     padding: 8,
+                                    margin: 0,
+                                    width: "fit-content",
                                 }}
                             >
                                 {tokens.map((line, i) => (
