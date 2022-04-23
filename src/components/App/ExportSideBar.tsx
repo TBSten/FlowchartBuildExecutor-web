@@ -22,7 +22,7 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setEmphasisTarget({ key: NONE_KEY }))
-    }, []);
+    }, [dispatch]);
     const handleToImg = useCallback(() => {
         donwloadImage(title);
     }, [])
@@ -87,34 +87,6 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
                         <Tab label={tab.label} value={tab.label} key={tab.label} />
                     ))}
                 </Tabs>
-                {/* 
-                <SidebarContent title="画像に変換">
-                    <Emphansible
-                        target={TO_IMG_KEY}
-                        p={1}
-                        sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                        }}>
-                        <ButtonGroup variant="contained">
-                            <Button onClick={handleToImg} >
-                                画像に変換する
-                            </Button>
-                        </ButtonGroup>
-                    </Emphansible>
-                </SidebarContent>
-
-                <SidebarContent title="PDFに変換">
-                    <Box p={1}>
-                        準備中...
-                    </Box>
-                </SidebarContent>
-
-                <SidebarContent title="プログラムに変換">
-                    <Emphansible target={TO_PROGRAM_KEY} p={1}>
-                        <ToProgram />
-                    </Emphansible>
-                </SidebarContent> */}
                 {tabs.map(tab => (
                     tab.label === nowTab &&
                     <SidebarContent title={tab.label}>

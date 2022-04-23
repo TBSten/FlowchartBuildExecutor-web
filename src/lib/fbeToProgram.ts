@@ -7,6 +7,7 @@ import { notImplementError } from "./error";
 export const enableTargets = [
     "javascript",
     "python",
+    "java",
 ] as const;
 export type EnableTarget = typeof enableTargets[number];
 export function fbeToProgram(target: typeof enableTargets[number]) {
