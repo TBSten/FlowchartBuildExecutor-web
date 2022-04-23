@@ -2,13 +2,28 @@ import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import Highlight, { defaultProps, Language, Prism as ReactPrism } from "prism-react-renderer";
 import PrismDarkTheme from "prism-react-renderer/themes/vsDark";
 import Prism from "prismjs";
+// import Prism from 'prismjs';
 import { FC, useEffect } from "react";
 import { EnableTarget } from "src/lib/fbeToProgram";
 import UtilDialog, { useUtilDialog } from "./UtilDialog";
 
+declare global {
+    namespace NodeJs {
+        interface Global {
+            Prism: any
+        }
+    }
+}
+declare global {
+    interface Window {
+        Prism: any
+    }
+}
+; (typeof global !== "undefined" ? global : window).Prism = ReactPrism
+require("prismjs/components/prism-java")
 
 export interface ProgramConvertViewProps {
     target: EnableTarget,
@@ -43,7 +58,7 @@ const ProgramConvertView: FC<ProgramConvertViewProps> = ({ children, target }) =
                     <Highlight {...defaultProps}
                         code={children ?? ""}
                         theme={PrismDarkTheme}
-                        language={target}
+                        language={target as Language}
                     >
                         {({ className, style, tokens, getLineProps, getTokenProps }) => (
                             <pre
@@ -53,6 +68,7 @@ const ProgramConvertView: FC<ProgramConvertViewProps> = ({ children, target }) =
                                     padding: 8,
                                     margin: 0,
                                     width: "fit-content",
+                                    minWidth: "100%",
                                 }}
                             >
                                 {tokens.map((line, i) => (
