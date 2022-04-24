@@ -11,7 +11,7 @@ export function useTitle() {
     const dispatch = useDispatch();
     const set = (title: string) => {
         dispatch(setTitle({ title }));
-        dispatch(notifyChange());
+        notifyChange()
     };
     return [
         title,

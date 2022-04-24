@@ -1,0 +1,26 @@
+"filename", "language", "TypeScript", "TypeScript React", "HTML", "JSON", "Log", "Shell Script", "comment", "blank", "total"
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/git-ac.sh", "Shell Script", 0, 0, 0, 0, 0, -2, 0, -1, -3
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/git-acm.sh", "Shell Script", 0, 0, 0, 0, 0, -6, 0, -2, -8
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/git-m.sh", "Shell Script", 0, 0, 0, 0, 0, -4, 0, -2, -6
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/package.json", "JSON", 0, 0, 0, 2, 0, 0, 0, 1, 3
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/public/index.html", "HTML", 0, 0, 0, 0, 0, 0, -23, 0, -23
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/App.tsx", "TypeScript React", 0, 21, 0, 0, 0, 0, 1, 0, 22
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/EditSidebar.tsx", "TypeScript React", 0, -2, 0, 0, 0, 0, 1, 0, -1
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/ExecuteSidebar.tsx", "TypeScript React", 0, -1, 0, 0, 0, 0, 1, 0, 0
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/ExportSideBar.tsx", "TypeScript React", 0, 1, 0, 0, 0, 0, -19, -1, -19
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/Fabs.tsx", "TypeScript React", 0, -2, 0, 0, 0, 0, 2, 0, 0
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/Header.tsx", "TypeScript React", 0, 89, 0, 0, 0, 0, 1, 2, 92
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/ProgramConvertView.tsx", "TypeScript React", 0, 10, 0, 0, 0, 0, 1, 0, 11
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/execute/runtime/Runtime.tsx", "TypeScript React", 0, -1, 0, 0, 0, 0, -1, -2, -4
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/format/browser.ts", "TypeScript", 86, 0, 0, 0, 0, 0, 1, 12, 99
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/format/index.ts", "TypeScript", -153, 0, 0, 0, 0, 0, -2, -16, -171
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/format/share.ts", "TypeScript", 45, 0, 0, 0, 0, 0, 0, 2, 47
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/format/util.ts", "TypeScript", 74, 0, 0, 0, 0, 0, 1, 7, 82
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/option.tsx", "TypeScript React", 0, -1, 0, 0, 0, 0, 1, 0, 0
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/constants.tsx", "TypeScript React", 0, 1, 0, 0, 0, 0, 0, 0, 1
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/fbeToProgram.ts", "TypeScript", 1, 0, 0, 0, 0, 0, 0, 0, 1
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/image.tsx", "TypeScript React", 0, 1, 0, 0, 0, 0, 0, 0, 1
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/logger.ts", "TypeScript", 2, 0, 0, 0, 0, 0, 5, 2, 9
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/app/hooks.ts", "TypeScript", 5, 0, 0, 0, 0, 0, 0, 0, 5
+"/Users/tsubasa/Desktop/dev/fbe/fbe-core/web/yarn-error.log", "Log", 0, 0, 0, 0, -8280, 0, 0, -1240, -9520
+"Total", "-", 60, 116, 0, 2, -8280, -12, -30, -1238, -9382
