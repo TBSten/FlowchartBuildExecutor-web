@@ -25,7 +25,7 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
     }, [dispatch]);
     const handleToImg = useCallback(() => {
         donwloadImage(title);
-    }, [])
+    }, [title])
     const tabs = useMemo(() => [
         {
             label: "画像に変換",
@@ -43,14 +43,14 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
                         </Button>
                     </ButtonGroup>
                 </Emphansible>
-        }, {
-            label: "PDFに変換",
-            node:
-                <Box p={1}>
-                    準備中...
-                </Box>
-
         },
+        // {
+        //     label: "PDFに変換",
+        //     node:
+        //         <Box p={1}>
+        //             準備中...
+        //         </Box>
+        // },
         {
             label: "プログラムに変換",
             node:
@@ -59,7 +59,7 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
                 </Emphansible>
 
         }
-    ], [handleToImg,]);
+    ], [handleToImg]);
     const [nowTab, setNowTab] = useState(tabs[0].label);
     const handleChangeTab = (e: React.SyntheticEvent, newValue: string) => {
         setNowTab(newValue)
@@ -70,7 +70,7 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
             setNowTab(emphasisTarget);
             window.location.hash = "sidebar-" + emphasisTarget;
         }
-    }, [emphasisTarget])
+    }, [emphasisTarget, tabs])
     return (
         <Box>
             <Box>
@@ -84,12 +84,19 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
                     allowScrollButtonsMobile
                 >
                     {tabs.map(tab => (
-                        <Tab label={tab.label} value={tab.label} key={tab.label} />
+                        <Tab
+                            key={tab.label}
+                            label={tab.label}
+                            value={tab.label}
+                        />
                     ))}
                 </Tabs>
                 {tabs.map(tab => (
                     tab.label === nowTab &&
-                    <SidebarContent title={tab.label}>
+                    <SidebarContent
+                        title={tab.label}
+                        key={tab.label}
+                    >
                         {tab.node}
                     </SidebarContent>
                 ))}

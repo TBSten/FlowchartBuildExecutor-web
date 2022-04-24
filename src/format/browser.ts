@@ -1,16 +1,15 @@
 import { isString } from "lodash";
 import { useEffect } from "react";
 import { getRuntimeKeys } from "src/execute/runtime";
-import { FBE_VERSION } from "src/lib/constants";
 import { logger } from "src/lib/logger";
 import { useZoom } from "src/redux/app/hooks";
 import { loadItems } from "src/redux/items/actions";
-import { Item, ItemId } from "src/redux/items/types";
 import { loadMeta } from "src/redux/meta/actions";
 import { store } from "src/redux/store";
 import { useSp } from "src/style/media";
 import storeJs from "storejs";
-import { storeStateToJson, SAVE_KEYS, SaveFormat, isSaveFormat, loadJson } from "./util";
+import { storeStateToJson, SAVE_KEYS, SaveFormat, loadJson } from "./util";
+
 
 export function saveToBrowser() {
     const saveFormat = storeStateToJson();

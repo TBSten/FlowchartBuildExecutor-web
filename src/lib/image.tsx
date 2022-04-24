@@ -20,6 +20,7 @@ export async function donwloadImage(title: string) {
     aEle.remove();
 
     el.style.transform = before.transform;
+    return imageUrl;
 }
 
 

@@ -20,6 +20,7 @@ export interface Item {
     itemType: string;
     childrenItemIds: ItemId[];
     parentItemId: ItemId | null;
+    flgs:Record<string,boolean>,
 }
 
 export interface Sym extends Item {

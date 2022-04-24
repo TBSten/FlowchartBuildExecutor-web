@@ -32,7 +32,12 @@ export const meta = reducerWithInitialState(init)
         };
     })
     .case(actions.loadMeta, (state, payload) => {
-        return payload.meta;
+        // return payload.meta;
+        const ans :Meta = {
+            title:payload.meta.title,
+            flowIds:payload.meta.flowIds,
+        };
+        return ans;
     })
     .case(actions.resetMeta, () => {
         return init;

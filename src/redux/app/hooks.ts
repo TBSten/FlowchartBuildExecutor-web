@@ -26,6 +26,8 @@ import { getAllItems } from "../items/selectors";
 import { getFlowIds } from "../meta/selectors";
 import { useAppSelector } from "src/redux/root/hooks";
 import { useItemOperations } from "../items/hooks";
+import { saveToBrowser } from "src/format/browser";
+import { sleep } from "src/lib/sleep";
 
 export function useMode() {
     const mode = useAppSelector(getMode());
@@ -91,8 +93,11 @@ export function useZoom() {
 export function useChange() {
     const isExistsChange = useAppSelector(isExistsChangeSelector());
     const dispatch = useDispatch();
-    const notifyChange = () => {
+    const notifyChange = async () => {
         dispatch(notifyChangeAction());
+        saveToBrowser();
+        await sleep(1000);
+        dispatch(resetChangeCountAction());
     };
     const resetChangeCount = () => {
         dispatch(resetChangeCountAction());

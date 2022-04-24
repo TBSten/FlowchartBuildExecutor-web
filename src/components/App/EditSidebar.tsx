@@ -133,7 +133,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                                         記号の種類を変更
                                         {" "}
                                     </Button>
-                                    <Button onClick={handleRemove}>
+                                    <Button onClick={handleRemove} disabled={!selectItem?.flgs?.delete}>
                                         記号を削除
                                     </Button>
                                 </ButtonGroup>

@@ -4,9 +4,14 @@ export const itemBaseCreator = (
     itemId: ItemId,
     itemType: string,
     parentItemId: ItemId | null
-) => ({
-    itemId,
-    itemType,
-    childrenItemIds: [],
-    parentItemId,
-});
+) => {
+    return {
+        itemId,
+        itemType,
+        childrenItemIds: [],
+        parentItemId,
+        flgs:{
+            "delete":true,
+        }
+    }
+};
