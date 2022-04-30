@@ -32,9 +32,7 @@ import { switchExecute } from "./switch/execute";
 import { prepareExecute } from "./prepare/execute";
 import { processExecute } from "./process/execute";
 import { DefaultOptionEditor } from "./option";
-import PrepareOptionEditor from "./prepare/PrepareOptionEditor";
-import CalcOptionEditor from "./calc/CalcOptionEditor";
-import OutputOptionEditor from "./output/OutputOptionEditor";
+import SwitchOptionEditor from "./switch/SwitchOptionEditor";
 
 
 export const symTypes = {
@@ -44,7 +42,7 @@ export const symTypes = {
         addable: true,
         label: "計算",
         execute: calcExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "terminal-start": {
         creator: terminalStartSymCreator,
@@ -52,7 +50,7 @@ export const symTypes = {
         addable: false,
         label: "端子（開始）",
         execute: terminalStartExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "terminal-end": {
         creator: terminalEndSymCreator,
@@ -60,7 +58,7 @@ export const symTypes = {
         addable: false,
         label: "端子（終了）",
         execute: terminalEndExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "output": {
         creator: outputSymCreator,
@@ -68,7 +66,7 @@ export const symTypes = {
         addable: true,
         label: "出力",
         execute: outputExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "input": {
         creator: inputSymCreator,
@@ -76,7 +74,7 @@ export const symTypes = {
         addable: true,
         label: "入力",
         execute: inputExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "while": {
         creator: whileSymCreator,
@@ -84,7 +82,7 @@ export const symTypes = {
         addable: true,
         label: "繰り返し",
         execute: whileExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "for": {
         creator: forSymCreator,
@@ -92,7 +90,7 @@ export const symTypes = {
         addable: true,
         label: "回数繰り返し",
         execute: forExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "if": {
         creator: ifSymCreator,
@@ -100,7 +98,7 @@ export const symTypes = {
         addable: true,
         label: "分岐",
         execute: ifExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "switch": {
         creator: switchSymCreator,
@@ -108,7 +106,7 @@ export const symTypes = {
         addable: true,
         label: "多分岐",
         execute: switchExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: SwitchOptionEditor,
     },
     "prepare": {
         creator: prepareSymCreator,
@@ -116,7 +114,7 @@ export const symTypes = {
         addable: true,
         label: "準備",
         execute: prepareExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
     "process": {
         creator: processSymCreator,
@@ -124,7 +122,7 @@ export const symTypes = {
         addable: true,
         label: "定義済み処理",
         execute: processExecute,
-        optionEditor:DefaultOptionEditor,
+        optionEditor: DefaultOptionEditor,
     },
 } as const;
 
