@@ -57,11 +57,11 @@ const SwitchOptionEditor: SymOptionEditor = (props) => {
                     sx={theme => ({ color: theme.palette.primary.main })}
                     onClick={addChild}
                 >
-                    {!isSp && "分岐先を"}
                     <ListItemIcon>
                         <AddIcon />
                     </ListItemIcon>
                     <ListItemText>
+                        {!isSp && "分岐先を"}
                         追加する
                     </ListItemText>
                 </ListItemButton>
