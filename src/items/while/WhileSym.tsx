@@ -1,6 +1,6 @@
 import { notImplement } from "src/lib/error";
 import { useSym } from "src/redux/items/hooks";
-import SymBase, { SymChild, SymComponent, SymRender } from "../base/SymBase";
+import BaseSymComponent, { SymChild, SymComponent, SymRender } from "../base/SymBase";
 import Flow from "../flow/Flow";
 import { getOption } from "../option";
 import { corners } from "../util";
@@ -38,7 +38,7 @@ const topRender: SymRender = (ctx, size) => {
     ctx.fill();
     ctx.stroke();
 };
-const TopWhile = SymBase(TopChild, topRender);
+const TopWhile = BaseSymComponent(TopChild, topRender);
 
 const BottomChild: SymChild = ({ sym }) => {
     const cond = getOption(sym, "ループ条件")?.value;
@@ -69,7 +69,7 @@ const bottomRender: SymRender = (ctx, size) => {
     ctx.fill();
     ctx.stroke();
 };
-const BottomWhile = SymBase(BottomChild, bottomRender);
+const BottomWhile = BaseSymComponent(BottomChild, bottomRender);
 
 const WhileSym: SymComponent = ({ itemId }) => {
     const [sym] = useSym(itemId);

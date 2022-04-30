@@ -57,7 +57,7 @@ export const app = reducerWithInitialState(init)
         if (state.selectItemIds.includes(payload.itemId)) {
             return {
                 ...state,
-                selectItemIds: state.selectItemIds.filter(id => id != payload.itemId)
+                selectItemIds: state.selectItemIds.filter(id => id !== payload.itemId)
             }
         }
         return {
@@ -146,6 +146,7 @@ export const app = reducerWithInitialState(init)
         };
     })
     .case(actions.resetChangeCount, (state) => {
+        if(state.changeCount === 0) return state ;
         return {
             ...state,
             changeCount: 0,

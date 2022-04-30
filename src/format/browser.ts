@@ -2,6 +2,7 @@ import { isString } from "lodash";
 import { useEffect } from "react";
 import { getRuntimeKeys } from "src/execute/runtime";
 import { logger } from "src/lib/logger";
+import { optimize } from "src/lib/optimize";
 import { useZoom } from "src/redux/app/hooks";
 import { loadItems } from "src/redux/items/actions";
 import { loadMeta } from "src/redux/meta/actions";
@@ -12,10 +13,13 @@ import { storeStateToJson, SAVE_KEYS, SaveFormat, loadJson } from "./util";
 
 
 export function saveToBrowser() {
+    logger.log("save to browser");
+    // optimize();
     const saveFormat = storeStateToJson();
     storeJs(SAVE_KEYS.FBE_SAVE_DATA, saveFormat);
 }
 export function resetBrowserSave() {
+    logger.log("reset browser save");
     storeJs.remove(SAVE_KEYS.FBE_SAVE_DATA)
 }
 
@@ -93,4 +97,11 @@ export function useSavedZoom() {
     useEffect(() => () => saveZoomToBrowser(), [zoom])
     return result;
 }
+
+// 全て
+
+export async function clearBrowserData() {
+    storeJs.clear();
+}
+
 

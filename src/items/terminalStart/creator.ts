@@ -10,6 +10,7 @@ export const terminalStartSymCreator:SymCreator = (itemId,parentItemId)=>{
         ],
     }
     ans.flgs.delete = false ;
+    ans.flgs.duplicate = false ;
     return ans ;
 } ;
 

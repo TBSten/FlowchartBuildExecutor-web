@@ -14,7 +14,7 @@ export const whileSymCreator: SymCreator = (itemId, parentItemId) => {
         ...itemBaseCreator(itemId, "while", parentItemId),
         childrenItemIds: [flowId],
         options: [
-            optionCreator("ループ条件", "変数 < 5"),
+            optionCreator("ループ条件", "変数 < 5", { type: "formula" }),
             optionCreator("判定タイミング", "前判定", { type: "select", inputArgs: ["前判定", "後判定"] }),
         ],
     };

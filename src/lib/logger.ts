@@ -14,7 +14,7 @@ function addLog(log: Log) {
 }
 
 function outputConsole(type: "info" | "log" | "error" | "warn", ...args: any[]) {
-    // console[type](...args)
+    console[type](...args)
 }
 
 function toLogMessage(...args: any[]) {

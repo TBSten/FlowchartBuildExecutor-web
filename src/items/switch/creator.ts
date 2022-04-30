@@ -23,7 +23,7 @@ export const switchSymCreator: SymCreator = (itemId, parentItemId) => {
         ...itemBaseCreator(itemId, "switch", parentItemId),
         childrenItemIds: [flowId1, flowId2, flowId3],
         options: [
-            optionCreator("条件", "変数"),
+            optionCreator("条件", "変数", { type: "formula" }),
         ],
     }
 };

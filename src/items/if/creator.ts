@@ -6,21 +6,21 @@ import { flowCreatorWithChildren } from "../flow/creator";
 import { SymCreator } from "../types";
 import { makeItemId } from "../util";
 
-export const ifSymCreator: SymCreator = (itemId,parentItemId) => {
-    const yesFlowId = makeItemId() ;
-    const noFlowId = makeItemId() ;
-    const yesFlow = flowCreatorWithChildren(yesFlowId,[],itemId);
-    const noFlow = flowCreatorWithChildren(noFlowId,[],itemId);
+export const ifSymCreator: SymCreator = (itemId, parentItemId) => {
+    const yesFlowId = makeItemId();
+    const noFlowId = makeItemId();
+    const yesFlow = flowCreatorWithChildren(yesFlowId, [], itemId);
+    const noFlow = flowCreatorWithChildren(noFlowId, [], itemId);
 
-    store.dispatch(setItem({item:yesFlow}));
-    store.dispatch(setItem({item:noFlow}));
+    store.dispatch(setItem({ item: yesFlow }));
+    store.dispatch(setItem({ item: noFlow }));
     return {
-        ...itemBaseCreator(itemId,"if",parentItemId),
+        ...itemBaseCreator(itemId, "if", parentItemId),
         childrenItemIds: [
             yesFlowId,
             noFlowId,
         ],
-        options: [optionCreator("条件", "変数 < 5")],
+        options: [optionCreator("条件", "変数 < 5", { type: "formula" })],
     };
 };
 

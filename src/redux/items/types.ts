@@ -7,6 +7,29 @@ type PureOptionValue =
 export type OptionValue =
     | PureOptionValue
     | PureOptionValue[];
+export function isOptionValue(arg:any):arg is OptionValue{
+    if(arg instanceof Array){
+        return arg.reduce((ans,value)=>ans && isOptionValue(value),true)
+    }else{
+        return (
+            typeof arg === "string" ||
+            typeof arg === "number" ||
+            typeof arg === "boolean"
+        );
+    }
+}
+export function isOption(arg:any):arg is Option{
+    return (
+        arg && 
+        typeof arg === "object" &&
+        typeof arg.name === "string" &&
+        isOptionValue(arg.value) &&
+        typeof arg.type === "string" &&
+        (arg.inputArgs || arg.inputArgs === null) &&
+        typeof arg.visible === "boolean"
+    ) ;
+}
+
 
 export interface Option {
     name: string;
@@ -51,3 +74,5 @@ export function isSym(arg: any): arg is Sym {
 export function isFlow(arg: any): arg is Flow {
     return typeof arg === "object" && isItem(arg);
 }
+
+
