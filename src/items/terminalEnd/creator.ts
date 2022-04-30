@@ -11,6 +11,7 @@ export const terminalEndSymCreator: SymCreator = (itemId, parentItemId) => {
         ],
     })
     ans.flgs.delete = false;
+    ans.flgs.duplicate = false;
     return ans ;
 };
 

@@ -10,7 +10,7 @@ import { useItem } from "src/redux/items/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { isFlow, ItemId } from "src/redux/items/types";
 import { useAppSelector } from "src/redux/root/hooks";
-import SymBase, {
+import BaseSymComponent, {
     SymChild,
     SymComponent,
     SymRender
@@ -32,7 +32,7 @@ const diamondRender: SymRender = (ctx, size) => {
     ctx.fill();
     ctx.stroke();
 };
-const Diamond = SymBase(DiamondChild, diamondRender);
+const Diamond = BaseSymComponent(DiamondChild, diamondRender);
 
 export const BranchBase = (
     labels: ReactNode[] | ((parentSiwtchId: ItemId, childFlowId: ItemId) => ReactNode),

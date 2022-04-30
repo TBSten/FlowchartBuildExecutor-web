@@ -1,5 +1,5 @@
 
-export const VERSION = "2.1.2";
+export const VERSION = "2.1.3";
 // export const FBE_VERSION = "2.0.0";
 export const FBE_VERSION = "2.1.0";
 

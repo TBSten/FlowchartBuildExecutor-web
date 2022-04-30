@@ -87,7 +87,7 @@ export function useOption(itemId: ItemId, name: string) {
             value,
         }))
     };
-    return [option, set];
+    return [option, set] as const;
 }
 
 

@@ -33,7 +33,7 @@ import SidebarContent from "./SidebarContent";
 export interface EditSidebarProps { }
 
 const EditSidebar: FC<EditSidebarProps> = () => {
-    const { setItem, removeItem } = useItemOperations();
+    const { setItem, removeItem, } = useItemOperations();
     const [flows, { addFlow }] = useFlows();
     const { notifyChange } = useChange();
 
@@ -66,7 +66,8 @@ const EditSidebar: FC<EditSidebarProps> = () => {
 
     const [selectItemIds] = useSelectItemIds();
     const [selectItem, { set: setSelectItem }] = useItem(selectItemIds[0]);
-    const [, { removeFlow }] = useFlows();
+    const selectItemType = selectItem?.itemType;
+    const [, { removeFlow, }] = useFlows();
 
     const [openTCDialog, setOpenTCDialog] = useState(false);
     const handleOpenDialog = () => {
@@ -133,20 +134,27 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                                         記号の種類を変更
                                         {" "}
                                     </Button>
-                                    <Button onClick={handleRemove} disabled={!selectItem?.flgs?.delete}>
+                                    <Button
+                                        onClick={handleRemove}
+                                        disabled={!selectItem?.flgs?.delete}
+                                    >
                                         記号を削除
                                     </Button>
                                 </ButtonGroup>
                             </SidebarContent>
 
                             <SidebarContent title="オプション">
-                                {selectItem.options.map((o) => (
+                                {/* {selectItem.options.map((o) => (
                                     <OptionRow
                                         key={o.name}
                                         itemId={selectItem.itemId}
                                         name={o.name}
                                     />
-                                ))}
+                                ))} */}
+                                {isSymType(selectItemType) && (() => {
+                                    const OptionEditor = symTypes[selectItemType].optionEditor;
+                                    return <OptionEditor symId={selectItemIds[0]} />
+                                })()}
                             </SidebarContent>
                         </>
                     ) : isFlow(selectItem) ? (

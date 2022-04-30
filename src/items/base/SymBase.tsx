@@ -47,7 +47,7 @@ function defaultSettings() {
         autoSize: true,
     };
 }
-const SymBase = (
+const BaseSymComponent = (
     Child: SymChild,
     render: SymRender,
     _settings: SymSettings = {}
@@ -89,7 +89,7 @@ const SymBase = (
             {children}
         </Box>
     );
-    const Sym: SymComponent = ({ itemId }) => {
+    const Sym: SymComponent = ({ itemId, }) => {
         const {
             handleSelect,
             canvasRef,
@@ -131,7 +131,7 @@ const SymBase = (
     return React.memo(Sym);
 };
 
-export default SymBase;
+export default BaseSymComponent;
 
 export interface UseSymBaseArg {
     itemId: ItemId;

@@ -1,5 +1,5 @@
 
-import SymBase, { SymChild, SymRender } from "../base/SymBase";
+import BaseSymComponent, { SymChild, SymRender } from "../base/SymBase";
 import { getOption } from "../option";
 import { corners } from "../util";
 
@@ -20,7 +20,7 @@ const render: SymRender = (ctx, size) => {
     ctx.closePath();
     ctx.stroke();
 };
-const ProcessSym = SymBase(Child, render);
+const ProcessSym = BaseSymComponent(Child, render);
 
 export default ProcessSym;
 

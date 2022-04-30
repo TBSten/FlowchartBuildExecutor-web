@@ -12,6 +12,7 @@ export const itemBaseCreator = (
         parentItemId,
         flgs:{
             "delete":true,
+            "duplicate":true,
         }
     }
 };

@@ -14,10 +14,10 @@ export const forSymCreator: SymCreator = (itemId, parentItemId) => {
         ...itemBaseCreator(itemId, "for", parentItemId),
         childrenItemIds: [flowId],
         options: [
-            optionCreator("ループ変数", "i"),
-            optionCreator("初期値", "0"),
-            optionCreator("条件", "i < 5"),
-            optionCreator("増分", "1"),
+            optionCreator("ループ変数", "i", { type: "variableName" }),
+            optionCreator("初期値", "0", { type: "formula" }),
+            optionCreator("条件", "i < 5", { type: "formula" }),
+            optionCreator("増分", "1", { type: "formula" }),
         ],
     }
 };

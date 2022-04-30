@@ -1,4 +1,4 @@
-export function notImplement(msg: string = "") {
+export function notImplement(msg: string = ""): never {
     throw new Error("not implement ! " + msg);
 }
 

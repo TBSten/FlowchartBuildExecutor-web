@@ -1,10 +1,9 @@
 import { reducerWithInitialState } from "typescript-fsa-reducers";
-import { isFlow, isSym, Item, Items, Option, Sym } from "./types";
+import { Flow, isFlow, isSym, Item, Items, Option, Sym } from "./types";
 import * as actions from "./actions";
 import produce from "immer";
 import { notImplement, notImplementError } from "src/lib/error";
 import { logger } from "src/lib/logger";
-import { itemCreator } from "src/items/creators";
 
 export const init: Items = [];
 
@@ -85,16 +84,8 @@ export const items = reducerWithInitialState(init)
     .case(actions.loadItems, (state, payload) => {
         // return payload.items;
         const newItems = payload.items.map<Item>(item=>{
-            const {
-                itemId,
-                itemType,
-                parentItemId,
-                childrenItemIds,
-            } = item;
-            //古いFBEフォーマットを読み込んでもflgを反映するためにitemCreatorで再生成を行う
-            const ans = itemCreator(itemType,itemId,parentItemId);
-            ans.childrenItemIds = childrenItemIds;
-            console.log("load one item",item,ans)
+            const ans = {...item}
+            // ここでitemCreatorを挟みたいが一部のitemCreatorはstoreにdispatchしようとするため挟めない
             return ans;
         })
         return newItems;
