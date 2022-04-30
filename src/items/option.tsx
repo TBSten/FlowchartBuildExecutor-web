@@ -144,7 +144,8 @@ export function getOption(item: Item, name: string) {
 export interface OptionEditorProps {
     symId: ItemId;
 }
-export const DefaultOptionEditor: FC<OptionEditorProps> = ({ symId }) => {
+export type SymOptionEditor = FC<OptionEditorProps>;
+export const DefaultOptionEditor: SymOptionEditor = ({ symId }) => {
     const options = useAppSelector(state => {
         const item = getItem(symId)(state);
         return isSym(item) ? item.options : null;

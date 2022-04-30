@@ -46,10 +46,6 @@ export const BranchBase = (
             const parent = getItem(itemId)(state);
             return parent?.childrenItemIds ?? [];
         });
-        const [, {
-            // selectOne,
-        }] = useSelectItemIds();
-        // const [selectItemIds] = useSelectItemIds();
         const flowIdToLabel = (flowId: ItemId, idx: number) => {
             if (labels instanceof Array) {
                 return labels[idx];
@@ -132,10 +128,15 @@ const ChildFlow: FC<{ flowId: ItemId, label: ReactNode }> = ({ flowId, label }) 
             <Box
                 id={flowId}
                 onClick={handleSelect}
-                sx={{ minHeight: "1em", color: isSelect ? "blue" : "" }}
+                sx={{
+                    maxWidth: "90px",
+                    wordWrap: "break-word",
+                    minHeight: "1rem",
+                    color: isSelect ? "blue" : "",
+                }}
             >
                 {label}
-                {label === "" ? "(タグがありません)" : ""}
+                {label === "" && "(タグがありません)"}
             </Box>
             <Flow
                 flowId={flowId}

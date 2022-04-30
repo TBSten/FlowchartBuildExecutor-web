@@ -1,0 +1,69 @@
+Date : 2022-05-01 02:34:45
+Directory : /Users/tsubasa/Desktop/dev/fbe/fbe-core/web
+Total : 26 files,  620 codes, 35 comments, 66 blanks, all 721 lines
+
+Languages
++------------------+------------+------------+------------+------------+------------+
+| language         | files      | code       | comment    | blank      | total      |
++------------------+------------+------------+------------+------------+------------+
+| TypeScript React |         12 |        517 |         31 |         44 |        592 |
+| TypeScript       |         13 |        100 |          4 |         22 |        126 |
+| JSON             |          1 |          3 |          0 |          0 |          3 |
++------------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                   |         26 |        620 |         35 |         66 |        721 |
+| src                                                                                 |         25 |        617 |         35 |         66 |        718 |
+| src/components                                                                      |          5 |        153 |         16 |         17 |        186 |
+| src/components/App                                                                  |          3 |          1 |          8 |          0 |          9 |
+| src/components/util                                                                 |          2 |        152 |          8 |         17 |        177 |
+| src/format                                                                          |          1 |          4 |          2 |          3 |          9 |
+| src/items                                                                           |          8 |        335 |         14 |         16 |        365 |
+| src/items/base                                                                      |          1 |          6 |          0 |          0 |          6 |
+| src/items/flow                                                                      |          1 |         10 |          1 |          0 |         11 |
+| src/items/if                                                                        |          1 |          3 |         -2 |          0 |          1 |
+| src/items/switch                                                                    |          1 |        127 |          4 |         10 |        141 |
+| src/items/terminalEnd                                                               |          1 |          5 |          0 |          0 |          5 |
+| src/items/terminalStart                                                             |          1 |          5 |          0 |          0 |          5 |
+| src/lib                                                                             |          4 |         35 |          0 |         13 |         48 |
+| src/redux                                                                           |          5 |         32 |          3 |          6 |         41 |
+| src/redux/app                                                                       |          1 |          1 |          0 |          0 |          1 |
+| src/redux/items                                                                     |          3 |         27 |          2 |          6 |         35 |
+| src/redux/meta                                                                      |          1 |          4 |          1 |          0 |          5 |
++-------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| filename                                                                            | language         | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/package.json                            | JSON             |          3 |          0 |          0 |          3 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/Reset.tsx                           | TypeScript React |         39 |          0 |          7 |         46 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/BuildPane.tsx        | TypeScript React |          1 |          0 |          0 |          1 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/EditSidebar.tsx      | TypeScript React |          1 |          7 |          0 |          8 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/App/SideBar.tsx          | TypeScript React |         -1 |          1 |          0 |          0 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/CodeEditor.tsx      | TypeScript React |         68 |          8 |          3 |         79 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/components/util/Error.tsx           | TypeScript React |         84 |          0 |         14 |         98 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/format/browser.ts                   | TypeScript       |          4 |          2 |          3 |          9 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/index.tsx                           | TypeScript React |         19 |          0 |          4 |         23 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/base/itemBaseCreator.ts       | TypeScript       |          6 |          0 |          0 |          6 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/flow/Flow.tsx                 | TypeScript React |         10 |          1 |          0 |         11 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/if/IfSym.tsx                  | TypeScript React |          3 |         -2 |          0 |          1 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/option.tsx                    | TypeScript React |        166 |         11 |          6 |        183 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/switch/SwitchOptionEditor.tsx | TypeScript React |        127 |          4 |         10 |        141 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/symTypes.ts                   | TypeScript       |         13 |          0 |          0 |         13 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalEnd/creator.ts        | TypeScript       |          5 |          0 |          0 |          5 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/items/terminalStart/creator.ts      | TypeScript       |          5 |          0 |          0 |          5 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/constants.tsx                   | TypeScript React |          0 |          1 |          0 |          1 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/formula.ts                      | TypeScript       |          3 |          0 |          4 |          7 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/logger.ts                       | TypeScript       |          1 |         -1 |          0 |          0 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/lib/optimize.ts                     | TypeScript       |         31 |          0 |          9 |         40 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/app/reducers.ts               | TypeScript       |          1 |          0 |          0 |          1 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/actions.ts              | TypeScript       |          0 |          0 |          3 |          3 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/reducers.ts             | TypeScript       |          4 |          2 |          0 |          6 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/items/types.ts                | TypeScript       |         23 |          0 |          3 |         26 |
+| /Users/tsubasa/Desktop/dev/fbe/fbe-core/web/src/redux/meta/reducers.ts              | TypeScript       |          4 |          1 |          0 |          5 |
+| Total                                                                               |                  |        620 |         35 |         66 |        721 |
++-------------------------------------------------------------------------------------+------------------+------------+------------+------------+------------+

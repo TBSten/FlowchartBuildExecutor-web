@@ -40,6 +40,7 @@ const BuildPane: FC<BuildPaneProps> = () => {
                         overflow: "visible",
                         width: "fit-content%",
                         height: "fit-content",
+                        transformOrigin: "top left",
                         transform: `scale(${zoom})`,
                         transition: "0.3s"
                     }}
