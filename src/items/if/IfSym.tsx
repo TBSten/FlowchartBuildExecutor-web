@@ -125,7 +125,7 @@ const ChildFlow: FC<{ flowId: ItemId, label: ReactNode }> = ({ flowId, label }) 
     if (!isFlow(flow)) return <ErrorView log={[flow]} />;
     return (
         <>
-            <Box
+            {/* <Box
                 id={flowId}
                 onClick={handleSelect}
                 sx={{
@@ -137,11 +137,12 @@ const ChildFlow: FC<{ flowId: ItemId, label: ReactNode }> = ({ flowId, label }) 
             >
                 {label}
                 {label === "" && "(タグがありません)"}
-            </Box>
+            </Box> */}
             <Flow
                 flowId={flowId}
                 round
                 bottomArrow={false}
+                showTag
             />
         </>
 
