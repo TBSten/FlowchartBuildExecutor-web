@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import React, { FC, useState } from "react";
+import ErrorView from "src/components/util/ErrorView";
 import { isValidFormula } from "src/lib/formula";
 import { useChange } from "src/redux/app/hooks";
 import { useItemOperations, useOption } from "src/redux/items/hooks";
@@ -150,10 +151,11 @@ export const DefaultOptionEditor: SymOptionEditor = ({ symId }) => {
         const item = getItem(symId)(state);
         return isSym(item) ? item.options : null;
     })
+    if (!options) return <ErrorView>選択中のアイテムが異常です</ErrorView>
     return (
         <>
             {options?.map(option => (
-                <OptionRow
+                <OptionEditorRow
                     key={option.name}
                     itemId={symId}
                     name={option.name}
@@ -162,7 +164,7 @@ export const DefaultOptionEditor: SymOptionEditor = ({ symId }) => {
         </>
     );
 }
-const OptionRow = React.memo(
+export const OptionEditorRow = React.memo(
     ({ name, itemId }: { name: string; itemId: ItemId }) => {
         const [openDialog, setOpenDialog] = useState(false);
         const [option, setOption] = useOption(itemId, name);
@@ -172,7 +174,7 @@ const OptionRow = React.memo(
         if (!option.visible) return <></>;
         return (
             <>
-                <OptionListItem
+                <OptionEditorListItem
                     key={option.name}
                     itemId={itemId}
                     option={option}
@@ -180,7 +182,7 @@ const OptionRow = React.memo(
                     onOpenDialog={handleOpen}
 
                 />
-                <OptionDialog
+                <OptionEditorDialog
                     itemId={itemId}
                     option={option}
                     show={openDialog}
@@ -190,7 +192,7 @@ const OptionRow = React.memo(
         );
     }
 );
-const OptionListItem = React.memo(
+export const OptionEditorListItem = React.memo(
     ({
         option,
         onOpenDialog,
@@ -247,7 +249,7 @@ const OptionListItem = React.memo(
     }
 );
 
-const OptionDialog = React.memo(
+export const OptionEditorDialog = React.memo(
     ({
         option,
         show,

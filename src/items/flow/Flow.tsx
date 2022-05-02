@@ -1,7 +1,9 @@
+import { Box } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { notImplementError } from "src/lib/error";
+import { useSelectItemIds } from "src/redux/app/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { isFlow, ItemId } from "src/redux/items/types";
 import { useAppSelector } from "src/redux/root/hooks";
@@ -14,6 +16,7 @@ export interface FlowComponentProps {
     round?: boolean;
     bottomArrow?: boolean;
     selectable?: boolean;
+    showTag?: boolean;
 }
 
 const FlowComponent: FC<FlowComponentProps> = ({
@@ -21,6 +24,7 @@ const FlowComponent: FC<FlowComponentProps> = ({
     round = false,
     bottomArrow = true,
     selectable = true,
+    showTag = false,
 }) => {
     // const [flow] = useFlow(flowId);
     const childrenItemIds = useSelector((state: StoreState) => {
@@ -31,6 +35,18 @@ const FlowComponent: FC<FlowComponentProps> = ({
         }
         return item.childrenItemIds;
     })
+    const tag = useAppSelector(state => {
+        const item = getItem(flowId)(state);
+        if (!isFlow(item)) {
+            console.error(item, "is not flow");
+            throw notImplementError();
+        }
+        return item.tag;
+    })
+    const [, { selectOne }] = useSelectItemIds();
+    const handleSelect = () => {
+        selectOne(flowId)
+    }
     const isSelect = useAppSelector(state => state.app.selectItemIds.includes(flowId))
     let children = <>
         {round ? <Arrow flowId={flowId} selectable={selectable} index={0} /> : ""}
@@ -55,6 +71,20 @@ const FlowComponent: FC<FlowComponentProps> = ({
             outlineOffset: "-2px",
             borderRadius: "0.25em",
         }}>
+            {showTag &&
+                <Box
+                    id={flowId}
+                    onClick={handleSelect}
+                    sx={{
+                        maxWidth: "90px",
+                        wordWrap: "break-word",
+                        minHeight: "1rem",
+                        color: isSelect ? "blue" : "",
+                    }}
+                >
+                    {tag}
+                </Box>
+            }
             {children}
         </Stack>
     );
