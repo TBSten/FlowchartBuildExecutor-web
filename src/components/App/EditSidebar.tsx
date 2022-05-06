@@ -231,7 +231,7 @@ export default React.memo(EditSidebar);
 
 const FlowEdit = React.memo(
     ({ itemId }: { itemId: ItemId }) => {
-        const [openDialog, setOpenDialog] = useState(false);
+        const [, setOpenDialog] = useState(false);
         const { setItem } = useItemOperations();
         const flow = useAppSelector(getItem(itemId));
         const tag = useAppSelector(state => {
@@ -248,7 +248,7 @@ const FlowEdit = React.memo(
             visible: true
         };
         const handleOpen = () => setOpenDialog(true);
-        const handleClose = () => setOpenDialog(false);
+        // const handleClose = () => setOpenDialog(false);
         const handleUpdate: UpdateOption = (newValue) => {
             mustString(newValue);
             const newFlow: Flow = {

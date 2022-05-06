@@ -4,8 +4,6 @@ import { FC, ReactNode, useEffect, useRef } from "react";
 import ErrorView from "src/components/util/ErrorView";
 import { config } from "src/items/base/SymBase";
 import { logger } from "src/lib/logger";
-import { useSelectItemIds } from "src/redux/app/hooks";
-import { isSelecting } from "src/redux/app/selectors";
 import { useItem } from "src/redux/items/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { isFlow, ItemId } from "src/redux/items/types";
@@ -117,27 +115,9 @@ export const BranchBase = (
 };
 const ChildFlow: FC<{ flowId: ItemId, label: ReactNode }> = ({ flowId, label }) => {
     const [flow] = useItem(flowId);
-    const isSelect = useAppSelector(isSelecting(flowId));
-    const [, { selectOne }] = useSelectItemIds();
-    const handleSelect = () => {
-        selectOne(flowId);
-    };
     if (!isFlow(flow)) return <ErrorView log={[flow]} />;
     return (
         <>
-            {/* <Box
-                id={flowId}
-                onClick={handleSelect}
-                sx={{
-                    maxWidth: "90px",
-                    wordWrap: "break-word",
-                    minHeight: "1rem",
-                    color: isSelect ? "blue" : "",
-                }}
-            >
-                {label}
-                {label === "" && "(タグがありません)"}
-            </Box> */}
             <Flow
                 flowId={flowId}
                 round
@@ -145,12 +125,8 @@ const ChildFlow: FC<{ flowId: ItemId, label: ReactNode }> = ({ flowId, label }) 
                 showTag
             />
         </>
-
     );
 }
 
 const IfSym: SymComponent = BranchBase(["Yes", "No"]);
 export default IfSym;
-
-
-

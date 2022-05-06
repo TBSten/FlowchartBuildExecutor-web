@@ -3,6 +3,7 @@ import React, { FC, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { selectItemOne } from "src/redux/app/actions";
 import { useDragAndDropItem, useMode } from "src/redux/app/hooks";
+import { isSelecting } from "src/redux/app/selectors";
 import { Mode } from "src/redux/app/types";
 import { useSym } from "src/redux/items/hooks";
 import { ItemId, Sym } from "src/redux/items/types";
@@ -83,6 +84,7 @@ const BaseSymComponent = (
                 height: "100%",
                 fontSize: "14px",
                 p: 1,
+                lineHeight: "1.1em",
             }}
             {...other}
         >
@@ -94,6 +96,7 @@ const BaseSymComponent = (
             handleSelect,
             canvasRef,
             sym,
+            // isSelect,
             isDragging,
             props,
         } = useSymBase({ itemId, render });
@@ -125,6 +128,23 @@ const BaseSymComponent = (
                 >
                     <Child sym={sym} />
                 </ChildCon>
+                {/* <Box sx={{
+                    height: "100%",
+                    position: "absolute",
+                    left: "-34px",
+                    zIndex: "1000",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}>
+                    <Box>
+                        <IconButton>
+                            <SelectAllIcon
+                                color={isSelect ? "primary" : "inherit"}
+                            />
+                        </IconButton>
+                    </Box>
+                </Box> */}
             </Box>
         );
     };
@@ -140,13 +160,14 @@ export interface UseSymBaseArg {
 export function useSymBase({ itemId, render }: UseSymBaseArg) {
     const [sym] = useSym(itemId);
     const canvasRef = useSymRender({ itemId, render });
-    const handleSelect = useSymSelect({ itemId });
+    const [isSelect, handleSelect] = useSymSelect({ itemId });
     const [isDragging, dragProps] = useSymDragAndDrop(itemId);
     return {
         handleSelect,
         canvasRef,
         sym,
         isDragging,
+        isSelect,
         props: {
             ...dragProps,
         }
@@ -205,6 +226,7 @@ export interface UseSymSelectArg {
     itemId: ItemId;
 }
 export function useSymSelect({ itemId }: UseSymSelectArg) {
+    const isSelect = useAppSelector(state => isSelecting(itemId)(state));
     const dispatch = useDispatch();
     const selectOne = (itemId: ItemId) => {
         dispatch(selectItemOne({ itemId }));
@@ -212,7 +234,7 @@ export function useSymSelect({ itemId }: UseSymSelectArg) {
     const handleSelect = () => {
         selectOne(itemId);
     };
-    return handleSelect;
+    return [isSelect, handleSelect] as const;
 }
 
 export function useSymDragAndDrop(itemId: ItemId) {
