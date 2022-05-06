@@ -7,7 +7,7 @@ if [ $NOW_BRANCH != $BRANCH ] ; then
     exit 1
 fi
 
-COMMAND_CNT=7
+COMMAND_CNT=8
 
 git add .
 echo "[1/$COMMAND_CNT] command finished"
@@ -26,6 +26,9 @@ echo "[6/$COMMAND_CNT] command finished"
 
 git checkout dev
 echo "[7/$COMMAND_CNT] command finished"
+
+git push --all
+echo "[8/$COMMAND_CNT] command finished"
 
 echo "finish"
 
