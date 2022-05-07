@@ -350,9 +350,14 @@ const LeftTopMenu: FC<{}> = () => {
         downloadTextFile(saveFormat, title + ".fbe");
     };
     const handleImport = (async () => {
-        setOpen(false);
-        const text = await getFileText();
-        loadJson(JSON.parse(text));
+        try {
+            setOpen(false);
+            const text = await getFileText();
+            loadJson(JSON.parse(text));
+        } catch (e) {
+            logger.error("import error", e);
+            alert("エラー");
+        }
     });
     const handleNew = () => {
         setOpen(false);

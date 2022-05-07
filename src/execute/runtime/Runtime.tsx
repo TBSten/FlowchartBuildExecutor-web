@@ -355,7 +355,7 @@ export abstract class Runtime {
             const newHistory = createHistory(this.variables, name);
             draft.push(newHistory as VariableHistoryLine);
         });
-        console.log("variable history", this.variableHistory)
+        logger.log("variable history", this.variableHistory)
     }
     async assignVariable(target: string, value: PureVariableValue) {
         let name = target;

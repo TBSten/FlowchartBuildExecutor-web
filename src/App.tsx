@@ -114,7 +114,7 @@ function useSharedSaveData() {
         (async () => {
             const params = new URLSearchParams(window.location.search);
             const SHAREID = "shareId";
-            console.log(params.get(SHAREID))
+            logger.log("share by id", params.get(SHAREID))
             //shareIdが指定されていたらサーバからセーブフォーマット取得
             if (params.has(SHAREID)) {
                 logger.log("refer shared fbe ")

@@ -36,9 +36,9 @@ export async function getFromServer(id?: string) {
     const json = await res.json();
     const saveData = json?.result;
     if (!isSaveFormat(saveData)) {
-        console.error("res", res)
-        console.error("json", json)
-        console.error("saveData", saveData);
+        logger.error("res", res)
+        logger.error("json", json)
+        logger.error("saveData", saveData);
         throw notImplementError(`invalid save data from server : ${saveData} `);
     }
     logger.log(`get save data from server by id : ${id}`, saveData);

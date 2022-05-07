@@ -3,6 +3,7 @@ import Stack from "@mui/material/Stack";
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { notImplementError } from "src/lib/error";
+import { logger } from "src/lib/logger";
 import { useSelectItemIds } from "src/redux/app/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { isFlow, ItemId } from "src/redux/items/types";
@@ -29,7 +30,7 @@ const FlowComponent: FC<FlowComponentProps> = ({
     const childrenItemIds = useSelector((state: StoreState) => {
         const item = getItem(flowId)(state);
         if (!isFlow(item)) {
-            console.error(item, "is not flow");
+            logger.error(item, "is not flow");
             throw notImplementError();
         }
         return item.childrenItemIds;
@@ -37,7 +38,7 @@ const FlowComponent: FC<FlowComponentProps> = ({
     const tag = useAppSelector(state => {
         const item = getItem(flowId)(state);
         if (!isFlow(item)) {
-            console.error(item, "is not flow");
+            logger.error(item, "is not flow");
             throw notImplementError();
         }
         return item.tag;

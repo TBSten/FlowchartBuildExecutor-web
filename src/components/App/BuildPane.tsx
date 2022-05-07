@@ -13,12 +13,10 @@ import { useAppSelector } from "src/redux/root/hooks";
 export interface BuildPaneProps { }
 
 const BuildPane: FC<BuildPaneProps> = () => {
-    console.log("render build pane");
     const [flowIds] = useFlows();
-    const [zoom, setZoom] = useSavedZoom();
-    const [mode] = useMode();
+    const [zoom] = useSavedZoom();
+    // const [mode] = useMode();
     return (
-
         <Box
             sx={{
                 width: "fit-content",

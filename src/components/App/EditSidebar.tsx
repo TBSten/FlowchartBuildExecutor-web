@@ -92,7 +92,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
         }
     };
     const handleRemove = () => {
-        console.log("remove", selectItemIds)
+        logger.log("remove", selectItemIds)
         selectItemIds.forEach(itemId => {
             removeFlow(itemId);
             removeItem(itemId);

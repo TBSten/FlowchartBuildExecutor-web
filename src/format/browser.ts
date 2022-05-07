@@ -58,7 +58,7 @@ function defaultRuntimeName() {
 }
 export function saveZoomToBrowser(zoom?: number) {
     if (!zoom) zoom = defaultZoom();
-    console.log("saveZoomToBrowser", zoom);
+    logger.log("saveZoomToBrowser", zoom);
     storeJs(SAVE_KEYS.ZOOM, zoom.toString());
 }
 export function saveRuntimeNameToBrowser(name?: string) {
