@@ -92,20 +92,12 @@ const EditSidebar: FC<EditSidebarProps> = () => {
         }
     };
     const handleRemove = () => {
-        if (isSym(selectItem)) {
-            selectItemIds.forEach((itemId) => {
-                removeItem(itemId)
-            })
-            notifyChange();
-        }
-        if (isFlow(selectItem)) {
-            selectItemIds.forEach(itemId => {
-                logger.log("remove flow", itemId)
-                removeFlow(itemId);
-                removeItem(itemId);
-            })
-            notifyChange();
-        }
+        console.log("remove", selectItemIds)
+        selectItemIds.forEach(itemId => {
+            removeFlow(itemId);
+            removeItem(itemId);
+        })
+        notifyChange();
     };
 
     const changeTargetTypes = addableItemTypes.filter(
@@ -140,13 +132,6 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                             </SidebarContent>
 
                             <SidebarContent title="オプション">
-                                {/* {selectItem.options.map((o) => (
-                                    <OptionRow
-                                        key={o.name}
-                                        itemId={selectItem.itemId}
-                                        name={o.name}
-                                    />
-                                ))} */}
                                 {isSymType(selectItemType) && (() => {
                                     const OptionEditor = symTypes[selectItemType].optionEditor;
                                     return <OptionEditor symId={selectItemIds[0]} />
@@ -197,36 +182,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
 };
 export default React.memo(EditSidebar);
 
-// const OptionRow = React.memo(
-//     ({ name, itemId }: { name: string; itemId: ItemId }) => {
-//         const [openDialog, setOpenDialog] = useState(false);
-//         const option = useAppSelector(state => {
-//             const item = state.items.find((item) => item.itemId === itemId);
-//             if (!isSym(item)) return;
-//             return item.options.find((o) => o.name === name);
-//         });
-//         if (!option) return <div># ERROR {name} option is not exist </div>;
-//         const handleClose = () => setOpenDialog(false);
-//         const handleOpen = () => setOpenDialog(true);
-//         if (!option.visible) return <></>;
-//         return (
-//             <>
-//                 <OptionListItem
-//                     key={option.name}
-//                     itemId={itemId}
-//                     option={option}
-//                     onOpenDialog={handleOpen}
-//                 />
-//                 <OptionDialog
-//                     itemId={itemId}
-//                     option={option}
-//                     show={openDialog}
-//                     onClose={handleClose}
-//                 />
-//             </>
-//         );
-//     }
-// );
+
 
 
 const FlowEdit = React.memo(
@@ -248,7 +204,6 @@ const FlowEdit = React.memo(
             visible: true
         };
         const handleOpen = () => setOpenDialog(true);
-        // const handleClose = () => setOpenDialog(false);
         const handleUpdate: UpdateOption = (newValue) => {
             mustString(newValue);
             const newFlow: Flow = {
@@ -259,9 +214,6 @@ const FlowEdit = React.memo(
             notifyChange();
         };
         return (
-            // <OptionComponent
-            //     option={option}
-            //     setOption={handleUpdate} />
             <OptionEditorListItem
                 itemId={flow.itemId}
                 option={option}
@@ -269,98 +221,5 @@ const FlowEdit = React.memo(
                 onOpenDialog={handleOpen}
             />
         )
-        // return <>
-        //     <OptionListItem
-        //         itemId={itemId}
-        //         option={option}
-        //         onOpenDialog={handleOpen}
-        //     />
-        //     <Dialog open={openDialog} onClose={handleClose}>
-        //         <DialogTitle>{option.name} の編集</DialogTitle>
-        //         <DialogContent>
-        //             <Input option={option} updateOption={handleUpdate} />
-        //         </DialogContent>
-        //         <DialogActions>
-        //             <Button onClick={handleClose}>閉じる</Button>
-        //         </DialogActions>
-        //     </Dialog>
-
-        // </>;
     });
 
-// const OptionListItem = React.memo(
-//     ({
-//         option,
-//         onOpenDialog,
-//     }: {
-//         itemId: ItemId;
-//         option: Option;
-//         onOpenDialog: () => void;
-//     }) => {
-//         return (
-//             <ListItem
-//                 button
-//                 onClick={onOpenDialog}
-//                 secondaryAction={
-//                     <IconButton>
-//                         {" "}
-//                         <EditIcon />{" "}
-//                     </IconButton>
-//                 }
-//             >
-//                 <ListItemText
-//                     sx={{
-//                         px: 2,
-//                         lineBreak: "anywhere",
-//                     }}
-//                 >
-//                     <Stack direction="row" justifyContent="space-between">
-//                         <Box>
-//                             {option.name} :
-//                         </Box>
-//                         <Box sx={{ color: "blue", }} component="span">
-//                             {option.value === true
-//                                 ? "Yes"
-//                                 : option.value === false
-//                                     ? "No"
-//                                     : option.value}
-//                         </Box>
-//                     </Stack>
-//                 </ListItemText>
-//             </ListItem>
-//         );
-//     }
-// );
-
-// const OptionDialog = React.memo(
-//     ({
-//         option,
-//         show,
-//         onClose,
-//         itemId,
-//     }: {
-//         option: Option;
-//         show: boolean;
-//         onClose: () => void;
-//         itemId: ItemId;
-//     }) => {
-//         const { setOption } = useItemOperations();
-//         const { notifyChange } = useChange();
-//         const Input = optionInputs[option.type].component;
-//         const handleUpdate: UpdateOption = (newValue) => {
-//             setOption(itemId, option.name, newValue);
-//             notifyChange();
-//         };
-//         return (
-//             <Dialog open={show} onClose={onClose}>
-//                 <DialogTitle>{option.name} の編集</DialogTitle>
-//                 <DialogContent>
-//                     <Input option={option} updateOption={handleUpdate} />
-//                 </DialogContent>
-//                 <DialogActions>
-//                     <Button onClick={onClose}>閉じる</Button>
-//                 </DialogActions>
-//             </Dialog>
-//         );
-//     }
-// );

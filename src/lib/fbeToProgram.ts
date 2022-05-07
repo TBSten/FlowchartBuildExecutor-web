@@ -24,13 +24,11 @@ export function fbeToProgram(target: typeof enableTargets[number]) {
             }),
         }).then(r => r.json()).then(json => {
             return json?.result;
-        })
-            // .catch(e => { throw Error("invalid fetch result") })
-            .catch(e => {
-                logger.error("failed fbe to program")
-                logger.error(e)
-                reject(e);
-            });
+        }).catch(e => {
+            logger.error("failed fbe to program")
+            logger.error(e)
+            reject(e);
+        });
         if (typeof result !== "string") reject(notImplementError(`invalid result ${result}`));
         resolve(result)
     })

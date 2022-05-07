@@ -26,7 +26,6 @@ const FlowComponent: FC<FlowComponentProps> = ({
     selectable = true,
     showTag = false,
 }) => {
-    // const [flow] = useFlow(flowId);
     const childrenItemIds = useSelector((state: StoreState) => {
         const item = getItem(flowId)(state);
         if (!isFlow(item)) {

@@ -66,9 +66,7 @@ function App() {
                         bottom: isSp ? 0 : 10,
                         maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
                         minWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
-                        // minWidth: isSp ? "100%" : null,
                         maxHeight: isSp ? "35vh" : "calc(100vh - 10px - 132px )",
-                        // minHeight: isSp ? null : "calc(100vh - 10px - 132px )",
                         p: isSp ? 0.5 : undefined,
                         overflow: "auto",
                     }}

@@ -381,7 +381,6 @@ export abstract class Runtime {
                     newValue = arr[i] as any;
                 })
             );
-            // v.value = newValue as VariableValue;
             this.setVariable(v.name, newValue as VariableValue);
         } else {
             this.setVariable(name, assignValue);

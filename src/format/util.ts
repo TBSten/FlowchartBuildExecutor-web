@@ -79,3 +79,17 @@ export function loadJson(obj: any) {
         throw new Error(`invalid argument of loadJson`);
     }
 }
+export function withCatch<R>(
+    func: () => R,
+    onError: (e: unknown) => any = (e) => { alert(e) },
+) {
+    return () => {
+        try {
+            return func();
+        } catch (e) {
+            onError(e);
+            return null;
+        }
+    }
+}
+

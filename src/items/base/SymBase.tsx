@@ -97,7 +97,7 @@ const BaseSymComponent = (
             canvasRef,
             sym,
             // isSelect,
-            isDragging,
+            // isDragging,
             props,
         } = useSymBase({ itemId, render });
         return (

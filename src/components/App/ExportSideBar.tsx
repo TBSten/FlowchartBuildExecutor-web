@@ -44,13 +44,6 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
                     </ButtonGroup>
                 </Emphansible>
         },
-        // {
-        //     label: "PDFに変換",
-        //     node:
-        //         <Box p={1}>
-        //             準備中...
-        //         </Box>
-        // },
         {
             label: "プログラムに変換",
             node:

@@ -64,7 +64,8 @@ import UtilDialog, { useUtilDialog, UtilDialogProps } from "./UtilDialog";
 export interface HeaderProps { }
 
 const Header: FC<HeaderProps> = () => {
-    const { isExistsChange } = useChange();
+    // const { isExistsChange } = useChange();
+    useChange();
     return (
         <AppBar
             color="transparent"
@@ -122,16 +123,6 @@ async function sendLogs(logs: Log[]) {
 }
 interface RightTopMenuProps {
 }
-// function useMenuItems(): ({ label: string, onSelect?: () => any } | "hr")[] {
-//     return useMemo(() => [
-//         { label: "全てのメニュー", },
-//         "hr",
-//         {
-//             label: "エラーレポートを送信",
-//             onSelect: handleSendError,
-//         }
-//     ], [handleSendError]);
-// }
 const RightTopMenu: FC<RightTopMenuProps> = () => {
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const open = Boolean(anchor);
@@ -143,7 +134,6 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             cb();
         }
     }
-    // const menuItems = useMenuItems();
     const { logs } = useLogs();
     const [reportNo, setReportNo] = useState(-1);
     const isPc = usePc();
@@ -349,21 +339,21 @@ const LeftTopMenu: FC<{}> = () => {
     ] = useUtilDialog({});
     const [target, setTarget] = useState<(EnableTarget)>("javascript");
 
-    const handleSave = () => {
+    const handleSave = (() => {
         setOpen(false);
         saveToBrowser();
         resetChangeCount();
-    };
+    });
     const handleDownload = () => {
         setOpen(false);
         const saveFormat = storeStateToJson();
         downloadTextFile(saveFormat, title + ".fbe");
     };
-    const handleImport = async () => {
+    const handleImport = (async () => {
         setOpen(false);
         const text = await getFileText();
         loadJson(JSON.parse(text));
-    };
+    });
     const handleNew = () => {
         setOpen(false);
         //reset
@@ -374,14 +364,12 @@ const LeftTopMenu: FC<{}> = () => {
         window.location.href = window.location.toString().replace(window.location.search, "")
     };
     const handleDownloadImage = () => {
-        // donwloadImage(title);
         setOpen(false);
         saveToBrowser();
         dispatch(exportMode());
         dispatch(setEmphasisTarget({ key: TO_IMG_KEY }));
     };
     const handleToProgram = () => {
-        // openTargetSelectDialog();
         setOpen(false);
         dispatch(exportMode());
         dispatch(setEmphasisTarget({ key: TO_PROGRAM_KEY }));

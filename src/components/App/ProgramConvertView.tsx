@@ -5,10 +5,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Highlight, { defaultProps, Language, Prism as ReactPrism } from "prism-react-renderer";
 import PrismDarkTheme from "prism-react-renderer/themes/vsDark";
 import Prism from "prismjs";
-// import Prism from 'prismjs';
 import { FC, useEffect } from "react";
 import { EnableTarget } from "src/lib/fbeToProgram";
 import UtilDialog, { useUtilDialog } from "./UtilDialog";
+
 
 declare global {
     namespace NodeJs {
