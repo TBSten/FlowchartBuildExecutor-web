@@ -2,7 +2,6 @@ import { isString } from "lodash";
 import { useEffect } from "react";
 import { getRuntimeKeys } from "src/execute/runtime";
 import { logger } from "src/lib/logger";
-import { optimize } from "src/lib/optimize";
 import { useZoom } from "src/redux/app/hooks";
 import { loadItems } from "src/redux/items/actions";
 import { loadMeta } from "src/redux/meta/actions";

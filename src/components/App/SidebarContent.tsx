@@ -10,7 +10,7 @@ interface SidebarContentProps {
 const SidebarContent: FC<SidebarContentProps> = ({ children, title, defaultExpanded = false }) => {
     const isSp = useSp();
     return (
-        <Accordion defaultExpanded={defaultExpanded}>
+        <Accordion defaultExpanded={defaultExpanded} sx={{ my: 1 }}>
             <AccordionSummary
                 expandIcon={<ExpandMore />}
             >

@@ -1,4 +1,4 @@
-import { ButtonGroup } from "@mui/material";
+import { ButtonGroup, Slide } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -20,7 +20,7 @@ import { useChange, useSelectItemIds } from "src/redux/app/hooks";
 import { useItem, useItemOperations } from "src/redux/items/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { Flow, isFlow, isSym, ItemId, Option } from "src/redux/items/types";
-import { useFlows } from "src/redux/meta/hooks";
+import { useTopFlows } from "src/redux/meta/hooks";
 import { useAppSelector } from "src/redux/root/hooks";
 import ErrorView from "../util/ErrorView";
 import SidebarContent from "./SidebarContent";
@@ -30,7 +30,7 @@ export interface EditSidebarProps { }
 
 const EditSidebar: FC<EditSidebarProps> = () => {
     const { setItem, removeItem, } = useItemOperations();
-    const [flows, { addFlow }] = useFlows();
+    const [flows, { addTopFlow: addFlow }] = useTopFlows();
     const { notifyChange } = useChange();
 
     const handleAddFlow = () => {
@@ -63,7 +63,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
     const [selectItemIds] = useSelectItemIds();
     const [selectItem, { set: setSelectItem }] = useItem(selectItemIds[0]);
     const selectItemType = selectItem?.itemType;
-    const [, { removeFlow, }] = useFlows();
+    const [, { removeTopFlow: removeFlow, }] = useTopFlows();
 
     const [openTCDialog, setOpenTCDialog] = useState(false);
     const handleOpenDialog = () => {
@@ -111,48 +111,50 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                 </Button>
             </SidebarContent>
 
-            {selectItem && (
-                <>
-                    {isSym(selectItem) ? (
-                        <>
-                            <SidebarContent title="選択中の記号" defaultExpanded>
-                                <ButtonGroup variant="outlined">
-                                    <Button onClick={handleOpenDialog}>
-                                        {" "}
-                                        記号の種類を変更
-                                        {" "}
-                                    </Button>
-                                    <Button
-                                        onClick={handleRemove}
-                                        disabled={!selectItem?.flgs?.delete}
-                                    >
-                                        記号を削除
-                                    </Button>
-                                </ButtonGroup>
-                            </SidebarContent>
+            <Slide direction="up" mountOnEnter unmountOnExit in={isSym(selectItem)}>
+                <Box>
+                    <SidebarContent title="選択中の記号" defaultExpanded>
+                        <ButtonGroup variant="outlined" sx={{ mb: 2 }}>
+                            <Button onClick={handleOpenDialog}>
+                                {" "}
+                                記号の種類を変更
+                                {" "}
+                            </Button>
+                            <Button
+                                onClick={handleRemove}
+                                disabled={!selectItem?.flgs?.delete}
+                            >
+                                記号を削除
+                            </Button>
+                        </ButtonGroup>
+                        {isSymType(selectItemType) && (() => {
+                            const OptionEditor = symTypes[selectItemType].optionEditor;
+                            return <OptionEditor symId={selectItemIds[0]} />
+                        })()}
+                    </SidebarContent>
 
-                            <SidebarContent title="オプション">
-                                {isSymType(selectItemType) && (() => {
-                                    const OptionEditor = symTypes[selectItemType].optionEditor;
-                                    return <OptionEditor symId={selectItemIds[0]} />
-                                })()}
-                            </SidebarContent>
-                        </>
-                    ) : isFlow(selectItem) ? (
-                        <>
-                            <SidebarContent title="選択中のフロー" defaultExpanded>
-                                {/* flow を編集する */}
-                                <Button variant="outlined" onClick={handleRemove}>
-                                    フローを削除
-                                </Button>
-                                <FlowEdit
-                                    itemId={selectItem.itemId}
-                                />
-                            </SidebarContent>
-                        </>
-                    ) : ""}
-                </>
-            )}
+                    {/* <SidebarContent title="オプション">
+                    </SidebarContent> */}
+                </Box>
+            </Slide>
+
+            <Slide direction="up" mountOnEnter unmountOnExit in={isFlow(selectItem)}>
+                <Box>
+                    <SidebarContent title="選択中のフロー">
+                        {/* flow を編集する */}
+                        <Button
+                            variant="outlined"
+                            onClick={handleRemove}
+                        >
+                            フローを削除
+                        </Button>
+                        <FlowEdit
+                            itemId={selectItem?.itemId ?? ""}
+                        />
+                    </SidebarContent>
+                </Box>
+            </Slide>
+
             <Dialog open={openTCDialog} onClose={handleCloseDialog}>
                 <DialogTitle> 記号の種類を変更 </DialogTitle>
                 <DialogContent>

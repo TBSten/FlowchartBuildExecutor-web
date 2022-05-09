@@ -83,8 +83,8 @@ export const items = reducerWithInitialState(init)
     })
     .case(actions.loadItems, (state, payload) => {
         // return payload.items;
-        const newItems = payload.items.map<Item>(item=>{
-            const ans = {...item}
+        const newItems = payload.items.map<Item>(item => {
+            const ans = { ...item }
             // ここでitemCreatorを挟みたいが一部のitemCreatorはstoreにdispatchしようとするため挟めない
             return ans;
         })

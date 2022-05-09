@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
-import { notImplementError } from "src/lib/error";
+import ErrorView from "src/components/util/ErrorView";
 import { logger } from "src/lib/logger";
 import { useSelectItemIds } from "src/redux/app/hooks";
 import { getItem } from "src/redux/items/selectors";
@@ -29,17 +29,19 @@ const FlowComponent: FC<FlowComponentProps> = ({
 }) => {
     const childrenItemIds = useSelector((state: StoreState) => {
         const item = getItem(flowId)(state);
+        if (typeof item !== "object") return null;
         if (!isFlow(item)) {
-            logger.error(item, "is not flow");
-            throw notImplementError();
+            // logger.error(item, "is not flow", "id", flowId);
+            return null;
         }
         return item.childrenItemIds;
     })
     const tag = useAppSelector(state => {
         const item = getItem(flowId)(state);
+        if (typeof item !== "object") return null;
         if (!isFlow(item)) {
-            logger.error(item, "is not flow");
-            throw notImplementError();
+            // logger.error(item, "is not flow");
+            return null;
         }
         return item.tag;
     })
@@ -50,21 +52,21 @@ const FlowComponent: FC<FlowComponentProps> = ({
     const isSelect = useAppSelector(state => state.app.selectItemIds.includes(flowId))
     let children = <>
         {round ? <Arrow flowId={flowId} selectable={selectable} index={0} /> : ""}
-        {childrenItemIds.map((itemId, i) => {
+        {childrenItemIds?.map((itemId, i) => {
             return (
                 <React.Fragment key={itemId}>
-
                     {i > 0 ? <Arrow flowId={flowId} selectable={selectable} index={i} /> : ""}
-
                     <ChildSym itemId={itemId} />
-
                 </React.Fragment>
             );
         })}
-        {round ? <Arrow flowId={flowId} selectable={selectable} index={childrenItemIds.length} arrow={bottomArrow} /> : ""}
+        {round ? <Arrow flowId={flowId} selectable={selectable} index={childrenItemIds?.length ?? 0} arrow={bottomArrow} /> : ""}
     </>;
-    if (childrenItemIds.length <= 0) children = <Arrow flowId={flowId} selectable={selectable} index={0} />;
-
+    if (!childrenItemIds || typeof tag !== "string") {
+        logger.error("invalid itemId", flowId)
+        return <ErrorView>不正なフローです</ErrorView>
+    }
+    if ((childrenItemIds.length ?? 0) <= 0) children = <Arrow flowId={flowId} selectable={selectable} index={0} />;
     return (
         <Stack sx={{
             outline: `#1671d65c 4px ${isSelect ? "solid" : "none"}`,

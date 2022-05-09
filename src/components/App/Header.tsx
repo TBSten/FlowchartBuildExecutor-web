@@ -52,7 +52,7 @@ import { zoomUnit } from "src/redux/app/reducers";
 import { resetItems } from "src/redux/items/actions";
 import { useItemOperations } from "src/redux/items/hooks";
 import { resetMeta } from "src/redux/meta/actions";
-import { useFlows, useTitle } from "src/redux/meta/hooks";
+import { useTitle, useTopFlows } from "src/redux/meta/hooks";
 import { usePc } from "src/style/media";
 import ConfirmDialog, { useConfirmDialog } from "../util/ConfirmDialog";
 import OnlyEditMode from "../util/OnlyEditMode";
@@ -495,7 +495,7 @@ const Tools: FC<{}> = () => {
     const [mode, setMode] = useMode();
     const [, , incZoom] = useZoom();
     const [selectItemIds] = useSelectItemIds();
-    const [, { removeFlow }] = useFlows();
+    const [, { removeTopFlow: removeFlow }] = useTopFlows();
     const { removeItem } = useItemOperations();
     const {
         executeNext,
