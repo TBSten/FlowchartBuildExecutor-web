@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { ItemId } from "../items/types";
 import { addFlow, removeFlow, setTitle, } from "./actions";
-import { getTitle, getFlowIds } from "./selectors";
+import { getTitle, getTopFlowIds } from "./selectors";
 import { useAppSelector } from "src/redux/root/hooks";
 import { useChange } from "../app/hooks";
 
@@ -18,8 +18,8 @@ export function useTitle() {
         set,
     ] as const;
 }
-export function useFlows() {
-    const flowIds = useAppSelector(getFlowIds());
+export function useTopFlows() {
+    const flowIds = useAppSelector(getTopFlowIds());
     const dispatch = useDispatch();
     const add = (flowId: ItemId) => {
         dispatch(addFlow({ flowId }))
@@ -30,8 +30,8 @@ export function useFlows() {
     return [
         flowIds,
         {
-            addFlow: add,
-            removeFlow: remove,
+            addTopFlow: add,
+            removeTopFlow: remove,
         }
     ] as const;
 }

@@ -1,5 +1,5 @@
 
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, ListItem, ListItemText, Stack } from "@mui/material";
+import { Box, ListItem, ListItemText, Stack, Tooltip } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -7,8 +7,7 @@ import TextField, { TextFieldProps } from "@mui/material/TextField";
 import React, { FC, useState } from "react";
 import ErrorView from "src/components/util/ErrorView";
 import { isValidFormula } from "src/lib/formula";
-import { useChange } from "src/redux/app/hooks";
-import { useItemOperations, useOption } from "src/redux/items/hooks";
+import { useOption } from "src/redux/items/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { isSym, Item, ItemId, Option, OptionValue } from "src/redux/items/types";
 import { useAppSelector } from "src/redux/root/hooks";
@@ -31,7 +30,7 @@ const TextOptionInput: OptionInputComponent<TextFieldProps> = ({ option, updateO
     };
     return (
         <Box>
-            <TextField value={option.value} onChange={handleChange} {...other} />
+            <TextField value={option.value} onChange={handleChange}  {...other} />
         </Box>
     );
 };
@@ -155,7 +154,7 @@ export const DefaultOptionEditor: SymOptionEditor = ({ symId }) => {
     return (
         <>
             {options?.map(option => (
-                <OptionEditorRow
+                <DefaultOptionEditorRow
                     key={option.name}
                     itemId={symId}
                     name={option.name}
@@ -164,13 +163,20 @@ export const DefaultOptionEditor: SymOptionEditor = ({ symId }) => {
         </>
     );
 }
-export const OptionEditorRow = React.memo(
-    ({ name, itemId }: { name: string; itemId: ItemId }) => {
-        const [openDialog, setOpenDialog] = useState(false);
+export const DefaultOptionEditorRow = React.memo(
+    ({
+        name,
+        itemId,
+        description = "",
+        error = false,
+    }: {
+        name: string;
+        itemId: ItemId;
+        description?: string,
+        error?: boolean,
+    }) => {
         const [option, setOption] = useOption(itemId, name);
         if (!option) return <Box># ERROR {name} option is not exist </Box>;
-        const handleClose = () => setOpenDialog(false);
-        const handleOpen = () => setOpenDialog(true);
         if (!option.visible) return <></>;
         return (
             <>
@@ -179,14 +185,7 @@ export const OptionEditorRow = React.memo(
                     itemId={itemId}
                     option={option}
                     onChangeOptionValue={setOption}
-                    onOpenDialog={handleOpen}
-
-                />
-                <OptionEditorDialog
-                    itemId={itemId}
-                    option={option}
-                    show={openDialog}
-                    onClose={handleClose}
+                    description={description}
                 />
             </>
         );
@@ -195,13 +194,13 @@ export const OptionEditorRow = React.memo(
 export const OptionEditorListItem = React.memo(
     ({
         option,
-        onOpenDialog,
         onChangeOptionValue,
+        description,
     }: {
         itemId: ItemId;
         option: Option;
-        onOpenDialog: () => void;
         onChangeOptionValue: (value: OptionValue) => void;
+        description: string;
     }) => {
         return (
             <ListItem
@@ -221,72 +220,34 @@ export const OptionEditorListItem = React.memo(
                         justifyContent="space-between"
                         flexWrap="wrap"
                     >
-                        <Stack
-                            justifyContent="center"
-                            alignItems="center"
-                            minWidth="fit-content"
-                        >
-                            {option.name} :
-                        </Stack>
+                        <Tooltip title={description} >
+                            <Stack
+                                justifyContent="center"
+                                alignItems="center"
+                                minWidth="fit-content"
+                            >
+                                {option.name} :
+                            </Stack>
+                        </Tooltip>
                         <Box sx={{ color: "blue", }} component="span">
-                            {/* {option.value === true
-                                ? "Yes"
-                                : option.value === false
-                                    ? "No"
-                                    : option.value} */}
-                            <OptionComponent option={option} setOption={onChangeOptionValue} />
+                            <OptionComponent
+                                option={option}
+                                setOption={onChangeOptionValue}
+                            />
                         </Box>
                     </Stack>
                 </ListItemText>
-                {/* <ListItemIcon>
-                    <IconButton>
-                        {" "}
-                        <EditIcon />{" "}
-                    </IconButton>
-                </ListItemIcon> */}
             </ListItem>
         );
     }
 );
 
-export const OptionEditorDialog = React.memo(
-    ({
-        option,
-        show,
-        onClose,
-        itemId,
-    }: {
-        option: Option;
-        show: boolean;
-        onClose: () => void;
-        itemId: ItemId;
-    }) => {
-        const { setOption } = useItemOperations();
-        const { notifyChange } = useChange();
-        const Input = optionInputs[option.type].component;
-        const handleUpdate: UpdateOption = (newValue) => {
-            setOption(itemId, option.name, newValue);
-            notifyChange();
-        };
-        return (
-            <Dialog open={show} onClose={onClose}>
-                <DialogTitle>{option.name} の編集</DialogTitle>
-                <DialogContent>
-                    <Input option={option} updateOption={handleUpdate} />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose}>閉じる</Button>
-                </DialogActions>
-            </Dialog>
-        );
-    }
-);
 
 export interface OptionComponentProps {
     option: Option;
     setOption: (value: OptionValue) => void;
 }
-export function OptionComponent({ option, setOption }: OptionComponentProps) {
+export function OptionComponent({ option, setOption, }: OptionComponentProps) {
     const Comp = optionInputs[option.type].component;
     return <Comp option={option} updateOption={setOption} />
 }

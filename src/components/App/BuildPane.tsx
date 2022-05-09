@@ -6,19 +6,18 @@ import { useSavedZoom } from "src/format/browser";
 import CompFlow from "src/items/flow/Flow";
 import { useMode, useSelectItemIds } from "src/redux/app/hooks";
 import { isSelecting } from "src/redux/app/selectors";
+import { useFlow } from "src/redux/items/hooks";
 import { ItemId } from "src/redux/items/types";
-import { useFlows } from "src/redux/meta/hooks";
+import { useTopFlows } from "src/redux/meta/hooks";
 import { useAppSelector } from "src/redux/root/hooks";
 
 export interface BuildPaneProps { }
 
 const BuildPane: FC<BuildPaneProps> = () => {
-    console.log("render build pane");
-    const [flowIds] = useFlows();
-    const [zoom, setZoom] = useSavedZoom();
-    const [mode] = useMode();
+    const [flowIds] = useTopFlows();
+    const [zoom] = useSavedZoom();
+    // const [mode] = useMode();
     return (
-
         <Box
             sx={{
                 width: "fit-content",
@@ -47,7 +46,10 @@ const BuildPane: FC<BuildPaneProps> = () => {
                 >
                     {flowIds.map((flowId) => {
                         return (
-                            <FlowContainer key={flowId} flowId={flowId} />
+                            <FlowContainer
+                                key={flowId}
+                                flowId={flowId}
+                            />
                         )
                     })}
                 </Stack>
@@ -60,12 +62,14 @@ export default React.memo(BuildPane);
 
 
 const FlowContainer: FC<{ flowId: ItemId }> = ({ flowId }) => {
+    const [flow] = useFlow(flowId);
     const [, { selectOne }] = useSelectItemIds();
     const isSelect = useAppSelector(isSelecting(flowId))
     const [mode] = useMode();
     const handleSelect = () => {
         selectOne(flowId);
     };
+    if (!flow) return <>???</>;
     return (
         <Box>
             {mode === "edit" ?
@@ -73,9 +77,8 @@ const FlowContainer: FC<{ flowId: ItemId }> = ({ flowId }) => {
                     <SelectAllIcon color={isSelect ? "primary" : "inherit"} />
                 </Box>
                 : null}
-            <CompFlow key={flowId} flowId={flowId} selectable={false} />
+            <CompFlow flowId={flowId} selectable={false} />
         </Box>
-
     );
 };
 

@@ -7,10 +7,10 @@ type PureOptionValue =
 export type OptionValue =
     | PureOptionValue
     | PureOptionValue[];
-export function isOptionValue(arg:any):arg is OptionValue{
-    if(arg instanceof Array){
-        return arg.reduce((ans,value)=>ans && isOptionValue(value),true)
-    }else{
+export function isOptionValue(arg: any): arg is OptionValue {
+    if (arg instanceof Array) {
+        return arg.reduce((ans, value) => ans && isOptionValue(value), true)
+    } else {
         return (
             typeof arg === "string" ||
             typeof arg === "number" ||
@@ -18,16 +18,16 @@ export function isOptionValue(arg:any):arg is OptionValue{
         );
     }
 }
-export function isOption(arg:any):arg is Option{
+export function isOption(arg: any): arg is Option {
     return (
-        arg && 
+        arg &&
         typeof arg === "object" &&
         typeof arg.name === "string" &&
         isOptionValue(arg.value) &&
         typeof arg.type === "string" &&
         (arg.inputArgs || arg.inputArgs === null) &&
         typeof arg.visible === "boolean"
-    ) ;
+    );
 }
 
 
@@ -43,7 +43,7 @@ export interface Item {
     itemType: string;
     childrenItemIds: ItemId[];
     parentItemId: ItemId | null;
-    flgs:Record<string,boolean>,
+    flgs: Record<string, boolean>,
 }
 
 export interface Sym extends Item {
@@ -72,7 +72,9 @@ export function isSym(arg: any): arg is Sym {
 }
 
 export function isFlow(arg: any): arg is Flow {
-    return typeof arg === "object" && isItem(arg);
+    return typeof arg === "object" &&
+        typeof arg.tag === "string" &&
+        isItem(arg);
 }
 
 

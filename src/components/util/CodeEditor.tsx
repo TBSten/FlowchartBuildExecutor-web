@@ -19,7 +19,6 @@ const CodeEditor: FC<CodeEditorProps> = ({ ...other }) => {
                     [/\s+/, "custom-ws"],
                     [/[0-9]+(\.(0-9)+)?/, "custom-number"],
                     [/(true)|(false)/, "custom-bool"],
-                    // [/[^+\-*/(または)]/, "custom-var"],
                     [/".*"/, "custom-str"]
                 ]
             }
@@ -61,7 +60,6 @@ const CodeEditor: FC<CodeEditorProps> = ({ ...other }) => {
             <Editor
                 width="50vw"
                 height="2.5em"
-                // defaultLanguage={FBE_LANGUAGE}
                 language={FBE_LANGUAGE}
                 theme={FBE_THEME}
                 options={{

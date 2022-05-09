@@ -34,7 +34,6 @@ const Diamond = BaseSymComponent(DiamondChild, diamondRender);
 
 export const BranchBase = (
     labels: ReactNode[] | ((parentSiwtchId: ItemId, childFlowId: ItemId) => ReactNode),
-    // childrenSelectable: boolean = false,
 ) => {
     const Branch: SymComponent = ({ itemId }) => {
         logger.warn("branch render when state.items changed . i will fix many rendering .")

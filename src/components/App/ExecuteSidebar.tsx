@@ -18,7 +18,7 @@ import { logger } from "src/lib/logger";
 import { setRuntime } from "src/redux/app/actions";
 import { useRuntime } from "src/redux/app/hooks";
 import { getAllItems } from "src/redux/items/selectors";
-import { getFlowIds } from "src/redux/meta/selectors";
+import { useTopFlows } from "src/redux/meta/hooks";
 import { useAppSelector } from "src/redux/root/hooks";
 import { useSp } from "src/style/media";
 import SidebarContent from "./SidebarContent";
@@ -72,7 +72,7 @@ export default ExecuteSidebar;
 const SelectRuntime: FC<{}> = () => {
     const dispatch = useDispatch();
     const items = useAppSelector(getAllItems());
-    const flowIds = useAppSelector(getFlowIds());
+    const [flowIds] = useTopFlows();
     const [selectedName, setSelectedName] = useState(runtimeNames[0]);
     const handleChangeRuntime = (e: SelectChangeEvent) => {
         const name = e.target.value;

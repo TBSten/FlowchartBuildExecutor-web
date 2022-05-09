@@ -26,16 +26,17 @@ export const meta = reducerWithInitialState(init)
         };
     })
     .case(actions.removeFlow, (state, payload) => {
+        const flowIds = state.flowIds.filter(id => id !== payload.flowId);
         return {
             ...state,
-            flowIds: state.flowIds.filter(id => id !== payload.flowId)
+            flowIds,
         };
     })
     .case(actions.loadMeta, (state, payload) => {
         // return payload.meta;
-        const ans :Meta = {
-            title:payload.meta.title,
-            flowIds:payload.meta.flowIds,
+        const ans: Meta = {
+            title: payload.meta.title,
+            flowIds: payload.meta.flowIds,
         };
         return ans;
     })

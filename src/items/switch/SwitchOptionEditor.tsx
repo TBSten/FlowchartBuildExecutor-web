@@ -16,9 +16,6 @@ import { makeItemId } from "../util";
 
 
 const SwitchOptionEditor: SymOptionEditor = (props) => {
-    // const [formula, setFormula] = useOption(symId, "式");
-    // const [variable, setVariable] = useOption(symId, "代入先変数");
-    // if (!isOption(formula) || !isOption(variable)) return <ErrorView>invalid option</ErrorView>
     const { setItem } = useItemOperations();
     const [item] = useSym(props.symId);
     const flows = useAppSelector(state => {

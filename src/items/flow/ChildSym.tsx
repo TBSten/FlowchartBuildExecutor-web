@@ -12,7 +12,6 @@ const ChildSym: FC<ChildSymProps> = ({ itemId }) => {
     const itemType = useAppSelector(state => {
         return state.items.find(item => item.itemId === itemId)?.itemType;
     });
-    // logger.log(itemType)
     if (!itemType) {
         logger.error("invalid item type", itemType)
         return <div># ERROR UNVALID SYM</div>;

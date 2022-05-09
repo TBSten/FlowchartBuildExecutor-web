@@ -23,7 +23,7 @@ import {
 import { ItemId } from "../items/types";
 import { DragEventHandler, useCallback } from "react";
 import { getAllItems } from "../items/selectors";
-import { getFlowIds } from "../meta/selectors";
+import { getTopFlowIds } from "../meta/selectors";
 import { useAppSelector } from "src/redux/root/hooks";
 import { useItemOperations } from "../items/hooks";
 import { saveToBrowser } from "src/format/browser";
@@ -95,9 +95,9 @@ export function useChange() {
     const dispatch = useDispatch();
     const notifyChange = async () => {
         dispatch(notifyChangeAction());
-        saveToBrowser();
-        await sleep(1000);
-        dispatch(resetChangeCountAction());
+        // saveToBrowser();
+        // await sleep(1000);
+        // dispatch(resetChangeCountAction());
     };
     const resetChangeCount = () => {
         dispatch(resetChangeCountAction());
@@ -113,7 +113,7 @@ export function useChange() {
 export function useRuntime() {
     const runtime = useAppSelector(state => state.app.runtime);
     const items = useAppSelector(getAllItems());
-    const topFlowIds = useAppSelector(getFlowIds());
+    const topFlowIds = useAppSelector(getTopFlowIds());
     useAppSelector(state => state.app.runtime?.status);
     const executeUtilities = useExecute();
     const initialize = useCallback(() => {

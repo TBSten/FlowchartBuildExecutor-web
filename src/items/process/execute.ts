@@ -15,7 +15,6 @@ export const processExecute: ItemExecute = async ({
     const flowId = runtime.getProcessFlowId(flowName);
     logger.log("processExecute.flowId", flowId);
     if (!flowId) {
-        // throw notImplementError();
         // ビルドイン関数を実行
         let result = runtime.dangerousEval(flowName);
         if (result instanceof Function) {

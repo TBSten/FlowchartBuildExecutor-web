@@ -1,28 +1,23 @@
-import { Box, Typography } from "@mui/material";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import { FC } from "react";
 import { useSp } from "src/style/media";
 
 interface SidebarContentProps {
     title?: string;
+    defaultExpanded?: boolean;
 }
-const SidebarContent: FC<SidebarContentProps> = ({ children, title }) => {
+const SidebarContent: FC<SidebarContentProps> = ({ children, title, defaultExpanded = false }) => {
     const isSp = useSp();
     return (
-        <Box
-            py={isSp ? 0.5 : 1} px={isSp ? 0 : 0.5} pb={3}
-            width="100%"
-            overflow="auto"
-        >
-            {title ?
-                <Typography color="text.secondary" id={`sidebar-${title ?? "content"}`}>
-                    {title}
-                </Typography>
-                : null
-            }
-            <Box pl={2} py={0.5}>
-                {children}
-            </Box>
-        </Box>
+        <Accordion defaultExpanded={defaultExpanded} sx={{ my: 1 }}>
+            <AccordionSummary
+                expandIcon={<ExpandMore />}
+            >
+                {title}
+            </AccordionSummary>
+            <AccordionDetails>{children}</AccordionDetails>
+        </Accordion>
     );
 }
 

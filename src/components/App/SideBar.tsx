@@ -11,9 +11,7 @@ export interface SidebarProps { }
 const Sidebar: FC<SidebarProps> = () => {
   const [mode,] = useMode();
   return (
-    <Box
-    // minHeight="70vh"
-    >
+    <Box>
       {mode === "edit" &&
         <EditSidebar />
       }

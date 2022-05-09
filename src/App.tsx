@@ -30,6 +30,7 @@ function App() {
     const isSp = useSp();
     const ref = useScrollPos();
     useEffect(() => {
+        welcomeMessage();
         loadFromBrowser();
     }, []);
     useSharedSaveData();
@@ -66,9 +67,7 @@ function App() {
                         bottom: isSp ? 0 : 10,
                         maxWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
                         minWidth: isSp ? "100%" : "min(calc(100% - 10em),50vw)",
-                        // minWidth: isSp ? "100%" : null,
                         maxHeight: isSp ? "35vh" : "calc(100vh - 10px - 132px )",
-                        // minHeight: isSp ? null : "calc(100vh - 10px - 132px )",
                         p: isSp ? 0.5 : undefined,
                         overflow: "auto",
                     }}
@@ -116,7 +115,7 @@ function useSharedSaveData() {
         (async () => {
             const params = new URLSearchParams(window.location.search);
             const SHAREID = "shareId";
-            console.log(params.get(SHAREID))
+            logger.log("share by id", params.get(SHAREID))
             //shareIdが指定されていたらサーバからセーブフォーマット取得
             if (params.has(SHAREID)) {
                 logger.log("refer shared fbe ")
@@ -129,3 +128,20 @@ function useSharedSaveData() {
         })()
     }, []);
 }
+
+const WELCOME_MESSAGE = `
+==========================================
+==                                      ==
+==  WELCOME TO FLOWCHAR BUILD EXECUTER  ==
+==                                      ==
+==                                      ==
+==    THIS CONSOLE SHOW SOME LOGS .     ==
+==                                      ==
+==========================================
+
+`;
+function welcomeMessage() {
+    console.log(WELCOME_MESSAGE);
+}
+
+

@@ -34,7 +34,6 @@ function toLogMessage(...args: any[]) {
  * 通常の出力です。`console.log`や`console.info`と同等のレベルです
  */
 function info(...args: any[]) {
-    // console.info(...args);
     outputConsole("info", ...args)
     addLog({
         message: toLogMessage(...args),
@@ -45,7 +44,6 @@ function info(...args: any[]) {
  * 警告を出力します。`console.warn`と同等のレベルです
  */
 function warn(...args: any[]) {
-    // console.warn(...args);
     outputConsole("warn", ...args)
     addLog({
         message: toLogMessage(...args),
@@ -56,7 +54,6 @@ function warn(...args: any[]) {
  * エラーを出力します。`console.error`と同等のレベルです
  */
 function error(...args: any[]) {
-    // console.error(...args);
     outputConsole("error", ...args)
     addLog({
         message: toLogMessage(...args),
@@ -68,7 +65,6 @@ function error(...args: any[]) {
  * 致命的なエラーを出力します。`console.error`とよりも重要なレベルです
  */
 function fatal(...args: any[]) {
-    // console.error(...args);
     outputConsole("error", ...args)
     addLog({
         message: toLogMessage(...args),

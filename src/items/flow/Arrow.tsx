@@ -45,17 +45,16 @@ const Arrow: FC<ArrowProps> = ({ flowId, index, arrow = true, selectable }) => {
             ctx.beginPath();
             ctx.moveTo(top.x, top.y);
             ctx.lineTo(bottom.x, bottom.y);
-            if (arrow) {
-                // ctx.lineTo(left.x,left.y);
-                // ctx.moveTo(bottom.x,bottom.y);
-                // ctx.lineTo(right.x,right.y);
-            }
+            // if (arrow) {
+            //     // ctx.lineTo(left.x,left.y);
+            //     // ctx.moveTo(bottom.x,bottom.y);
+            //     // ctx.lineTo(right.x,right.y);
+            // }
             ctx.closePath();
             ctx.stroke();
         }
     }, [mode, arrow]);
     const handleAddSym = () => {
-        //flow.childrenItemIds.splice(index,0,newItem)
         const newItemId = makeItemId();
         const newItem = calcSymCreator(newItemId, flowId);
         const childrenItemIds = [...flow.childrenItemIds];
