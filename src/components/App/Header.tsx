@@ -308,7 +308,10 @@ const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
                             >
                                 <TwitterIcon size={40} />
                             </TwitterShareButton>
-                            <LineShareButton url={url} title={title}>
+                            <LineShareButton
+                                url={url}
+                                title={title}
+                            >
                                 <LineIcon size={40} />
                             </LineShareButton>
                         </SidebarContent>

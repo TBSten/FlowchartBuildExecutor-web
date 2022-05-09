@@ -30,6 +30,7 @@ function App() {
     const isSp = useSp();
     const ref = useScrollPos();
     useEffect(() => {
+        welcomeMessage();
         loadFromBrowser();
     }, []);
     useSharedSaveData();
@@ -127,3 +128,19 @@ function useSharedSaveData() {
         })()
     }, []);
 }
+
+const WELCOME_MESSAGE = `
+==========================================
+==                                      ==
+==  WELCOME TO FLOWCHAR BUILD EXECUTER  ==
+==                                      ==
+==                                      ==
+==    THIS CONSOLE SHOW SOME LOGS .     ==
+==                                      ==
+==========================================
+
+`;
+function welcomeMessage() {
+    console.log(WELCOME_MESSAGE);
+}
+

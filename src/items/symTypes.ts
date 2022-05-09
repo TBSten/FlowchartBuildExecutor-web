@@ -33,6 +33,7 @@ import { prepareExecute } from "./prepare/execute";
 import { processExecute } from "./process/execute";
 import { DefaultOptionEditor } from "./option";
 import SwitchOptionEditor from "./switch/SwitchOptionEditor";
+import PrepareOptionEditor from "./prepare/option";
 
 
 export const symTypes = {
@@ -114,7 +115,7 @@ export const symTypes = {
         addable: true,
         label: "準備",
         execute: prepareExecute,
-        optionEditor: DefaultOptionEditor,
+        optionEditor: PrepareOptionEditor,
     },
     "process": {
         creator: processSymCreator,

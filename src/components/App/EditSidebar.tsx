@@ -105,7 +105,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
     );
     return (
         <Box>
-            <SidebarContent>
+            <SidebarContent title="基本操作">
                 <Button variant="outlined" onClick={handleAddFlow}>
                     フローを追加
                 </Button>
@@ -115,7 +115,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                 <>
                     {isSym(selectItem) ? (
                         <>
-                            <SidebarContent title="選択中の記号">
+                            <SidebarContent title="選択中の記号" defaultExpanded>
                                 <ButtonGroup variant="outlined">
                                     <Button onClick={handleOpenDialog}>
                                         {" "}
@@ -140,7 +140,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
                         </>
                     ) : isFlow(selectItem) ? (
                         <>
-                            <SidebarContent title="選択中のフロー">
+                            <SidebarContent title="選択中のフロー" defaultExpanded>
                                 {/* flow を編集する */}
                                 <Button variant="outlined" onClick={handleRemove}>
                                     フローを削除
@@ -187,7 +187,6 @@ export default React.memo(EditSidebar);
 
 const FlowEdit = React.memo(
     ({ itemId }: { itemId: ItemId }) => {
-        const [, setOpenDialog] = useState(false);
         const { setItem } = useItemOperations();
         const flow = useAppSelector(getItem(itemId));
         const tag = useAppSelector(state => {
@@ -203,7 +202,6 @@ const FlowEdit = React.memo(
             value: tag,
             visible: true
         };
-        const handleOpen = () => setOpenDialog(true);
         const handleUpdate: UpdateOption = (newValue) => {
             mustString(newValue);
             const newFlow: Flow = {
@@ -218,7 +216,7 @@ const FlowEdit = React.memo(
                 itemId={flow.itemId}
                 option={option}
                 onChangeOptionValue={handleUpdate}
-                onOpenDialog={handleOpen}
+                description=""
             />
         )
     });
