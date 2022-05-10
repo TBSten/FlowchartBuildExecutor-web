@@ -134,7 +134,7 @@ const ExeButtons: FC<{}> = () => {
     const handleCloseVariableDialog = () => setOpenVariableDialog(false);
     return (
         <>
-            <ExeButtonGroup>
+            <ExeButtonGroupSidebarContent title="制御" >
                 <Button
                     variant={"contained"}
                     onClick={executeNext}
@@ -170,43 +170,49 @@ const ExeButtons: FC<{}> = () => {
                 >
                     はじめから
                 </Button>
-            </ExeButtonGroup>
-            <ExeButtonGroup>
+            </ExeButtonGroupSidebarContent>
+            <ExeButtonGroupSidebarContent title="トレース">
                 <Button onClick={handleOpenVariableDialog}>変数を確認</Button>
-            </ExeButtonGroup>
+            </ExeButtonGroupSidebarContent>
 
             <VariableDialog open={openVariableDialog} onOpen={handleOpenVariableDialog} onClose={handleCloseVariableDialog} />
         </>
     );
 };
 
-const ExeButtonGroup: FC<{}> = ({ children }) => {
-    const isSp = useSp();
-    return (
-        <SidebarContent>
-            {isSp ?
-                <Box
-                    sx={{
-                        display: "grid",
-                        gap: "10px",
-                        gridTemplateRows: "auto",
-                        gridAutoFlow: "column",
-                    }}
-                    p={1}
-                >
-                    {children}
-                </Box>
-                :
-                <ButtonGroup
-                    orientation="horizontal"
-                    sx={{ py: 1 }}
-                >
-                    {children}
-                </ButtonGroup>
-            }
-        </SidebarContent>
-    );
-};
+const ExeButtonGroupSidebarContent: FC<{
+    title: string,
+}> = ({
+    title,
+    children,
+}) => {
+        const isSp = useSp();
+        return (
+            <SidebarContent title={title} defaultExpanded>
+                {isSp ?
+                    <Box
+                        sx={{
+                            display: "grid",
+                            gap: "10px",
+                            gridTemplateRows: "auto",
+                            gridAutoFlow: "column",
+                        }}
+                        p={1}
+                    >
+                        {children}
+                    </Box>
+                    :
+                    <ButtonGroup
+                        orientation="horizontal"
+                        sx={{ py: 1, }}
+                        fullWidth
+                    >
+                        {children}
+                    </ButtonGroup>
+                }
+            </SidebarContent>
+        );
+    };
 
 const marks = [
     {
