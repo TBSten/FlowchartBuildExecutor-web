@@ -28,14 +28,14 @@ const Child: SymChild = ({ sym }) => {
 };
 const render: SymRender = (ctx, size) => {
     const c = corners(size.width, size.height, size.lineWidth);
-    const base = c.height / 2;
+    const base = c.height / 4;
     ctx.beginPath();
     ctx.moveTo(base, c.topLeft.y);
     ctx.lineTo(c.topRight.x - base, c.topRight.y);
-    ctx.lineTo(c.topRight.x, base);
+    ctx.lineTo(c.topRight.x, c.height / 2);
     ctx.lineTo(c.bottomRight.x - base, c.bottomRight.y);
     ctx.lineTo(base, c.bottomLeft.y);
-    ctx.lineTo(c.topLeft.x, base);
+    ctx.lineTo(c.topLeft.x, c.height / 2);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();

@@ -134,7 +134,7 @@ const ExeButtons: FC<{}> = () => {
     const handleCloseVariableDialog = () => setOpenVariableDialog(false);
     return (
         <>
-            <ExeButtonGroupSidebarContent title="制御" >
+            <EBGSidebarContent title="制御" >
                 <Button
                     variant={"contained"}
                     onClick={executeNext}
@@ -170,10 +170,11 @@ const ExeButtons: FC<{}> = () => {
                 >
                     はじめから
                 </Button>
-            </ExeButtonGroupSidebarContent>
-            <ExeButtonGroupSidebarContent title="トレース">
+            </EBGSidebarContent>
+
+            <EBGSidebarContent title="トレース" >
                 <Button onClick={handleOpenVariableDialog}>変数を確認</Button>
-            </ExeButtonGroupSidebarContent>
+            </EBGSidebarContent>
 
             <VariableDialog open={openVariableDialog} onOpen={handleOpenVariableDialog} onClose={handleCloseVariableDialog} />
         </>
@@ -182,13 +183,15 @@ const ExeButtons: FC<{}> = () => {
 
 const ExeButtonGroupSidebarContent: FC<{
     title: string,
+    defaultExpanded?: boolean,
 }> = ({
     title,
     children,
+    defaultExpanded = true,
 }) => {
         const isSp = useSp();
         return (
-            <SidebarContent title={title} defaultExpanded>
+            <SidebarContent title={title} defaultExpanded={defaultExpanded}>
                 {isSp ?
                     <Box
                         sx={{
@@ -196,6 +199,7 @@ const ExeButtonGroupSidebarContent: FC<{
                             gap: "10px",
                             gridTemplateRows: "auto",
                             gridAutoFlow: "column",
+                            overflow: "auto",
                         }}
                         p={1}
                     >
@@ -204,7 +208,7 @@ const ExeButtonGroupSidebarContent: FC<{
                     :
                     <ButtonGroup
                         orientation="horizontal"
-                        sx={{ py: 1, }}
+                        sx={{ py: 1, overflow: "auto" }}
                         fullWidth
                     >
                         {children}
@@ -213,6 +217,7 @@ const ExeButtonGroupSidebarContent: FC<{
             </SidebarContent>
         );
     };
+const EBGSidebarContent = ExeButtonGroupSidebarContent;
 
 const marks = [
     {

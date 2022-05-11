@@ -102,8 +102,8 @@ export abstract class Runtime {
 
             "pow": (a: number, b: number) => Math.pow(a, b),
 
-            "int": (num: any) => parseInt(num),
-            "整数": (num: any) => parseInt(num),
+            "int": (num: any) => mustNumber(parseInt(num)),
+            "整数": (num: any) => mustNumber(parseInt(num)),
 
             "sqrt": (num: number) => Math.sqrt(mustNumber(num)),
             "平方根": (num: number) => Math.sqrt(mustNumber(num)),

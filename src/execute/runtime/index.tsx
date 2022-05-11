@@ -1,25 +1,43 @@
+import { FC } from "react";
 import { logger } from "src/lib/logger";
-import { MsgRuntime } from "./MsgRuntime";
+import { MsgRuntime } from "./msg/MsgRuntime";
 import { Runtime } from "./Runtime";
-import { TerminalRuntime } from "./TerminalRuntime";
+import { TerminalRuntime } from "./terminal/TerminalRuntime";
 
-const runtimeFactories: {
-    [key: string]: () => Runtime;
+
+export type RuntimeSettingComponentProps = {
+    runtime: Runtime,
+}
+export type RuntimeSettingComponent = FC<RuntimeSettingComponentProps>;
+
+
+type RuntimeFactory = () => Runtime;
+const runtimes: {
+    [key: string]: {
+        factory: RuntimeFactory,
+        setting: RuntimeSettingComponent,
+    };
 } = {
-    "メッセージボックス": () => new MsgRuntime(),
-    "ターミナル": () => new TerminalRuntime(),
+    "メッセージボックス": {
+        factory: () => new MsgRuntime(),
+        setting: () => <></>,
+    },
+    "ターミナル": {
+        factory: () => new TerminalRuntime(),
+        setting: () => <></>,
+    },
 };
 
 export function getRuntime(name: string = "メッセージボックス") {
     logger.log("getRuntime", name)
-    return runtimeFactories[name]();
+    return runtimes[name].factory();
 }
 
 export function getRuntimeKeys() {
-    return Object.keys(runtimeFactories);
+    return Object.keys(runtimes);
 }
 
 export function getRuntimeFactories() {
-    return Object.values(runtimeFactories)
+    return Object.values(runtimes).map(runtime => runtime.factory)
 }
 
