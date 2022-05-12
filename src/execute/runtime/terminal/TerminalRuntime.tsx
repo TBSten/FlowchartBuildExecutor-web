@@ -7,7 +7,7 @@ import { useScrollIntoView } from "src/lib/useScrollIntoView";
 import { Item } from "src/redux/items/types";
 import { useAppSelector } from "src/redux/root/hooks";
 import { useSp } from "src/style/media";
-import { Runtime } from "./Runtime";
+import { Runtime } from "../Runtime";
 
 
 export type IOHistory = IOLog[];

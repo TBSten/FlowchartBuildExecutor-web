@@ -134,7 +134,7 @@ const ExeButtons: FC<{}> = () => {
     const handleCloseVariableDialog = () => setOpenVariableDialog(false);
     return (
         <>
-            <ExeButtonGroup>
+            <EBGSidebarContent title="制御" >
                 <Button
                     variant={"contained"}
                     onClick={executeNext}
@@ -170,43 +170,54 @@ const ExeButtons: FC<{}> = () => {
                 >
                     はじめから
                 </Button>
-            </ExeButtonGroup>
-            <ExeButtonGroup>
+            </EBGSidebarContent>
+
+            <EBGSidebarContent title="トレース" >
                 <Button onClick={handleOpenVariableDialog}>変数を確認</Button>
-            </ExeButtonGroup>
+            </EBGSidebarContent>
 
             <VariableDialog open={openVariableDialog} onOpen={handleOpenVariableDialog} onClose={handleCloseVariableDialog} />
         </>
     );
 };
 
-const ExeButtonGroup: FC<{}> = ({ children }) => {
-    const isSp = useSp();
-    return (
-        <SidebarContent>
-            {isSp ?
-                <Box
-                    sx={{
-                        display: "grid",
-                        gap: "10px",
-                        gridTemplateRows: "auto",
-                        gridAutoFlow: "column",
-                    }}
-                    p={1}
-                >
-                    {children}
-                </Box>
-                :
-                <ButtonGroup
-                    orientation="horizontal"
-                    sx={{ py: 1 }}
-                >
-                    {children}
-                </ButtonGroup>
-            }
-        </SidebarContent>
-    );
-};
+const ExeButtonGroupSidebarContent: FC<{
+    title: string,
+    defaultExpanded?: boolean,
+}> = ({
+    title,
+    children,
+    defaultExpanded = true,
+}) => {
+        const isSp = useSp();
+        return (
+            <SidebarContent title={title} defaultExpanded={defaultExpanded}>
+                {isSp ?
+                    <Box
+                        sx={{
+                            display: "grid",
+                            gap: "10px",
+                            gridTemplateRows: "auto",
+                            gridAutoFlow: "column",
+                            overflow: "auto",
+                        }}
+                        p={1}
+                    >
+                        {children}
+                    </Box>
+                    :
+                    <ButtonGroup
+                        orientation="horizontal"
+                        sx={{ py: 1, overflow: "auto" }}
+                        fullWidth
+                    >
+                        {children}
+                    </ButtonGroup>
+                }
+            </SidebarContent>
+        );
+    };
+const EBGSidebarContent = ExeButtonGroupSidebarContent;
 
 const marks = [
     {

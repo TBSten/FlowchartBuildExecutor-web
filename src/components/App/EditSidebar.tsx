@@ -9,7 +9,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import React, { FC, useState } from "react";
 import { flowCreatorWithChildren } from "src/items/flow/creator";
-import { OptionEditorListItem, UpdateOption } from "src/items/option";
+import { DefaultOptionEditorListItem, UpdateOption } from "src/items/option";
 import { addableItemTypes, isSymType, SymType, symTypes } from "src/items/symTypes";
 import { terminalEndSymCreator } from "src/items/terminalEnd/creator";
 import { terminalStartSymCreator } from "src/items/terminalStart/creator";
@@ -214,7 +214,7 @@ const FlowEdit = React.memo(
             notifyChange();
         };
         return (
-            <OptionEditorListItem
+            <DefaultOptionEditorListItem
                 itemId={flow.itemId}
                 option={option}
                 onChangeOptionValue={handleUpdate}

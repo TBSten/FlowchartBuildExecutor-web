@@ -1,9 +1,9 @@
 
-import { Box, ListItem, ListItemText, Stack, Tooltip } from "@mui/material";
+import { Box, FormControl, FormHelperText, ListItem, ListItemText, Stack, Tooltip } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField from "@mui/material/TextField";
 import React, { FC, useState } from "react";
 import ErrorView from "src/components/util/ErrorView";
 import { isValidFormula } from "src/lib/formula";
@@ -11,12 +11,14 @@ import { useOption } from "src/redux/items/hooks";
 import { getItem } from "src/redux/items/selectors";
 import { isSym, Item, ItemId, Option, OptionValue } from "src/redux/items/types";
 import { useAppSelector } from "src/redux/root/hooks";
+import { sxColor } from "src/style/sxHooks";
 
 
 export type UpdateOption = (value: OptionValue) => any;
 export type OptionInputComponent<P extends object = {}> = FC<P & {
     option: Option,
     updateOption: UpdateOption,
+    error?: string,
 }>;
 export interface OptionInput {
     component: OptionInputComponent,
@@ -24,13 +26,18 @@ export interface OptionInput {
 
 
 
-const TextOptionInput: OptionInputComponent<TextFieldProps> = ({ option, updateOption, ...other }) => {
+const TextOptionInput: OptionInputComponent = ({ option, updateOption, error, }) => {
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         updateOption(e.target.value);
     };
     return (
         <Box>
-            <TextField value={option.value} onChange={handleChange}  {...other} />
+            <TextField
+                value={option.value}
+                onChange={handleChange}
+                error={typeof error !== "undefined"}
+                helperText={error}
+            />
         </Box>
     );
 };
@@ -51,7 +58,7 @@ const CheckOptionInput: OptionInputComponent = ({ option, updateOption }) => {
     );
 };
 
-const SelectOptionInput: OptionInputComponent = ({ option, updateOption }) => {
+const SelectOptionInput: OptionInputComponent = ({ option, updateOption, error }) => {
     const value = option.value;
     const args = option.inputArgs;
     const handleChange = (e: SelectChangeEvent) => {
@@ -59,16 +66,16 @@ const SelectOptionInput: OptionInputComponent = ({ option, updateOption }) => {
     };
     if (!(args instanceof Array && typeof value === "string")) return <># ERROR </>
     return (
-        <Box>
-            <Select value={value} onChange={handleChange}>
+        <FormControl>
+            <Select value={value} onChange={handleChange} error={typeof error !== "undefined"}>
                 {args.map(arg => typeof arg === "string" ? (
                     <MenuItem key={arg} value={arg}>
                         {arg}
                     </MenuItem>
                 ) : "ERROR!")}
             </Select>
-            {/* select from {args.map(arg=><li key={arg.toString()}>{arg}</li>)} */}
-        </Box>
+            <FormHelperText sx={sxColor(p => p.error.main)}>{error}</FormHelperText>
+        </FormControl>
     );
 };
 const FormulaOptionInput: OptionInputComponent = (props) => {
@@ -85,8 +92,6 @@ const FormulaOptionInput: OptionInputComponent = (props) => {
         <TextOptionInput
             {...props}
             updateOption={handleUpdate}
-            error={isInvalidFormula}
-            helperText={isInvalidFormula && "不正な式です"}
         />
     </Box>
 }
@@ -180,7 +185,7 @@ export const DefaultOptionEditorRow = React.memo(
         if (!option.visible) return <></>;
         return (
             <>
-                <OptionEditorListItem
+                <DefaultOptionEditorListItem
                     key={option.name}
                     itemId={itemId}
                     option={option}
@@ -191,16 +196,18 @@ export const DefaultOptionEditorRow = React.memo(
         );
     }
 );
-export const OptionEditorListItem = React.memo(
+export const DefaultOptionEditorListItem = React.memo(
     ({
         option,
         onChangeOptionValue,
         description,
+        error,
     }: {
         itemId: ItemId;
         option: Option;
         onChangeOptionValue: (value: OptionValue) => void;
         description: string;
+        error?: string,
     }) => {
         return (
             <ListItem
@@ -233,6 +240,7 @@ export const OptionEditorListItem = React.memo(
                             <OptionComponent
                                 option={option}
                                 setOption={onChangeOptionValue}
+                                error={error}
                             />
                         </Box>
                     </Stack>
@@ -246,9 +254,10 @@ export const OptionEditorListItem = React.memo(
 export interface OptionComponentProps {
     option: Option;
     setOption: (value: OptionValue) => void;
+    error?: string,
 }
-export function OptionComponent({ option, setOption, }: OptionComponentProps) {
+export function OptionComponent({ option, setOption, error, }: OptionComponentProps) {
     const Comp = optionInputs[option.type].component;
-    return <Comp option={option} updateOption={setOption} />
+    return <Comp option={option} updateOption={setOption} error={error} />
 }
 
