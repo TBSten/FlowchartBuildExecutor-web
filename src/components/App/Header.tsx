@@ -305,8 +305,8 @@ const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
                             <Typography variant="caption">
                                 FBE-HubはFBEで作成したフローチャートをさまざまな人に公開・共有できるサイトです。
                             </Typography>
-                            <DialogButton onClick={handlePublishFBEHub}>
-                                FBE-Hubで公開する
+                            <DialogButton onClick={handlePublishFBEHub} disabled>
+                                FBE-Hubで公開する(Comming soon)
                             </DialogButton>
                         </SidebarContent>
                         <SidebarContent title="URL" defaultExpanded>
