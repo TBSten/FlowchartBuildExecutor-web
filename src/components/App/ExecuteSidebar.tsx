@@ -101,7 +101,7 @@ const SelectRuntime: FC<{}> = () => {
         }
     }, [selectedName, items, flowIds])
     return (
-        <SidebarContent title="実行タイプ">
+        <SidebarContent title="実行タイプ" defaultExpanded>
             <Select
                 value={selectedName}
                 onChange={handleChangeRuntime}
@@ -241,7 +241,7 @@ const SpeedChange: FC<{}> = () => {
     };
     if (!runtime) return <>{""}</>;
     return (
-        <SidebarContent title="実行速度">
+        <SidebarContent title="実行速度" defaultExpanded>
             <Box px={isSp ? 3 : 1.25}>
                 <Slider
                     value={runtime.speed}

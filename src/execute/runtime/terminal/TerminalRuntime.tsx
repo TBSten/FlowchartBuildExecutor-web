@@ -78,7 +78,7 @@ const TerminalView: FC<{}> = () => {
         return <ErrorView>ターミナルタブは実行タイプ「ターミナル」の時のみ使用可能です</ErrorView>
     }
     return (
-        <SidebarContent title="出力と入力">
+        <SidebarContent title="出力と入力" defaultExpanded>
             <Box
                 bgcolor="black"
                 color="white"

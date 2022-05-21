@@ -89,6 +89,7 @@ const ExportSideBar: FC<ExportSideBarProps> = () => {
                     <SidebarContent
                         title={tab.label}
                         key={tab.label}
+                        defaultExpanded
                     >
                         {tab.node}
                     </SidebarContent>
