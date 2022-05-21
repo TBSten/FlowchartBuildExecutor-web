@@ -105,7 +105,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
     );
     return (
         <Box>
-            <SidebarContent title="基本操作">
+            <SidebarContent title="基本操作" defaultExpanded>
                 <Button variant="outlined" onClick={handleAddFlow}>
                     フローを追加
                 </Button>
@@ -140,7 +140,7 @@ const EditSidebar: FC<EditSidebarProps> = () => {
 
             <Slide direction="up" mountOnEnter unmountOnExit in={isFlow(selectItem)}>
                 <Box>
-                    <SidebarContent title="選択中のフロー">
+                    <SidebarContent title="選択中のフロー" defaultExpanded>
                         {/* flow を編集する */}
                         <Button
                             variant="outlined"

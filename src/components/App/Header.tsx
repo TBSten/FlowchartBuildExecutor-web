@@ -18,7 +18,7 @@ import { Alert, CircularProgress, Grow, Menu, MenuItem, Stack } from "@mui/mater
 import AppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import Button, { ButtonProps } from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -35,6 +35,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import React, { ChangeEventHandler, FC, MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { LineIcon, LineShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 import {
     resetBrowserSave, saveToBrowser
@@ -152,7 +153,7 @@ const RightTopMenu: FC<RightTopMenuProps> = () => {
             color={theme => theme.palette.primary.main}
             sx={{ overflowWrap: "break-word" }}
         >
-            {reportNo}
+            {String(reportNo).split(/(\d{3})/).filter(s => s).join("-")}
         </Box>
         <Typography variant="body2">
             レポート番号は後にサポートを受けるために必要なレポートの識別番号です。
@@ -262,7 +263,9 @@ interface ShareDialogProps {
 const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
     const [shareId, setShareId] = useState<null | string>(null);
     const [isError, setIsError] = useState(false);
+    const navigate = useNavigate();
     useEffect(() => {
+        setShareId(null);
         if (shareDialogProps.open) {
             saveToServer().then(id => {
                 logger.log("save to server id:", id);
@@ -289,18 +292,32 @@ const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
             alert('対応していません。');
         }
     };
+    const handlePublishFBEHub = () => {
+        // navigate("https://google.com")
+        window.open("https://google.com", "_blank")
+    }
     return (
         <UtilDialog {...shareDialogProps}>
-            <DialogContent>
+            <DialogContent key={url}>
                 {isError ? "エラーが発生しました" :
                     shareId ? <>
-                        <SidebarContent title="URL">
-                            {url}
-                            <Button onClick={handleCopy}>
-                                コピー
-                            </Button>
+                        <SidebarContent title="FBE-Hub" defaultExpanded>
+                            <Typography variant="caption">
+                                FBE-HubはFBEで作成したフローチャートをさまざまな人に公開・共有できるサイトです。
+                            </Typography>
+                            <DialogButton onClick={handlePublishFBEHub}>
+                                FBE-Hubで公開する
+                            </DialogButton>
                         </SidebarContent>
-                        <SidebarContent title="SNSでシェア">
+                        <SidebarContent title="URL" defaultExpanded>
+                            <Box sx={{ wordBreak: "break-all" }}>
+                                {url}
+                            </Box>
+                            <DialogButton onClick={handleCopy} >
+                                コピー
+                            </DialogButton>
+                        </SidebarContent>
+                        <SidebarContent title="SNSでシェア" defaultExpanded>
                             <TwitterShareButton
                                 title={title}
                                 url={url}
@@ -327,6 +344,15 @@ const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
     );
 }
 
+const DialogButton = (props: ButtonProps) => {
+    return (
+        <Button
+            variant="contained"
+            fullWidth sx={{ my: 2 }}
+            {...props}
+        />
+    )
+}
 
 const LeftTopMenu: FC<{}> = () => {
     const [open, setOpen] = useState(false);
