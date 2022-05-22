@@ -42,7 +42,7 @@ import {
 } from "src/format/browser";
 import { saveToServer } from "src/format/share";
 import { loadJson, storeStateToJson } from "src/format/util";
-import { FBE_DOC_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants";
+import { FBE_DOC_URL, FBE_HUB_URL, FBE_SUPPORT_BACKEND_URL, VERSION } from "src/lib/constants";
 import { EnableTarget, enableTargets, useFbeToProgram } from "src/lib/fbeToProgram";
 import { downloadTextFile, getFileText } from "src/lib/file";
 import { Log, logger } from "src/lib/logger";
@@ -293,8 +293,10 @@ const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
         }
     };
     const handlePublishFBEHub = () => {
-        // navigate("https://google.com")
-        window.open("https://google.com", "_blank")
+        // fbehubへshareId付きで移動
+        const url = `${FBE_HUB_URL}?shareId=${shareId}`
+        window.open(url, "_blank")
+        console.log("url", url);
     }
     return (
         <UtilDialog {...shareDialogProps}>
@@ -305,8 +307,8 @@ const ShareDialog: FC<ShareDialogProps> = ({ shareDialogProps, }) => {
                             <Typography variant="caption">
                                 FBE-HubはFBEで作成したフローチャートをさまざまな人に公開・共有できるサイトです。
                             </Typography>
-                            <DialogButton onClick={handlePublishFBEHub} disabled>
-                                FBE-Hubで公開する(Comming soon)
+                            <DialogButton onClick={handlePublishFBEHub}>
+                                FBE-Hubで公開する
                             </DialogButton>
                         </SidebarContent>
                         <SidebarContent title="URL" defaultExpanded>
