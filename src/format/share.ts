@@ -1,8 +1,8 @@
 import { FBE_SAVEPOINT_BACKEND_URL } from "src/lib/constants";
-import { isSaveFormat, SAVE_KEYS, storeStateToSaveFormat } from "./util";
-import storeJs from "storejs";
 import { notImplementError } from "src/lib/error";
 import { logger } from "src/lib/logger";
+import storeJs from "storejs";
+import { isSaveFormat, SAVE_KEYS, storeStateToSaveFormat } from "./util";
 
 export async function saveToServer() {
     const fbe = storeStateToSaveFormat();
@@ -34,7 +34,7 @@ export async function getFromServer(id?: string) {
         method: "GET",
     });
     const json = await res.json();
-    const saveData = json?.result;
+    const saveData = json?.result?.data?.fbe;
     if (!isSaveFormat(saveData)) {
         logger.error("res", res)
         logger.error("json", json)

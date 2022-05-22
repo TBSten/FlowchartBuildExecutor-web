@@ -9,6 +9,7 @@ import { RecoilRoot } from "recoil";
 import Error from "src/components/util/Error";
 import "src/style/global.css";
 import App from './App';
+import Preview from './Preview';
 import { store } from './redux/store';
 import Reset from './Reset';
 
@@ -33,6 +34,7 @@ ReactDOM.render(
                 <Routes>
                   <Route path="/" element={<CoreApp />} />
                   <Route path="reset" element={<Reset />} />
+                  <Route path="preview" element={<Preview />} />
                 </Routes>
               </BrowserRouter>
             </Error>

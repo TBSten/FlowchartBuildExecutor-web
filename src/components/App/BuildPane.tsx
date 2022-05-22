@@ -11,9 +11,11 @@ import { ItemId } from "src/redux/items/types";
 import { useTopFlows } from "src/redux/meta/hooks";
 import { useAppSelector } from "src/redux/root/hooks";
 
-export interface BuildPaneProps { }
+export interface BuildPaneProps {
+    disablePadding?: boolean;
+}
 
-const BuildPane: FC<BuildPaneProps> = () => {
+const BuildPane: FC<BuildPaneProps> = ({ disablePadding = false }) => {
     const [flowIds] = useTopFlows();
     const [zoom] = useSavedZoom();
     // const [mode] = useMode();
@@ -27,8 +29,9 @@ const BuildPane: FC<BuildPaneProps> = () => {
                 minWidth: "20vw",
                 minHeight: "20vh",
                 overflow: "auto",
-                px: "80vw",
-                py: "70vh",
+                px: !disablePadding ? "80vw" : 0,
+                py: !disablePadding ? "70vh" : 0,
+
             }}
         >
             <Box id="fbe-build-pane">
