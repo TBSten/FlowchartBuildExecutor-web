@@ -210,6 +210,9 @@ export function useSymRender({
             if (isExecuting) {
                 color.fore = "#70b108";
             }
+            if (mode === "export") {
+                color.fore = config.color.fore;
+            }
 
             ctx.clearRect(0, 0, size.width, size.height);
             ctx.fillStyle = color.back;
