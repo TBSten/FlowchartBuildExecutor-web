@@ -15,6 +15,8 @@ export interface BuildPaneProps {
     disablePadding?: boolean;
 }
 
+export const BUILDPANE_ID = "fbe-build-pane";
+
 const BuildPane: FC<BuildPaneProps> = ({ disablePadding = false }) => {
     const [flowIds] = useTopFlows();
     const [zoom] = useSavedZoom();
@@ -34,7 +36,7 @@ const BuildPane: FC<BuildPaneProps> = ({ disablePadding = false }) => {
 
             }}
         >
-            <Box id="fbe-build-pane">
+            <Box id={BUILDPANE_ID}>
                 <Stack
                     direction="row"
                     spacing={2}
