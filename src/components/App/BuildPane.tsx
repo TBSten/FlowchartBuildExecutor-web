@@ -23,20 +23,10 @@ const BuildPane: FC<BuildPaneProps> = ({ disablePadding = false }) => {
     // const [mode] = useMode();
     return (
         <Box
-            sx={{
-                width: "fit-content",
-                height: "fit-content",
-                maxWidth: "100%",
-                maxHeight: "100%",
-                minWidth: "20vw",
-                minHeight: "20vh",
-                overflow: "auto",
-                px: !disablePadding ? "80vw" : 0,
-                py: !disablePadding ? "70vh" : 0,
-
-            }}
+            px={!disablePadding ? "80vw" : 0}
+            py={!disablePadding ? "80vh" : 0}
         >
-            <Box id={BUILDPANE_ID}>
+            <Box>
                 <Stack
                     direction="row"
                     spacing={2}

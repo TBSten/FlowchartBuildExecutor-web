@@ -23,7 +23,7 @@ const Preview: FC<PreviewProps> = () => {
         })()
         const buildpane = document.getElementById(BUILDPANE_ID)
         if (buildpane) {
-            buildpane.style.overflow = "hidden"
+            buildpane.style.overflow = "auto"
         }
     }, [setMode, setZoom])
 
