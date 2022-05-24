@@ -21,7 +21,7 @@ const Preview: FC<PreviewProps> = () => {
             const fbe = await getFromServer(params.get("shareId") as string);
             loadJson(fbe);
         })()
-    }, [])
+    }, [setMode, setZoom])
 
     return (
         <BuildPane disablePadding />
