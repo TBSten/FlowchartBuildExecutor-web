@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import BuildPane from "./components/App/BuildPane";
+import BuildPane, { BUILDPANE_ID } from "./components/App/BuildPane";
 import { getFromServer } from "./format/share";
 import { loadJson } from "./format/util";
 import { useMode, useZoom } from "./redux/app/hooks";
@@ -21,6 +21,10 @@ const Preview: FC<PreviewProps> = () => {
             const fbe = await getFromServer(params.get("shareId") as string);
             loadJson(fbe);
         })()
+        const buildpane = document.getElementById(BUILDPANE_ID)
+        if (buildpane) {
+            buildpane.style.overflow = "hidden"
+        }
     }, [setMode, setZoom])
 
     return (
